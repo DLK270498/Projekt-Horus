@@ -40,6 +40,21 @@ const MUC_ROUTES: string[] = [
   "SEZ", "ZNZ", "KGL", "GIG", "SSA", "BOG", "CGK",
 ];
 
+// User suggestion: also try Frankfurt. FRA is Lufthansa's main long-haul
+// hub with substantially more direct/one-stop African and South Asian
+// capacity than MUC (e.g. Lufthansa itself flies FRA-NBO and FRA-LOS
+// direct; Ethiopian, EgyptAir and other value carriers connect more
+// easily via FRA), so the same destination can plausibly price lower
+// from there. Scoped to the Africa/South Asia/new-Latin-America cluster
+// where that hub advantage is real, rather than re-querying every MUC
+// destination a second time from FRA - the Far East/Pacific destinations
+// (Seoul, Hong Kong, Bangkok etc.) don't have the same FRA-specific edge
+// and doubling the whole route list wasn't worth the extra spend.
+const FRA_ROUTES: string[] = [
+  "NBO", "ADD", "LOS", "ACC", "JNB", "CPT", "MRU", "KGL", "ZNZ", "SEZ",
+  "BOM", "DEL", "DAC", "CMB", "BOG", "GIG", "SSA",
+];
+
 // Anti-cyclical dates, offset from rounds 1-3 (see git history) so this
 // batch samples periods we don't already have data for. Nudged around
 // Bavaria's 2026/2027 school-holiday windows same as before, spread over
@@ -84,20 +99,18 @@ const TRIP_DATES = OFF_PEAK_DEPARTURE_DATES.flatMap((departure) =>
   })),
 );
 
-const DUFFEL_ROUTES = MUC_ROUTES.map((destinationIata) => ({
-  originIata: "MUC",
-  destinationIata,
-  tripDates: TRIP_DATES,
-  batchLabel: BATCH_LABEL,
-}));
+const DUFFEL_ROUTES = [
+  ...MUC_ROUTES.map((destinationIata) => ({ originIata: "MUC", destinationIata, tripDates: TRIP_DATES, batchLabel: BATCH_LABEL })),
+  ...FRA_ROUTES.map((destinationIata) => ({ originIata: "FRA", destinationIata, tripDates: TRIP_DATES, batchLabel: BATCH_LABEL })),
+];
 
 // Safety net: if anything hangs (a fetch without its own timeout, a stuck
 // browser page, ...) despite the per-request timeouts already in place
 // elsewhere, force-exit rather than leave a runaway process behind.
 // unref() means this alone won't keep the process alive - it only fires if
-// something else already is. Sized generously for this run's ~760 Duffel
-// requests (38 routes x 10 dates x 2 trip lengths) at ~1.5-2s each (request
-// + rate-limit delay) plus response time.
+// something else already is. Sized generously for this run's ~1,020 Duffel
+// requests ((34 MUC + 17 FRA routes) x 10 dates x 2 trip lengths) at
+// ~1.5-2s each (request + rate-limit delay) plus response time.
 const MAX_RUNTIME_MS = 55 * 60 * 1000;
 const watchdog = setTimeout(() => {
   console.error(`Worker exceeded max runtime of ${MAX_RUNTIME_MS}ms - force-exiting.`);

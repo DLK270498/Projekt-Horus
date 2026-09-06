@@ -16,9 +16,10 @@ import { dirname, join } from "node:path";
  */
 const ESTIMATED_COST_PER_REQUEST_EUR = 0.01;
 // Raised from 15€ to 30€: user authorized 15-20€ more for the fourth
-// sampling round's "value hub" carrier batch (apps/worker/src/index.ts,
-// ~760 requests ≈ 7.6€ nominal), on top of the ~9€ already estimated
-// spent in production, plus margin. Each deployment target (this sandbox
+// sampling round's "value hub" carrier batch, now including Frankfurt as
+// a second origin (apps/worker/src/index.ts, ~1,020 requests ≈ 10.20€
+// nominal), on top of the ~9€ already estimated spent in production, plus
+// margin. Each deployment target (this sandbox
 // vs. Railway) tracks its own usage file, so this cap is per-environment,
 // not a shared total - and Railway's filesystem is ephemeral, so a fresh
 // container/redeploy resets it to 0 regardless of past real spend. This
