@@ -84,119 +84,128 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
         </a>
       </header>
 
-      <form
-        method="get"
-        className="mt-8 grid grid-cols-2 gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:grid-cols-3 lg:grid-cols-11"
-      >
-        <input
-          name="origin"
-          list="airport-options"
-          placeholder="Von (z.B. FRA)"
-          defaultValue={filters.origin}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
-        />
-        <input
-          name="destination"
-          list="airport-options"
-          placeholder="Nach (z.B. JFK)"
-          defaultValue={filters.destination}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
-        />
-        <datalist id="airport-options">
-          {airports.map((airport) => (
-            <option key={airport.id} value={airport.iataCode}>
-              {airport.city}
-            </option>
-          ))}
-        </datalist>
-
-        <select
-          name="airline"
-          defaultValue={filters.airline ?? ""}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
-        >
-          <option value="">Alle Airlines</option>
-          {airlines.map((airline) => (
-            <option key={airline.id} value={airline.iataCode}>
-              {airline.name}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="minRating"
-          defaultValue={filters.minRating ?? ""}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
-        >
-          <option value="">Rating egal</option>
-          <option value="5">★★★★★+</option>
-          <option value="4">★★★★+</option>
-          <option value="3">★★★+</option>
-        </select>
-
-        <select
-          name="haulType"
-          defaultValue={filters.haulType ?? ""}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
-        >
-          <option value="">Haul-Typ egal</option>
-          {Object.entries(HAUL_TYPE_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-
-        <input
-          name="maxPrice"
-          type="number"
-          placeholder="Max. Preis (€)"
-          defaultValue={filters.maxPrice}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
-        />
-
-        <input
-          name="minDiscount"
-          type="number"
-          placeholder="Min. Ersparnis %"
-          defaultValue={filters.minDiscount}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
-        />
-
-        <input
-          name="fromDate"
-          type="date"
-          title="Frühestes Abflugdatum"
-          defaultValue={filters.fromDate}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-300"
-        />
-
-        <input
-          name="toDate"
-          type="date"
-          title="Spätestes Abflugdatum"
-          defaultValue={filters.toDate}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-300"
-        />
-
-        <label className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-300">
+      <div className="sticky top-0 z-20 mt-8 -mx-6 border-b border-slate-800 bg-slate-950/90 px-6 py-3 backdrop-blur">
+        <form method="get" className="flex flex-wrap items-center gap-2 overflow-x-auto">
           <input
-            type="checkbox"
-            name="onlyRealDeals"
-            value="true"
-            defaultChecked={filters.onlyRealDeals === "true"}
-            className="h-4 w-4 rounded border-slate-600 bg-slate-900 accent-emerald-500"
+            name="origin"
+            list="airport-options"
+            placeholder="Von"
+            defaultValue={filters.origin}
+            className="w-24 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
           />
-          Nur echte Deals
-        </label>
+          <input
+            name="destination"
+            list="airport-options"
+            placeholder="Nach"
+            defaultValue={filters.destination}
+            className="w-24 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
+          />
+          <datalist id="airport-options">
+            {airports.map((airport) => (
+              <option key={airport.id} value={airport.iataCode}>
+                {airport.city}
+              </option>
+            ))}
+          </datalist>
 
-        <button
-          type="submit"
-          className="rounded-lg bg-sky-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-sky-400"
-        >
-          Filtern
-        </button>
-      </form>
+          <input
+            name="fromDate"
+            type="date"
+            title="Zeitraum ab"
+            defaultValue={filters.fromDate}
+            className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300"
+          />
+
+          <input
+            name="toDate"
+            type="date"
+            title="Zeitraum bis"
+            defaultValue={filters.toDate}
+            className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300"
+          />
+
+          <input
+            name="maxPrice"
+            type="number"
+            placeholder="Budget (€)"
+            defaultValue={filters.maxPrice}
+            className="w-32 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
+          />
+
+          <details className="relative">
+            <summary className="cursor-pointer list-none rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300 hover:border-slate-600">
+              Weitere Filter ⌄
+            </summary>
+            <div className="absolute left-0 top-full z-30 mt-2 flex w-72 flex-col gap-2 rounded-xl border border-slate-700 bg-slate-900 p-3 shadow-xl">
+              <select
+                name="airline"
+                defaultValue={filters.airline ?? ""}
+                className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
+              >
+                <option value="">Alle Airlines</option>
+                {airlines.map((airline) => (
+                  <option key={airline.id} value={airline.iataCode}>
+                    {airline.name}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                name="minRating"
+                defaultValue={filters.minRating ?? ""}
+                className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
+              >
+                <option value="">Rating egal</option>
+                <option value="5">★★★★★+</option>
+                <option value="4">★★★★+</option>
+                <option value="3">★★★+</option>
+              </select>
+
+              <select
+                name="haulType"
+                defaultValue={filters.haulType ?? ""}
+                className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
+              >
+                <option value="">Haul-Typ egal</option>
+                {Object.entries(HAUL_TYPE_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                name="minDiscount"
+                type="number"
+                placeholder="Min. Ersparnis %"
+                defaultValue={filters.minDiscount}
+                className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
+              />
+
+              <label className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-300">
+                <input
+                  type="checkbox"
+                  name="onlyRealDeals"
+                  value="true"
+                  defaultChecked={filters.onlyRealDeals === "true"}
+                  className="h-4 w-4 rounded border-slate-600 bg-slate-900 accent-emerald-500"
+                />
+                Nur echte Deals
+              </label>
+            </div>
+          </details>
+
+          <button
+            type="submit"
+            className="rounded-full bg-sky-500 px-5 py-2 text-sm font-medium text-slate-950 hover:bg-sky-400"
+          >
+            Filtern
+          </button>
+          <a href="/" className="rounded-full px-3 py-2 text-sm text-slate-400 hover:text-slate-200">
+            Zurücksetzen
+          </a>
+        </form>
+      </div>
 
       <section className="mt-8">
         {deals.length === 0 ? (
