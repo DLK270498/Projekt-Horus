@@ -283,7 +283,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                     <p className={`mt-1 ${MUTED_TEXT_CLASS}`}>
                       ab {deal.origin.city} ({deal.origin.iataCode})
                     </p>
-                    <p className="text-lg font-semibold leading-tight">
+                    <p className="text-base font-semibold leading-tight">
                       {deal.destination.city} <span className="font-normal text-slate-500">({deal.destination.iataCode})</span>
                     </p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
