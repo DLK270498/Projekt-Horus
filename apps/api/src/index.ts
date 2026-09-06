@@ -15,7 +15,9 @@ await app.register(airlineRoutes);
 await app.register(airportRoutes);
 await app.register(dealRoutes);
 
-const port = Number(process.env.API_PORT ?? 4000);
+// Railway (and most PaaS hosts) inject PORT and expect the app to bind to
+// it; API_PORT stays as the local-dev override.
+const port = Number(process.env.PORT ?? process.env.API_PORT ?? 4000);
 
 app
   .listen({ port, host: "0.0.0.0" })
