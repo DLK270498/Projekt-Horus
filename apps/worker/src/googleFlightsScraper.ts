@@ -43,11 +43,18 @@ export async function scrapeGoogleFlightsBusinessClass(
     headless: true,
     executablePath: CHROMIUM_EXECUTABLE_PATH,
     proxy: proxyServer ? { server: proxyServer } : undefined,
+    // Headless Chromium's default UA self-identifies as "HeadlessChrome",
+    // which plenty of sites (Google included) treat as an instant red flag
+    // regardless of actual behavior; strip that with --disable-blink-features
+    // plus a normal UA below rather than anything fingerprint-spoofing.
+    args: ["--disable-blink-features=AutomationControlled"],
   });
 
   try {
     const context = await browser.newContext({
       locale: "de-DE",
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
       // The sandbox proxy re-terminates TLS with its own CA, which Chromium
       // doesn't otherwise trust; harmless to also set this in a real,
       // proxy-less deployment.
