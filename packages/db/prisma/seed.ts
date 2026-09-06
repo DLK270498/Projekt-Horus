@@ -110,6 +110,14 @@ const airports: Array<{
   { iataCode: "ORD", name: "Chicago O'Hare International Airport", city: "Chicago", country: "USA", latitude: 41.9742, longitude: -87.9073 },
   { iataCode: "YYZ", name: "Toronto Pearson International Airport", city: "Toronto", country: "Canada", latitude: 43.6777, longitude: -79.6248 },
   { iataCode: "LIS", name: "Lisbon Airport", city: "Lisbon", country: "Portugal", latitude: 38.7813, longitude: -9.1359 },
+
+  // Added for the Munich-focused, research-informed route selection: new
+  // (Sao Paulo, Johannesburg) or upgauged (Mumbai, Seattle) Lufthansa
+  // Munich long-haul routes tend to carry launch/promotional fares while
+  // filling capacity - see apps/worker/src/index.ts for the reasoning.
+  { iataCode: "BOM", name: "Chhatrapati Shivaji Maharaj International Airport", city: "Mumbai", country: "India", latitude: 19.0896, longitude: 72.8656 },
+  { iataCode: "DEL", name: "Indira Gandhi International Airport", city: "Delhi", country: "India", latitude: 28.5562, longitude: 77.1000 },
+  { iataCode: "SEA", name: "Seattle-Tacoma International Airport", city: "Seattle", country: "USA", latitude: 47.4502, longitude: -122.3088 },
 ];
 
 /**

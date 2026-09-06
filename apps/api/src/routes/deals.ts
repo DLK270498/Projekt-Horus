@@ -10,16 +10,23 @@ type DealQuery = {
   maxPrice?: string;
   minDiscount?: string;
   haulType?: string;
+  onlyRealDeals?: string;
 };
 
 export async function dealRoutes(app: FastifyInstance) {
   app.get<{ Querystring: DealQuery }>("/deals", async (request) => {
-    const { origin, destination, airline, minRating, maxPrice, minDiscount, haulType } = request.query;
+    const { origin, destination, airline, minRating, maxPrice, minDiscount, haulType, onlyRealDeals } = request.query;
+
+    // A "real" deal has a baseline-computed discount (SCRAPER/API sources,
+    // e.g. Duffel); forum-curated posts land in the same table with
+    // discountPercent 0 since there's no price history to compare against
+    // yet (see apps/worker/src/forumCrawler.ts).
+    const minDiscountFilter = onlyRealDeals === "true" ? Math.max(0.01, Number(minDiscount) || 0) : Number(minDiscount) || undefined;
 
     const deals = await prisma.deal.findMany({
       where: {
         status: { in: ["CANDIDATE", "PUBLISHED"] },
-        discountPercent: minDiscount ? { gte: Number(minDiscount) } : undefined,
+        discountPercent: minDiscountFilter ? { gte: minDiscountFilter } : undefined,
         priceObservation: {
           price: maxPrice ? { lte: Number(maxPrice) } : undefined,
           originAirport: origin ? { iataCode: origin.toUpperCase() } : undefined,
@@ -46,6 +53,7 @@ export async function dealRoutes(app: FastifyInstance) {
       currency: deal.priceObservation.currency,
       baselinePrice: Number(deal.baselinePrice),
       discountPercent: Number(deal.discountPercent),
+      isRealDeal: Number(deal.discountPercent) > 0,
       cabinClass: deal.priceObservation.cabinClass,
       departureDate: deal.priceObservation.departureDate,
       clickoutUrl: deal.clickoutUrl,

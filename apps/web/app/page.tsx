@@ -4,6 +4,7 @@ type Deal = {
   currency: string;
   baselinePrice: number;
   discountPercent: number;
+  isRealDeal: boolean;
   cabinClass: string;
   departureDate: string | null;
   clickoutUrl: string;
@@ -57,6 +58,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
     maxPrice: param("maxPrice"),
     minDiscount: param("minDiscount"),
     haulType: param("haulType"),
+    onlyRealDeals: param("onlyRealDeals"),
   };
 
   const [deals, airlines, airports] = await Promise.all([
@@ -79,7 +81,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
 
       <form
         method="get"
-        className="mt-8 grid grid-cols-2 gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:grid-cols-3 lg:grid-cols-7"
+        className="mt-8 grid grid-cols-2 gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:grid-cols-3 lg:grid-cols-9"
       >
         <input
           name="origin"
@@ -148,21 +150,31 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
         />
 
-        <div className="flex gap-2">
+        <input
+          name="minDiscount"
+          type="number"
+          placeholder="Min. Ersparnis %"
+          defaultValue={filters.minDiscount}
+          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
+        />
+
+        <label className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-300">
           <input
-            name="minDiscount"
-            type="number"
-            placeholder="Min. Ersparnis %"
-            defaultValue={filters.minDiscount}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
+            type="checkbox"
+            name="onlyRealDeals"
+            value="true"
+            defaultChecked={filters.onlyRealDeals === "true"}
+            className="h-4 w-4 rounded border-slate-600 bg-slate-900 accent-emerald-500"
           />
-          <button
-            type="submit"
-            className="rounded-lg bg-sky-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-sky-400"
-          >
-            Filtern
-          </button>
-        </div>
+          Nur echte Deals
+        </label>
+
+        <button
+          type="submit"
+          className="rounded-lg bg-sky-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-sky-400"
+        >
+          Filtern
+        </button>
       </form>
 
       <section className="mt-8">
@@ -180,8 +192,13 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
             {deals.map((deal) => (
               <article
                 key={deal.id}
-                className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/50 p-5"
+                className="relative flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/50 p-5"
               >
+                {deal.isRealDeal && (
+                  <span className="absolute -top-2 -left-2 rotate-[-8deg] rounded-md bg-emerald-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-slate-950 shadow-lg">
+                    Deal
+                  </span>
+                )}
                 <div>
                   <div className="flex items-center justify-between text-sm text-slate-400">
                     <span>{deal.airline.name}</span>

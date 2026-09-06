@@ -9,25 +9,61 @@ import { prisma } from "./prisma.js";
 // still works and is worth re-enabling once better sources are found -
 // `import { runForumCrawlers } from "./forumCrawler.js";` and call it below.
 
-// Routes/dates queried against Duffel per run, prioritized rather than
-// brute-forced: our strongest German hubs (FRA/MUC/DUS/BER), one route per
-// major world region, 3 dates each (the minimum baseline.ts needs to trust
-// a median). Keeps each run's request count - and therefore cost - small
-// and predictable; see duffelBudget.ts for the hard spending cap.
-const DUFFEL_ROUTES: Array<{ originIata: string; destinationIata: string; departureDates: string[] }> = [
-  { originIata: "FRA", destinationIata: "JFK", departureDates: ["2026-10-20", "2026-12-01", "2027-01-15"] }, // North America
-  { originIata: "MUC", destinationIata: "BKK", departureDates: ["2026-10-22", "2026-12-03", "2027-01-18"] }, // SE Asia
-  { originIata: "FRA", destinationIata: "SIN", departureDates: ["2026-10-25", "2026-12-05", "2027-01-20"] }, // SE Asia hub
-  { originIata: "DUS", destinationIata: "DXB", departureDates: ["2026-10-28", "2026-12-08", "2027-01-22"] }, // Middle East
-  { originIata: "BER", destinationIata: "ICN", departureDates: ["2026-10-30", "2026-12-10", "2027-01-25"] }, // NE Asia
+// Munich-only for now, and route-selected rather than brute-forced, based
+// on real signals researched 2026-09 (see chat): Lufthansa is adding new
+// Munich long-haul routes (Sao Paulo, Johannesburg) and upgauging others
+// (Mumbai to A380) for 2026 - new/growing routes carry promotional fares
+// while airlines build demand and fill the extra capacity. Established
+// competitive hubs (multiple airlines flying the same city pair) are
+// included too since competition is the other classic source of real
+// discounting. Asia-Pacific long-haul is currently reported as
+// capacity-constrained with firming fares (Middle East airspace
+// restrictions), so it's included for comparison but not over-weighted.
+const MUC_ROUTES: string[] = [
+  "GRU", "JNB", "BOM", "SEA", // new/upgauged Munich routes - launch-fare candidates
+  "JFK", "ORD", "LAX", "YYZ", // competitive North America
+  "DXB", // competitive Middle East hub
+  "SIN", "HKG", "ICN", "PEK", "PVG", "DEL", "BKK", // Asia (comparison, currently reported capacity-constrained)
+  "CPT", // seasonal leisure/business mix, Southern Hemisphere counter-season
+  "CUN", "PUJ", "ATH", // leisure-heavy long/mid-haul, more price-elastic historically
 ];
+
+// Departure dates deliberately avoid German peak-travel windows (Christmas/
+// New Year, Easter, summer school holidays) where fares are structurally
+// higher regardless of any underlying "deal" - an anti-cyclical sample is
+// more likely to catch genuine troughs. Same date set for every route to
+// keep the request count predictable; extend/refine per-destination
+// seasonality later if the data warrants it.
+const OFF_PEAK_DEPARTURE_DATES: string[] = [
+  "2026-09-15",
+  "2026-09-29",
+  "2026-10-13",
+  "2026-10-27",
+  "2026-11-10",
+  "2026-11-24",
+  "2027-01-19",
+  "2027-02-02",
+  "2027-02-16",
+  "2027-03-02",
+  "2027-03-16",
+  "2027-05-04",
+  "2027-05-18",
+  "2027-06-01",
+];
+
+const DUFFEL_ROUTES = MUC_ROUTES.map((destinationIata) => ({
+  originIata: "MUC",
+  destinationIata,
+  departureDates: OFF_PEAK_DEPARTURE_DATES,
+}));
 
 // Safety net: if anything hangs (a fetch without its own timeout, a stuck
 // browser page, ...) despite the per-request timeouts already in place
 // elsewhere, force-exit rather than leave a runaway process behind.
 // unref() means this alone won't keep the process alive - it only fires if
-// something else already is.
-const MAX_RUNTIME_MS = 3 * 60 * 1000;
+// something else already is. Sized generously for this run's ~280 Duffel
+// requests at ~1.5-2s each (request + rate-limit delay) plus response time.
+const MAX_RUNTIME_MS = 25 * 60 * 1000;
 const watchdog = setTimeout(() => {
   console.error(`Worker exceeded max runtime of ${MAX_RUNTIME_MS}ms - force-exiting.`);
   process.exit(1);
@@ -39,7 +75,7 @@ async function main() {
   if (!duffelToken) {
     console.warn("DUFFEL_ACCESS_TOKEN not set - skipping Duffel ingestion.");
   } else {
-    console.log(`Querying Duffel for ${DUFFEL_ROUTES.length} route(s)...`);
+    console.log(`Querying Duffel for ${DUFFEL_ROUTES.length} route(s) x ${OFF_PEAK_DEPARTURE_DATES.length} date(s)...`);
     for (const route of DUFFEL_ROUTES) {
       const result = await ingestDuffelRoute(route, duffelToken);
       console.log(`${route.originIata} -> ${route.destinationIata}:`, result);

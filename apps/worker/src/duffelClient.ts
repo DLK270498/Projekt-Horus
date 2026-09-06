@@ -12,12 +12,30 @@ const DUFFEL_API_BASE = "https://api.duffel.com";
 const DUFFEL_API_VERSION = "v2";
 const REQUEST_TIMEOUT_MS = 30_000;
 
+// Duffel rate-limits rapid sequential requests (hit this for real: several
+// requests in a row started failing with "Too many requests hit the API too
+// quickly"). A fixed gap between requests plus one retry with backoff on
+// 429 keeps a multi-route, multi-date run from losing data to throttling.
+const DELAY_BETWEEN_REQUESTS_MS = 700;
+const RATE_LIMIT_RETRY_DELAY_MS = 5_000;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 type DuffelOffer = {
+  id: string;
   total_amount: string;
   total_currency: string;
   owner: { iata_code: string; name: string };
   slices: Array<{
-    segments: Array<{ departing_at: string }>;
+    fare_brand_name?: string;
+    segments: Array<{
+      departing_at: string;
+      arriving_at: string;
+      aircraft?: { name: string } | null;
+      operating_carrier?: { iata_code: string } | null;
+    }>;
   }>;
 };
 
@@ -37,20 +55,19 @@ export type CheapestOfferByAirline = {
   price: number;
   currency: string;
   departureDate: string;
+  raw: {
+    offerId: string;
+    fareBrandName: string | null;
+    stops: number;
+    aircraft: string | null;
+    operatingCarrier: string | null;
+  };
 };
 
-/**
- * Queries Duffel for Business Class offers on one route/date and returns
- * the cheapest offer per marketing airline. Duffel's sandbox ("test") token
- * returns realistic but synthetic offers - same shape as production, so
- * this same code works unchanged once a live token is used.
- */
-export async function fetchCheapestOffersByAirline(
+async function postOfferRequest(
   query: FlightQuery,
   accessToken: string,
-): Promise<CheapestOfferByAirline[]> {
-  assertBudgetAvailable(); // throws DuffelBudgetExceededError if the cost cap is reached - never skipped
-
+): Promise<DuffelOfferRequestResponse> {
   const response = await fetch(`${DUFFEL_API_BASE}/air/offer_requests?return_offers=true`, {
     method: "POST",
     headers: {
@@ -77,9 +94,39 @@ export async function fetchCheapestOffersByAirline(
 
   const payload = (await response.json()) as DuffelOfferRequestResponse;
 
+  if (response.status === 429) {
+    throw new Error("rate_limited");
+  }
   if (!response.ok) {
     const message = payload.errors?.map((e) => e.message).join("; ") ?? `HTTP ${response.status}`;
     throw new Error(message);
+  }
+
+  return payload;
+}
+
+/**
+ * Queries Duffel for Business Class offers on one route/date and returns
+ * the cheapest offer per marketing airline, retrying once after a fixed
+ * backoff if Duffel rate-limits the request.
+ */
+export async function fetchCheapestOffersByAirline(
+  query: FlightQuery,
+  accessToken: string,
+): Promise<CheapestOfferByAirline[]> {
+  assertBudgetAvailable(); // throws DuffelBudgetExceededError if the cost cap is reached - never skipped
+
+  let payload: DuffelOfferRequestResponse;
+  try {
+    payload = await postOfferRequest(query, accessToken);
+  } catch (error) {
+    if ((error as Error).message === "rate_limited") {
+      await sleep(RATE_LIMIT_RETRY_DELAY_MS);
+      assertBudgetAvailable();
+      payload = await postOfferRequest(query, accessToken);
+    } else {
+      throw error;
+    }
   }
 
   const offers = payload.data?.offers ?? [];
@@ -92,11 +139,21 @@ export async function fetchCheapestOffersByAirline(
     const existing = cheapestByAirline.get(offer.owner.iata_code);
     if (existing && existing.price <= price) continue;
 
+    const slice = offer.slices[0];
+    const segment = slice?.segments[0];
+
     cheapestByAirline.set(offer.owner.iata_code, {
       airlineIataCode: offer.owner.iata_code,
       price,
       currency: offer.total_currency,
-      departureDate: offer.slices[0]?.segments[0]?.departing_at?.slice(0, 10) ?? query.departureDate,
+      departureDate: segment?.departing_at?.slice(0, 10) ?? query.departureDate,
+      raw: {
+        offerId: offer.id,
+        fareBrandName: slice?.fare_brand_name ?? null,
+        stops: (slice?.segments.length ?? 1) - 1,
+        aircraft: segment?.aircraft?.name ?? null,
+        operatingCarrier: segment?.operating_carrier?.iata_code ?? null,
+      },
     });
   }
 
@@ -107,7 +164,8 @@ export async function fetchCheapestOffersByAirline(
  * Runs fetchCheapestOffersByAirline for a route across several departure
  * dates so the baseline engine (apps/worker/src/baseline.ts) has more than
  * one data point per (airline, route, cabin) to compare against - a single
- * snapshot can never be identified as "cheaper than usual".
+ * snapshot can never be identified as "cheaper than usual". Waits a fixed
+ * gap between requests to stay under Duffel's rate limit.
  */
 export async function ingestDuffelRoute(
   query: { originIata: string; destinationIata: string; departureDates: string[] },
@@ -128,7 +186,9 @@ export async function ingestDuffelRoute(
   let observationsCreated = 0;
   const errors: string[] = [];
 
-  for (const departureDate of query.departureDates) {
+  for (const [index, departureDate] of query.departureDates.entries()) {
+    if (index > 0) await sleep(DELAY_BETWEEN_REQUESTS_MS);
+
     try {
       const offers = await fetchCheapestOffersByAirline(
         { originIata: query.originIata, destinationIata: query.destinationIata, departureDate },
@@ -149,6 +209,7 @@ export async function ingestDuffelRoute(
             departureDate: new Date(offer.departureDate),
             price: offer.price,
             currency: offer.currency,
+            rawPayload: offer.raw,
           },
         });
         observationsCreated++;
