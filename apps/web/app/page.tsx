@@ -59,6 +59,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
     minDiscount: param("minDiscount"),
     haulType: param("haulType"),
     onlyRealDeals: param("onlyRealDeals"),
+    fromDate: param("fromDate"),
+    toDate: param("toDate"),
   };
 
   const [deals, airlines, airports] = await Promise.all([
@@ -81,7 +83,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
 
       <form
         method="get"
-        className="mt-8 grid grid-cols-2 gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:grid-cols-3 lg:grid-cols-9"
+        className="mt-8 grid grid-cols-2 gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:grid-cols-3 lg:grid-cols-11"
       >
         <input
           name="origin"
@@ -156,6 +158,22 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           placeholder="Min. Ersparnis %"
           defaultValue={filters.minDiscount}
           className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm placeholder:text-slate-500"
+        />
+
+        <input
+          name="fromDate"
+          type="date"
+          title="Frühestes Abflugdatum"
+          defaultValue={filters.fromDate}
+          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-300"
+        />
+
+        <input
+          name="toDate"
+          type="date"
+          title="Spätestes Abflugdatum"
+          defaultValue={filters.toDate}
+          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-300"
         />
 
         <label className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-300">

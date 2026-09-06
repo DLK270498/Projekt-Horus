@@ -11,11 +11,13 @@ type DealQuery = {
   minDiscount?: string;
   haulType?: string;
   onlyRealDeals?: string;
+  fromDate?: string;
+  toDate?: string;
 };
 
 export async function dealRoutes(app: FastifyInstance) {
   app.get<{ Querystring: DealQuery }>("/deals", async (request) => {
-    const { origin, destination, airline, minRating, maxPrice, minDiscount, haulType, onlyRealDeals } = request.query;
+    const { origin, destination, airline, minRating, maxPrice, minDiscount, haulType, onlyRealDeals, fromDate, toDate } = request.query;
 
     // A "real" deal has a baseline-computed discount (SCRAPER/API sources,
     // e.g. Duffel); forum-curated posts land in the same table with
@@ -29,6 +31,10 @@ export async function dealRoutes(app: FastifyInstance) {
         discountPercent: minDiscountFilter ? { gte: minDiscountFilter } : undefined,
         priceObservation: {
           price: maxPrice ? { lte: Number(maxPrice) } : undefined,
+          departureDate:
+            fromDate || toDate
+              ? { gte: fromDate ? new Date(fromDate) : undefined, lte: toDate ? new Date(toDate) : undefined }
+              : undefined,
           originAirport: origin ? { iataCode: origin.toUpperCase() } : undefined,
           destinationAirport: destination ? { iataCode: destination.toUpperCase() } : undefined,
           airline: {
