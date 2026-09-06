@@ -1,0 +1,24 @@
+{
+  "name": "projekt-horus",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev:web": "pnpm --filter @horus/web dev",
+    "dev:api": "pnpm --filter @horus/api dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "db:generate": "pnpm --filter @horus/db generate",
+    "db:migrate": "pnpm --filter @horus/db migrate",
+    "db:seed": "pnpm --filter @horus/db seed"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1"
+  }
+}

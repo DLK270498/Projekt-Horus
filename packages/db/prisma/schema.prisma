@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Enums -------------------------------------------------------------
+
+enum HaulType {
+  SHORT
+  MID
+  LONG
+}
+
+enum CabinClass {
+  ECONOMY
+  PREMIUM_ECONOMY
+  BUSINESS
+  FIRST
+}
+
+enum SourceType {
+  SCRAPER
+  FORUM
+  MANUAL
+}
+
+enum DealStatus {
+  CANDIDATE
+  PUBLISHED
+  EXPIRED
+  REJECTED
+}
+
+// --- Core reference data -------------------------------------------------
+
+model Airline {
+  id                      String   @id @default(cuid())
+  iataCode                String   @unique
+  icaoCode                String?
+  name                    String
+  homeCountry             String
+  skytraxRating           Int // 1-5, researched once, refreshed manually (see plan)
+  haulTypes               HaulType[]
+  businessClassProductName String?
+  isActive                Boolean  @default(true)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  priceObservations PriceObservation[]
+
+  @@map("airlines")
+}
+
+model Airport {
+  id        String   @id @default(cuid())
+  iataCode  String   @unique
+  name      String
+  city      String
+  country   String
+  latitude  Float?
+  longitude Float?
+  createdAt DateTime @default(now())
+
+  observationsAsOrigin      PriceObservation[] @relation("OriginAirport")
+  observationsAsDestination PriceObservation[] @relation("DestinationAirport")
+  subscriptions             Subscription[]
+
+  @@map("airports")
+}
+
+model Source {
+  id        String     @id @default(cuid())
+  name      String     @unique // e.g. "google_flights", "vielfliegertreff", "reddit_churning"
+  type      SourceType
+  baseUrl   String?
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+
+  priceObservations PriceObservation[]
+
+  @@map("sources")
+}
+
+// --- Ingestion & deals -----------------------------------------------------
+
+model PriceObservation {
+  id                String     @id @default(cuid())
+  airlineId         String
+  airline           Airline    @relation(fields: [airlineId], references: [id])
+  originAirportId   String
+  originAirport     Airport    @relation("OriginAirport", fields: [originAirportId], references: [id])
+  destinationAirportId String
+  destinationAirport Airport   @relation("DestinationAirport", fields: [destinationAirportId], references: [id])
+  sourceId          String
+  source            Source     @relation(fields: [sourceId], references: [id])
+  cabinClass        CabinClass @default(BUSINESS)
+  departureDate     DateTime
+  returnDate        DateTime?
+  price             Decimal    @db.Decimal(10, 2)
+  currency          String     @default("EUR")
+  rawPayload        Json?
+  observedAt        DateTime   @default(now())
+
+  deal Deal?
+
+  @@index([airlineId, originAirportId, destinationAirportId, cabinClass])
+  @@map("price_observations")
+}
+
+model Deal {
+  id                 String     @id @default(cuid())
+  priceObservationId String     @unique
+  priceObservation   PriceObservation @relation(fields: [priceObservationId], references: [id])
+  baselinePrice      Decimal    @db.Decimal(10, 2)
+  discountPercent    Decimal    @db.Decimal(5, 2)
+  status             DealStatus @default(CANDIDATE)
+  clickoutUrl        String
+  clickoutCheckedAt  DateTime?
+  clickoutIsValid    Boolean    @default(true)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  @@index([status])
+  @@map("deals")
+}
+
+// --- Users & alerting (foundation for later phase) --------------------------
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  subscriptions Subscription[]
+
+  @@map("users")
+}
+
+model Subscription {
+  id                  String    @id @default(cuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+  originAirportId     String?
+  originAirport       Airport?  @relation(fields: [originAirportId], references: [id])
+  destinationRegion   String?
+  maxPrice            Decimal?  @db.Decimal(10, 2)
+  haulTypes           HaulType[]
+  isActive            Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+
+  @@map("subscriptions")
+}
