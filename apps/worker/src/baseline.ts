@@ -20,7 +20,7 @@ export async function runBaselineCheck(
 ): Promise<number> {
   const pendingObservations = await prisma.priceObservation.findMany({
     where: { deal: null },
-    include: { source: true },
+    include: { source: true, airline: true },
     orderBy: { observedAt: "asc" },
   });
 
@@ -51,7 +51,7 @@ export async function runBaselineCheck(
           baselinePrice,
           discountPercent,
           status: "CANDIDATE",
-          clickoutUrl: observation.sourceUrl ?? observation.source.baseUrl ?? "",
+          clickoutUrl: observation.sourceUrl ?? observation.airline.websiteUrl ?? observation.source.baseUrl ?? "",
         },
       });
       dealsCreated++;

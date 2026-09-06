@@ -7,12 +7,13 @@ Findet, listet und (später) alarmiert bei Business-Class-Flugdeals ab Deutschla
 ```
 apps/
   api/    Fastify-API (liest/schreibt über @horus/db)
-  web/    Next.js-Frontend
+  web/    Next.js-Frontend (Deal-Liste mit Filtern)
+  worker/ Ingestion: Foren-/RSS-Crawler + Duffel-Flight-API-Client + Baseline-Preis-Engine
 packages/
-  db/     Prisma-Schema, Migrationen, Seed-Skript (Airline-Longlist)
+  db/     Prisma-Schema, Migrationen, Seed-Skript (Airline-/Airport-Longlist)
 ```
 
-**Aktueller Stand (Phase 0 – Fundament):** DB-Schema, Airline-Longlist als Seed-Daten, minimale API (`/health`, `/airlines`) und eine Debug-Seite im Web-Frontend, die die Airlines aus der DB anzeigt. Die eigentliche Deal-Liste mit Filtern (Phase 2), Scraper (Phase 1), Karte (Phase 4) und Alerting (Phase 3) folgen in späteren Phasen.
+**Aktueller Stand:** Kern-MVP (Phase 0–2) ist fertig — DB-Schema, 33 Airlines + 39 Airports als Seed-Daten, Deal-Liste mit Filtern (Von/Nach, Airline, Rating, Preis, Ersparnis-%, Haul-Typ), Clickout-Links. Ingestion läuft über zwei Quellen: Foren/RSS (community-kuratierte Deals, sofort als Deal übernommen) und die [Duffel](https://duffel.com) Flight-API (rohe Preisbeobachtungen, die die Baseline-Engine gegen historische Preise vergleicht, um echte Abweichungen als Deal zu markieren). Google-Flights-Scraping wurde versucht und verworfen (IP-Block, siehe `apps/worker/src/googleFlightsScraper.ts`-Kommentar) — Karte (Phase 4) und Alerting (Phase 3) folgen später.
 
 ## Voraussetzungen
 
@@ -43,7 +44,18 @@ pnpm dev:api
 pnpm dev:web
 ```
 
-Danach: `http://localhost:3000` zeigt die geseedete Airline-Longlist, `http://localhost:4000/health` und `http://localhost:4000/airlines` beantworten die API direkt.
+Danach: `http://localhost:3000` zeigt die Deal-Liste (anfangs leer, bis der Worker gelaufen ist), `http://localhost:3000/airlines` die Airline-Longlist, `http://localhost:4000/health` beantwortet die API direkt.
+
+## Ingestion (echte Deals holen)
+
+```bash
+# In apps/worker/.env: DUFFEL_ACCESS_TOKEN=duffel_test_... setzen
+# (kostenloser Test-Account auf duffel.com, siehe Anleitung im Projekt-Chat)
+
+pnpm --filter @horus/worker start
+```
+
+Läuft ohne `DUFFEL_ACCESS_TOKEN` auch (überspringt dann nur die Duffel-Abfrage und crawlt weiter die Foren-Quellen). Deals brauchen mindestens 3 Preisbeobachtungen für dieselbe Airline/Route/Cabin-Kombination, bevor die Baseline-Engine eine Abweichung erkennen kann — deshalb fragt der Worker mehrere Abflugdaten pro Route ab.
 
 ## Weitere Kommandos
 

@@ -47,6 +47,7 @@ model Airline {
   skytraxRating           Int // 1-5, researched once, refreshed manually (see plan)
   haulTypes               HaulType[]
   businessClassProductName String?
+  websiteUrl              String? // clickout fallback when a deal has no direct offer link (e.g. API-sourced deals)
   isActive                Boolean  @default(true)
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt

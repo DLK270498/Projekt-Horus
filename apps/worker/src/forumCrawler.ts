@@ -52,7 +52,13 @@ async function persistCuratedDeal(
   sourceId: string,
   extracted: NonNullable<ReturnType<typeof extractDeal>>,
   sourceUrl: string,
-) {
+): Promise<boolean> {
+  // Feeds get re-crawled on every run and often return the same posts again
+  // (especially a quiet subreddit); sourceUrl identifies the specific post,
+  // so skip it if we've already turned it into an observation.
+  const existing = await prisma.priceObservation.findFirst({ where: { sourceUrl } });
+  if (existing) return false;
+
   const observation = await prisma.priceObservation.create({
     data: {
       airlineId: extracted.airlineId as string,
@@ -75,6 +81,8 @@ async function persistCuratedDeal(
       clickoutUrl: sourceUrl,
     },
   });
+
+  return true;
 }
 
 async function crawlRssFeed(source: Source, airlines: KnownAirline[], airports: KnownAirport[]) {
@@ -98,8 +106,8 @@ async function crawlRssFeed(source: Source, airlines: KnownAirline[], airports: 
     const extracted = extractDeal(text, airlines, airports);
     if (!extracted || !extracted.airlineId) continue;
 
-    await persistCuratedDeal(source.id, extracted, item.link ?? source.baseUrl!);
-    created++;
+    const wasNew = await persistCuratedDeal(source.id, extracted, item.link ?? source.baseUrl!);
+    if (wasNew) created++;
   }
 
   return created;

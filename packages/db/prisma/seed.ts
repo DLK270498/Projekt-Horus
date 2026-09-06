@@ -13,45 +13,46 @@ const airlines: Array<{
   homeCountry: string;
   skytraxRating: number;
   haulTypes: HaulType[];
+  websiteUrl: string;
 }> = [
   // Long-haul premium (4-5 star)
-  { iataCode: "LH", name: "Lufthansa", homeCountry: "Germany", skytraxRating: 5, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "QR", name: "Qatar Airways", homeCountry: "Qatar", skytraxRating: 5, haulTypes: ["LONG"] },
-  { iataCode: "SQ", name: "Singapore Airlines", homeCountry: "Singapore", skytraxRating: 5, haulTypes: ["LONG"] },
-  { iataCode: "NH", name: "All Nippon Airways", homeCountry: "Japan", skytraxRating: 5, haulTypes: ["LONG"] },
-  { iataCode: "CX", name: "Cathay Pacific", homeCountry: "Hong Kong", skytraxRating: 5, haulTypes: ["LONG"] },
-  { iataCode: "OZ", name: "Asiana Airlines", homeCountry: "South Korea", skytraxRating: 5, haulTypes: ["LONG"] },
-  { iataCode: "BR", name: "EVA Air", homeCountry: "Taiwan", skytraxRating: 5, haulTypes: ["LONG"] },
-  { iataCode: "MH", name: "Malaysia Airlines", homeCountry: "Malaysia", skytraxRating: 5, haulTypes: ["LONG"] },
-  { iataCode: "JL", name: "Japan Airlines", homeCountry: "Japan", skytraxRating: 5, haulTypes: ["LONG"] },
-  { iataCode: "EK", name: "Emirates", homeCountry: "UAE", skytraxRating: 4, haulTypes: ["LONG"] },
-  { iataCode: "EY", name: "Etihad Airways", homeCountry: "UAE", skytraxRating: 4, haulTypes: ["LONG"] },
-  { iataCode: "TK", name: "Turkish Airlines", homeCountry: "Turkey", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
+  { iataCode: "LH", name: "Lufthansa", homeCountry: "Germany", skytraxRating: 5, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.lufthansa.com" },
+  { iataCode: "QR", name: "Qatar Airways", homeCountry: "Qatar", skytraxRating: 5, haulTypes: ["LONG"], websiteUrl: "https://www.qatarairways.com" },
+  { iataCode: "SQ", name: "Singapore Airlines", homeCountry: "Singapore", skytraxRating: 5, haulTypes: ["LONG"], websiteUrl: "https://www.singaporeair.com" },
+  { iataCode: "NH", name: "All Nippon Airways", homeCountry: "Japan", skytraxRating: 5, haulTypes: ["LONG"], websiteUrl: "https://www.ana.co.jp" },
+  { iataCode: "CX", name: "Cathay Pacific", homeCountry: "Hong Kong", skytraxRating: 5, haulTypes: ["LONG"], websiteUrl: "https://www.cathaypacific.com" },
+  { iataCode: "OZ", name: "Asiana Airlines", homeCountry: "South Korea", skytraxRating: 5, haulTypes: ["LONG"], websiteUrl: "https://flyasiana.com" },
+  { iataCode: "BR", name: "EVA Air", homeCountry: "Taiwan", skytraxRating: 5, haulTypes: ["LONG"], websiteUrl: "https://www.evaair.com" },
+  { iataCode: "MH", name: "Malaysia Airlines", homeCountry: "Malaysia", skytraxRating: 5, haulTypes: ["LONG"], websiteUrl: "https://www.malaysiaairlines.com" },
+  { iataCode: "JL", name: "Japan Airlines", homeCountry: "Japan", skytraxRating: 5, haulTypes: ["LONG"], websiteUrl: "https://www.jal.com" },
+  { iataCode: "EK", name: "Emirates", homeCountry: "UAE", skytraxRating: 4, haulTypes: ["LONG"], websiteUrl: "https://www.emirates.com" },
+  { iataCode: "EY", name: "Etihad Airways", homeCountry: "UAE", skytraxRating: 4, haulTypes: ["LONG"], websiteUrl: "https://www.etihad.com" },
+  { iataCode: "TK", name: "Turkish Airlines", homeCountry: "Turkey", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.turkishairlines.com" },
 
   // Long-haul standard (3-4 star)
-  { iataCode: "LX", name: "Swiss International Air Lines", homeCountry: "Switzerland", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "OS", name: "Austrian Airlines", homeCountry: "Austria", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "AF", name: "Air France", homeCountry: "France", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "KL", name: "KLM Royal Dutch Airlines", homeCountry: "Netherlands", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "BA", name: "British Airways", homeCountry: "United Kingdom", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "VS", name: "Virgin Atlantic", homeCountry: "United Kingdom", skytraxRating: 4, haulTypes: ["LONG"] },
-  { iataCode: "UA", name: "United Airlines", homeCountry: "USA", skytraxRating: 3, haulTypes: ["LONG"] },
-  { iataCode: "DL", name: "Delta Air Lines", homeCountry: "USA", skytraxRating: 4, haulTypes: ["LONG"] },
-  { iataCode: "AA", name: "American Airlines", homeCountry: "USA", skytraxRating: 3, haulTypes: ["LONG"] },
-  { iataCode: "AC", name: "Air Canada", homeCountry: "Canada", skytraxRating: 3, haulTypes: ["LONG"] },
-  { iataCode: "AY", name: "Finnair", homeCountry: "Finland", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "LO", name: "LOT Polish Airlines", homeCountry: "Poland", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "SK", name: "SAS Scandinavian Airlines", homeCountry: "Sweden", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "IB", name: "Iberia", homeCountry: "Spain", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "TP", name: "TAP Air Portugal", homeCountry: "Portugal", skytraxRating: 3, haulTypes: ["LONG", "MID", "SHORT"] },
-  { iataCode: "TG", name: "Thai Airways", homeCountry: "Thailand", skytraxRating: 4, haulTypes: ["LONG"] },
-  { iataCode: "VN", name: "Vietnam Airlines", homeCountry: "Vietnam", skytraxRating: 4, haulTypes: ["LONG"] },
-  { iataCode: "CZ", name: "China Southern Airlines", homeCountry: "China", skytraxRating: 4, haulTypes: ["LONG"] },
-  { iataCode: "MU", name: "China Eastern Airlines", homeCountry: "China", skytraxRating: 4, haulTypes: ["LONG"] },
+  { iataCode: "LX", name: "Swiss International Air Lines", homeCountry: "Switzerland", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.swiss.com" },
+  { iataCode: "OS", name: "Austrian Airlines", homeCountry: "Austria", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.austrian.com" },
+  { iataCode: "AF", name: "Air France", homeCountry: "France", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.airfrance.com" },
+  { iataCode: "KL", name: "KLM Royal Dutch Airlines", homeCountry: "Netherlands", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.klm.com" },
+  { iataCode: "BA", name: "British Airways", homeCountry: "United Kingdom", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.britishairways.com" },
+  { iataCode: "VS", name: "Virgin Atlantic", homeCountry: "United Kingdom", skytraxRating: 4, haulTypes: ["LONG"], websiteUrl: "https://www.virginatlantic.com" },
+  { iataCode: "UA", name: "United Airlines", homeCountry: "USA", skytraxRating: 3, haulTypes: ["LONG"], websiteUrl: "https://www.united.com" },
+  { iataCode: "DL", name: "Delta Air Lines", homeCountry: "USA", skytraxRating: 4, haulTypes: ["LONG"], websiteUrl: "https://www.delta.com" },
+  { iataCode: "AA", name: "American Airlines", homeCountry: "USA", skytraxRating: 3, haulTypes: ["LONG"], websiteUrl: "https://www.aa.com" },
+  { iataCode: "AC", name: "Air Canada", homeCountry: "Canada", skytraxRating: 3, haulTypes: ["LONG"], websiteUrl: "https://www.aircanada.com" },
+  { iataCode: "AY", name: "Finnair", homeCountry: "Finland", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.finnair.com" },
+  { iataCode: "LO", name: "LOT Polish Airlines", homeCountry: "Poland", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.lot.com" },
+  { iataCode: "SK", name: "SAS Scandinavian Airlines", homeCountry: "Sweden", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.flysas.com" },
+  { iataCode: "IB", name: "Iberia", homeCountry: "Spain", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.iberia.com" },
+  { iataCode: "TP", name: "TAP Air Portugal", homeCountry: "Portugal", skytraxRating: 3, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.flytap.com" },
+  { iataCode: "TG", name: "Thai Airways", homeCountry: "Thailand", skytraxRating: 4, haulTypes: ["LONG"], websiteUrl: "https://www.thaiairways.com" },
+  { iataCode: "VN", name: "Vietnam Airlines", homeCountry: "Vietnam", skytraxRating: 4, haulTypes: ["LONG"], websiteUrl: "https://www.vietnamairlines.com" },
+  { iataCode: "CZ", name: "China Southern Airlines", homeCountry: "China", skytraxRating: 4, haulTypes: ["LONG"], websiteUrl: "https://www.csair.com" },
+  { iataCode: "MU", name: "China Eastern Airlines", homeCountry: "China", skytraxRating: 4, haulTypes: ["LONG"], websiteUrl: "https://www.ceair.com" },
 
   // Mid/short-haul ex-Germany (Business often premium-economy grade)
-  { iataCode: "EW", name: "Eurowings", homeCountry: "Germany", skytraxRating: 3, haulTypes: ["SHORT", "MID"] },
-  { iataCode: "DE", name: "Condor", homeCountry: "Germany", skytraxRating: 3, haulTypes: ["LONG", "MID"] },
+  { iataCode: "EW", name: "Eurowings", homeCountry: "Germany", skytraxRating: 3, haulTypes: ["SHORT", "MID"], websiteUrl: "https://www.eurowings.com" },
+  { iataCode: "DE", name: "Condor", homeCountry: "Germany", skytraxRating: 3, haulTypes: ["LONG", "MID"], websiteUrl: "https://www.condor.com" },
 ];
 
 /**
@@ -133,6 +134,7 @@ const sources: Array<{
   { name: "loyalty_lobby", type: "FORUM", baseUrl: "https://loyaltylobby.com/feed/", isActive: true },
   { name: "reddit_awardtravel", type: "FORUM", baseUrl: "https://www.reddit.com/r/awardtravel/new.json?limit=25", isActive: false },
   { name: "reddit_flightdeals", type: "FORUM", baseUrl: "https://www.reddit.com/r/flightdeals/.rss?limit=100", isActive: true },
+  { name: "duffel", type: "SCRAPER", baseUrl: "https://api.duffel.com", isActive: true },
 ];
 
 async function main() {

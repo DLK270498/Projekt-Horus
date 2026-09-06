@@ -1,7 +1,16 @@
 import { runForumCrawlers } from "./forumCrawler.js";
 import { runBaselineCheck } from "./baseline.js";
-import { scrapeGoogleFlightsBusinessClass } from "./googleFlightsScraper.js";
+import { ingestDuffelRoute } from "./duffelClient.js";
 import { prisma } from "./prisma.js";
+
+// Routes/dates queried against Duffel per run. Several dates per route so
+// the baseline engine has more than one data point per (airline, route,
+// cabin) to compare against - see baseline.ts.
+const DUFFEL_ROUTES: Array<{ originIata: string; destinationIata: string; departureDates: string[] }> = [
+  { originIata: "FRA", destinationIata: "JFK", departureDates: ["2026-10-20", "2026-11-10", "2026-12-05", "2027-01-15"] },
+  { originIata: "MUC", destinationIata: "BKK", departureDates: ["2026-10-22", "2026-11-12", "2026-12-08", "2027-01-18"] },
+  { originIata: "FRA", destinationIata: "SIN", departureDates: ["2026-10-25", "2026-11-15", "2026-12-10", "2027-01-20"] },
+];
 
 // Safety net: if anything hangs (a fetch without its own timeout, a stuck
 // browser page, ...) despite the per-request timeouts already in place
@@ -20,15 +29,15 @@ async function main() {
   const forumResults = await runForumCrawlers();
   console.log(forumResults);
 
-  console.log("Attempting Google Flights scrape (FRA -> New York)...");
-  try {
-    const result = await scrapeGoogleFlightsBusinessClass({
-      originQuery: "Frankfurt",
-      destinationQuery: "New York",
-    });
-    console.log("Google Flights result:", result);
-  } catch (error) {
-    console.error("Google Flights scrape failed:", (error as Error).message);
+  const duffelToken = process.env.DUFFEL_ACCESS_TOKEN;
+  if (!duffelToken) {
+    console.warn("DUFFEL_ACCESS_TOKEN not set - skipping Duffel ingestion.");
+  } else {
+    console.log(`Querying Duffel for ${DUFFEL_ROUTES.length} route(s)...`);
+    for (const route of DUFFEL_ROUTES) {
+      const result = await ingestDuffelRoute(route, duffelToken);
+      console.log(`${route.originIata} -> ${route.destinationIata}:`, result);
+    }
   }
 
   console.log("Running baseline/deal-detection pass...");
