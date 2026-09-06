@@ -85,20 +85,20 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       </header>
 
       <div className="sticky top-0 z-20 mt-8 -mx-6 border-b border-slate-800 bg-slate-950/90 px-6 py-3 backdrop-blur">
-        <form method="get" className="flex flex-wrap items-center gap-2 overflow-x-auto">
+        <form method="get" className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1">
           <input
             name="origin"
             list="airport-options"
             placeholder="Von"
             defaultValue={filters.origin}
-            className="w-24 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
+            className="w-24 shrink-0 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
           />
           <input
             name="destination"
             list="airport-options"
             placeholder="Nach"
             defaultValue={filters.destination}
-            className="w-24 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
+            className="w-24 shrink-0 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
           />
           <datalist id="airport-options">
             {airports.map((airport) => (
@@ -108,31 +108,35 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
             ))}
           </datalist>
 
-          <input
-            name="fromDate"
-            type="date"
-            title="Zeitraum ab"
-            defaultValue={filters.fromDate}
-            className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300"
-          />
+          <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-slate-700 bg-slate-900 px-3 py-2">
+            <span className="text-xs text-slate-500">Ab</span>
+            <input
+              name="fromDate"
+              type="date"
+              defaultValue={filters.fromDate}
+              className="w-[120px] bg-transparent text-sm text-slate-300 [color-scheme:dark]"
+            />
+          </div>
 
-          <input
-            name="toDate"
-            type="date"
-            title="Zeitraum bis"
-            defaultValue={filters.toDate}
-            className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300"
-          />
+          <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-slate-700 bg-slate-900 px-3 py-2">
+            <span className="text-xs text-slate-500">Bis</span>
+            <input
+              name="toDate"
+              type="date"
+              defaultValue={filters.toDate}
+              className="w-[120px] bg-transparent text-sm text-slate-300 [color-scheme:dark]"
+            />
+          </div>
 
           <input
             name="maxPrice"
             type="number"
             placeholder="Budget (€)"
             defaultValue={filters.maxPrice}
-            className="w-32 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
+            className="w-32 shrink-0 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
           />
 
-          <details className="relative">
+          <details className="relative shrink-0">
             <summary className="cursor-pointer list-none rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300 hover:border-slate-600">
               Weitere Filter ⌄
             </summary>
@@ -197,11 +201,11 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
 
           <button
             type="submit"
-            className="rounded-full bg-sky-500 px-5 py-2 text-sm font-medium text-slate-950 hover:bg-sky-400"
+            className="shrink-0 rounded-full bg-sky-500 px-5 py-2 text-sm font-medium text-slate-950 hover:bg-sky-400"
           >
             Filtern
           </button>
-          <a href="/" className="rounded-full px-3 py-2 text-sm text-slate-400 hover:text-slate-200">
+          <a href="/" className="shrink-0 rounded-full px-3 py-2 text-sm text-slate-400 hover:text-slate-200">
             Zurücksetzen
           </a>
         </form>
