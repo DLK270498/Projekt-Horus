@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "NODE_USE_ENV_PROXY=1 node --env-file=.env --import tsx src/index.ts",
+    "start:maintenance": "NODE_USE_ENV_PROXY=1 node --env-file=.env --import tsx src/maintenance.ts",
     "test": "node --import tsx --test src/**/*.test.ts",
     "lint": "eslint --config ../../eslint.config.mjs .",
     "typecheck": "tsc --noEmit",

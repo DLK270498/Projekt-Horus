@@ -163,6 +163,7 @@ export function FilterBar({ airlines, airports }: { airlines: Airline[]; airport
             apps/worker/src/index.ts's BATCH_LABEL. */}
         <select name="batch" defaultValue={get("batch") ?? ""} className={`${FIELD_CLASS} max-w-[11rem] truncate text-slate-300`}>
           <option value="">Alle Durchläufe</option>
+          <option value="maintenance">Nur laufender Preis-Check</option>
           <option value="2026-09-06-valuehubs-v4">Nur neuester Durchlauf (Value-Hubs)</option>
           <option value="2026-09-06-longhaul-v3">Nur vorheriger Durchlauf (Long-Haul)</option>
         </select>
