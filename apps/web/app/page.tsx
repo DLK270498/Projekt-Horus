@@ -63,6 +63,12 @@ const FIELD_CLASS =
 // they were added.
 const MUTED_TEXT_CLASS = "text-xs text-slate-400";
 
+// Every small rounded "pill" on a deal card (date range, nights, discount,
+// community-deal) shares this exact size/padding - previously the
+// discount/community pill used text-sm/px-3 while the others used
+// text-xs/px-2.5, so pills on the same card were visibly different sizes.
+const PILL_CLASS = "rounded-full px-2.5 py-1 text-xs font-medium";
+
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function HomePage({ searchParams }: { searchParams: SearchParams }) {
@@ -256,18 +262,20 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                   className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-5 transition-colors hover:border-slate-700"
                 >
                   {deal.isRealDeal && (
-                    <span className="absolute right-3 top-3 rounded-md bg-emerald-500 px-2.5 py-1 text-xs font-bold tracking-wide text-slate-950 shadow-lg">
+                    <span className={`absolute right-3 top-3 bg-emerald-500 font-bold text-slate-950 shadow-lg ${PILL_CLASS}`}>
                       Deal
                     </span>
                   )}
                   <div>
                     <div className={`flex items-center justify-between gap-2 pr-16 ${MUTED_TEXT_CLASS}`}>
                       <span className="flex items-center gap-1.5">
-                        <img
-                          src={`https://images.kiwi.com/airlines/64x64/${deal.airline.iataCode}.png`}
-                          alt=""
-                          className="h-4 w-4 rounded-sm object-contain"
-                        />
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white">
+                          <img
+                            src={`https://images.kiwi.com/airlines/64x64/${deal.airline.iataCode}.png`}
+                            alt=""
+                            className="h-3.5 w-3.5 object-contain"
+                          />
+                        </span>
                         {deal.airline.name}
                       </span>
                       <span className="text-amber-400">{"★".repeat(deal.airline.skytraxRating)}</span>
@@ -279,12 +287,12 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                       {deal.destination.city} <span className="font-normal text-slate-500">({deal.destination.iataCode})</span>
                     </p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      <span className={`rounded-full bg-slate-800 px-2.5 py-1 ${MUTED_TEXT_CLASS}`}>
+                      <span className={`bg-slate-800 text-slate-400 ${PILL_CLASS}`}>
                         {deal.departureDate ? new Date(deal.departureDate).toLocaleDateString("de-DE") : "Datum flexibel"}
                         {deal.returnDate ? ` – ${new Date(deal.returnDate).toLocaleDateString("de-DE")}` : ""}
                       </span>
                       {deal.nights && (
-                        <span className={`rounded-full bg-slate-800 px-2.5 py-1 ${MUTED_TEXT_CLASS}`}>{deal.nights} Nächte</span>
+                        <span className={`bg-slate-800 text-slate-400 ${PILL_CLASS}`}>{deal.nights} Nächte</span>
                       )}
                     </div>
                   </div>
@@ -301,13 +309,13 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                       )}
                     </div>
                     {deal.discountPercent > 0 ? (
-                      <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400">
+                      <span className={`bg-emerald-500/10 text-emerald-400 ${PILL_CLASS}`}>
                         −{deal.discountPercent.toFixed(0)}%
                       </span>
                     ) : (
                       <span
                         title="Von der Community als Deal kuratiert - noch keine eigene Preishistorie für einen berechneten Vergleichswert"
-                        className="rounded-full bg-sky-500/10 px-3 py-1 text-sm font-medium text-sky-400"
+                        className={`bg-sky-500/10 text-sky-400 ${PILL_CLASS}`}
                       >
                         Community-Deal
                       </span>
