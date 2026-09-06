@@ -9,62 +9,53 @@ import { prisma } from "./prisma.js";
 // still works and is worth re-enabling once better sources are found -
 // `import { runForumCrawlers } from "./forumCrawler.js";` and call it below.
 
-// Munich-only for now, and route-selected rather than brute-forced, based
-// on real signals researched 2026-09 (see chat): Lufthansa is adding new
-// Munich long-haul routes (Sao Paulo, Johannesburg) and upgauging others
-// (Mumbai to A380) for 2026 - new/growing routes carry promotional fares
-// while airlines build demand and fill the extra capacity. Established
-// competitive hubs (multiple airlines flying the same city pair) are
-// included too since competition is the other classic source of real
-// discounting. Asia-Pacific long-haul is currently reported as
-// capacity-constrained with firming fares (Middle East airspace
-// restrictions), so it's included for comparison but not over-weighted.
+// THIRD sampling round (2026-09, see git history for rounds 1-2). User
+// feedback after reviewing 110 real deals: too many were premium-tier
+// long-haul (North America, Premium Asia) that structurally never gets
+// below ~3,000€ round-trip business even at a real discount, and the same
+// handful of destinations (e.g. Delhi) showed up many times over. This
+// round targets destinations plausibly served by value-oriented carriers
+// (Turkish, Ethiopian, Gulf connections, local flag carriers) that are
+// more likely to actually land in a 2,000-2,500€ round-trip band - see
+// packages/db/prisma/seed.ts for the new airports added for this batch.
+// Short/medium-haul (e.g. Athens) is deliberately excluded - explicitly
+// long-haul only per the user's request.
 const MUC_ROUTES: string[] = [
-  "GRU", "JNB", "BOM", "SEA", // new/upgauged Munich routes - launch-fare candidates
-  "JFK", "ORD", "LAX", "YYZ", // competitive North America
-  "DXB", // competitive Middle East hub
-  "SIN", "HKG", "ICN", "PEK", "PVG", "DEL", "BKK", // Asia (comparison, currently reported capacity-constrained)
-  "CPT", // seasonal leisure/business mix, Southern Hemisphere counter-season
-  "CUN", "PUJ", "ATH", // leisure-heavy long/mid-haul, more price-elastic historically
+  // Kept from rounds 1-2 - already producing sub-2,700€ deals or plausible
+  // candidates for the target band.
+  "GRU", "JNB", "BOM", "SEA", "DXB", "SIN", "HKG", "ICN", "PEK", "PVG",
+  "DEL", "BKK", "CPT", "CUN", "PUJ",
+  // North America dropped for this batch - every prior observation landed
+  // well above the target band (2,700€-5,700€) regardless of date.
+  // New for this round - value/leisure long-haul markets not tried yet.
+  "NBO", "ADD", "CMB", "MLE", "KUL", "MNL", "SGN", "HAN", "LOS", "ACC",
+  "DAC", "MRU",
 ];
 
-// Departure dates deliberately avoid German (Bavaria) peak-travel windows
-// (Christmas/New Year, Fasching, Easter, Pentecost, autumn half-term,
-// summer school holidays) where fares are structurally higher regardless
-// of any underlying "deal" - an anti-cyclical sample is more likely to
-// catch genuine troughs. Same date set for every route to keep the
-// request count predictable; extend/refine per-destination seasonality
-// later if the data warrants it.
-//
-// This is the SECOND sampling round - deliberately offset from the first
-// round's dates (2026-09-15 through 2027-06-01, see git history) so this
-// run adds new historical data points instead of re-querying periods we
-// already have observations for. Each date was nudged to skip Bavaria's
-// 2026/2027 school-holiday windows (autumn ~Nov 2-6, Fasching ~Feb 15-19,
-// Easter ~late Mar/early Apr).
+// Anti-cyclical dates, offset from rounds 1-2 (see git history) so this
+// batch samples periods we don't already have data for. Nudged around
+// Bavaria's 2026/2027 school-holiday windows same as before.
 const OFF_PEAK_DEPARTURE_DATES: string[] = [
-  "2026-09-22",
-  "2026-10-06",
-  "2026-10-20",
-  "2026-10-30",
-  "2026-11-17",
-  "2026-12-01",
-  "2027-01-26",
-  "2027-02-09",
-  "2027-02-23",
-  "2027-03-09",
-  "2027-03-23",
-  "2027-05-11",
-  "2027-05-25",
-  "2027-06-08",
+  "2026-09-13",
+  "2026-10-01",
+  "2026-12-08",
+  "2027-01-12",
+  "2027-04-13",
+  "2027-06-15",
 ];
 
-// Round-trip business fares are what "a deal" means in this market (see
-// duffelClient.ts) - one-way pricing follows different, disproportionate
-// economics and isn't comparable. 9 nights is a plausible length for a
-// long-haul business trip (a working week plus travel days) without being
-// so long it reads as a leisure holiday.
-const TRIP_LENGTH_NIGHTS = 9;
+// User wants to filter results by minimum time on the ground (>=1/2/3
+// weeks) - querying multiple actual trip lengths gives every band real
+// data to filter against, instead of everything being stuck at one fixed
+// duration. Round-trip business fares don't vary much with trip length
+// itself (route/season/day-of-week drive price far more), so these three
+// values are just samples across the bands users can filter by, not an
+// attempt to find the "best" duration.
+const TRIP_LENGTHS_NIGHTS = [7, 14, 21];
+
+// Tags every observation from this run so the frontend can compare this
+// batch against older data before anything gets deleted.
+const BATCH_LABEL = "2026-09-06-longhaul-v3";
 
 function addDays(dateStr: string, days: number): string {
   const date = new Date(`${dateStr}T00:00:00Z`);
@@ -72,22 +63,29 @@ function addDays(dateStr: string, days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
+const TRIP_DATES = OFF_PEAK_DEPARTURE_DATES.flatMap((departure) =>
+  TRIP_LENGTHS_NIGHTS.map((nights) => ({
+    departure,
+    return: addDays(departure, nights),
+    nights,
+  })),
+);
+
 const DUFFEL_ROUTES = MUC_ROUTES.map((destinationIata) => ({
   originIata: "MUC",
   destinationIata,
-  tripDates: OFF_PEAK_DEPARTURE_DATES.map((departure) => ({
-    departure,
-    return: addDays(departure, TRIP_LENGTH_NIGHTS),
-  })),
+  tripDates: TRIP_DATES,
+  batchLabel: BATCH_LABEL,
 }));
 
 // Safety net: if anything hangs (a fetch without its own timeout, a stuck
 // browser page, ...) despite the per-request timeouts already in place
 // elsewhere, force-exit rather than leave a runaway process behind.
 // unref() means this alone won't keep the process alive - it only fires if
-// something else already is. Sized generously for this run's ~280 Duffel
-// requests at ~1.5-2s each (request + rate-limit delay) plus response time.
-const MAX_RUNTIME_MS = 25 * 60 * 1000;
+// something else already is. Sized generously for this run's ~560 Duffel
+// requests (31 routes x 6 dates x 3 trip lengths) at ~1.5-2s each (request
+// + rate-limit delay) plus response time - roughly double rounds 1-2.
+const MAX_RUNTIME_MS = 55 * 60 * 1000;
 const watchdog = setTimeout(() => {
   console.error(`Worker exceeded max runtime of ${MAX_RUNTIME_MS}ms - force-exiting.`);
   process.exit(1);
@@ -99,7 +97,9 @@ async function main() {
   if (!duffelToken) {
     console.warn("DUFFEL_ACCESS_TOKEN not set - skipping Duffel ingestion.");
   } else {
-    console.log(`Querying Duffel for ${DUFFEL_ROUTES.length} route(s) x ${OFF_PEAK_DEPARTURE_DATES.length} date(s)...`);
+    console.log(
+      `Querying Duffel for ${DUFFEL_ROUTES.length} route(s) x ${OFF_PEAK_DEPARTURE_DATES.length} date(s) x ${TRIP_LENGTHS_NIGHTS.length} trip length(s) (batch "${BATCH_LABEL}")...`,
+    );
     for (const route of DUFFEL_ROUTES) {
       const result = await ingestDuffelRoute(route, duffelToken);
       console.log(`${route.originIata} -> ${route.destinationIata}:`, result);

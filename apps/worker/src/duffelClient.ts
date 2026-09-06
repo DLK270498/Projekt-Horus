@@ -179,7 +179,12 @@ export async function fetchCheapestOffersByAirline(
  * fixed gap between requests to stay under Duffel's rate limit.
  */
 export async function ingestDuffelRoute(
-  query: { originIata: string; destinationIata: string; tripDates: Array<{ departure: string; return: string }> },
+  query: {
+    originIata: string;
+    destinationIata: string;
+    tripDates: Array<{ departure: string; return: string; nights: number }>;
+    batchLabel?: string;
+  },
   accessToken: string,
 ): Promise<{ observationsCreated: number; errors: string[] }> {
   const [origin, destination, source, airlines] = await Promise.all([
@@ -219,9 +224,11 @@ export async function ingestDuffelRoute(
             cabinClass: "BUSINESS",
             departureDate: new Date(offer.departureDate),
             returnDate: new Date(offer.returnDate),
+            nights: trip.nights,
             price: offer.price,
             currency: offer.currency,
             rawPayload: offer.raw,
+            batchLabel: query.batchLabel,
           },
         });
         observationsCreated++;

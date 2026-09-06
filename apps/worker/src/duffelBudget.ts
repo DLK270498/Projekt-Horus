@@ -15,13 +15,12 @@ import { dirname, join } from "node:path";
  * invoice, not a substitute for checking Duffel's own billing dashboard.
  */
 const ESTIMATED_COST_PER_REQUEST_EUR = 0.01;
-// Raised from 5€ to 11€ (user authorized ~7€ more on top of the 3.75€
-// already spent) after the round-trip fix required re-querying from
-// scratch. Duffel's own dashboard showed a 0.00€ balance even after the
-// first ~375 requests, suggesting the excess-search fee bills later/
-// differently than assumed - kept conservative here regardless, since
-// that can't be confirmed live (see comment below).
-const HARD_CAP_EUR = 11;
+// Raised from 11€ to 15€: user authorized 10€ more for the long-haul,
+// multi-trip-length batch (apps/worker/src/index.ts's third sampling
+// round, ~558 requests ≈ 5.6€ nominal), on top of the ~3-4€ already spent
+// in production. Each deployment target (this sandbox vs. Railway) tracks
+// its own usage file, so this cap is per-environment, not a shared total.
+const HARD_CAP_EUR = 15;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const USAGE_FILE = join(__dirname, "..", ".duffel-usage.json");

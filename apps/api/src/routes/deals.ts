@@ -13,11 +13,28 @@ type DealQuery = {
   onlyRealDeals?: string;
   fromDate?: string;
   toDate?: string;
+  minNights?: string;
+  batch?: string;
+  uniqueDestinations?: string;
 };
 
 export async function dealRoutes(app: FastifyInstance) {
   app.get<{ Querystring: DealQuery }>("/deals", async (request) => {
-    const { origin, destination, airline, minRating, maxPrice, minDiscount, haulType, onlyRealDeals, fromDate, toDate } = request.query;
+    const {
+      origin,
+      destination,
+      airline,
+      minRating,
+      maxPrice,
+      minDiscount,
+      haulType,
+      onlyRealDeals,
+      fromDate,
+      toDate,
+      minNights,
+      batch,
+      uniqueDestinations,
+    } = request.query;
 
     // A "real" deal has a baseline-computed discount (SCRAPER/API sources,
     // e.g. Duffel); forum-curated posts land in the same table with
@@ -31,6 +48,8 @@ export async function dealRoutes(app: FastifyInstance) {
         discountPercent: minDiscountFilter ? { gte: minDiscountFilter } : undefined,
         priceObservation: {
           price: maxPrice ? { lte: Number(maxPrice) } : undefined,
+          nights: minNights ? { gte: Number(minNights) } : undefined,
+          batchLabel: batch || undefined,
           departureDate:
             fromDate || toDate
               ? { gte: fromDate ? new Date(fromDate) : undefined, lte: toDate ? new Date(toDate) : undefined }
@@ -50,10 +69,26 @@ export async function dealRoutes(app: FastifyInstance) {
         },
       },
       orderBy: { priceObservation: { price: "asc" } },
-      take: 200,
+      take: 500,
     });
 
-    return deals.map((deal) => ({
+    // Cheapest deal per destination only, by default - a user browsing
+    // deals doesn't want the same city five times over at slightly
+    // different dates. `deals` is already price-ascending, so the first
+    // occurrence per destination is the cheapest. Pass
+    // uniqueDestinations=false to see every candidate (e.g. to compare
+    // batches before pruning old data).
+    const dealsToReturn =
+      uniqueDestinations === "false"
+        ? deals
+        : deals.filter((deal, index, all) => {
+            const firstIndexForDestination = all.findIndex(
+              (d) => d.priceObservation.destinationAirportId === deal.priceObservation.destinationAirportId,
+            );
+            return firstIndexForDestination === index;
+          });
+
+    return dealsToReturn.map((deal) => ({
       id: deal.id,
       price: Number(deal.priceObservation.price),
       currency: deal.priceObservation.currency,
@@ -63,6 +98,8 @@ export async function dealRoutes(app: FastifyInstance) {
       cabinClass: deal.priceObservation.cabinClass,
       departureDate: deal.priceObservation.departureDate,
       returnDate: deal.priceObservation.returnDate,
+      nights: deal.priceObservation.nights,
+      batchLabel: deal.priceObservation.batchLabel,
       clickoutUrl: deal.clickoutUrl,
       clickoutCheckedAt: deal.clickoutCheckedAt,
       clickoutIsValid: deal.clickoutIsValid,

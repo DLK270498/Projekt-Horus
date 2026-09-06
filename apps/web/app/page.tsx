@@ -10,6 +10,8 @@ type Deal = {
   cabinClass: string;
   departureDate: string | null;
   returnDate: string | null;
+  nights: number | null;
+  batchLabel: string | null;
   clickoutUrl: string;
   clickoutCheckedAt: string | null;
   clickoutIsValid: boolean;
@@ -64,6 +66,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
     onlyRealDeals: param("onlyRealDeals"),
     fromDate: param("fromDate"),
     toDate: param("toDate"),
+    minNights: param("minNights"),
+    batch: param("batch"),
   };
 
   const [deals, airlines, airports] = await Promise.all([
@@ -136,6 +140,17 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
             className="w-32 shrink-0 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm placeholder:text-slate-500"
           />
 
+          <select
+            name="minNights"
+            defaultValue={filters.minNights ?? ""}
+            className="shrink-0 rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300"
+          >
+            <option value="">Aufenthalt egal</option>
+            <option value="7">≥ 1 Woche</option>
+            <option value="14">≥ 2 Wochen</option>
+            <option value="21">≥ 3 Wochen</option>
+          </select>
+
           <details className="relative shrink-0">
             <summary className="cursor-pointer list-none rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300 hover:border-slate-600">
               Weitere Filter ⌄
@@ -196,6 +211,18 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                 />
                 Nur echte Deals
               </label>
+
+              {/* Lets you compare the newest ingestion batch against older
+                  data before deciding to prune anything - see
+                  apps/worker/src/index.ts's BATCH_LABEL. */}
+              <select
+                name="batch"
+                defaultValue={filters.batch ?? ""}
+                className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
+              >
+                <option value="">Alle Durchläufe</option>
+                <option value="2026-09-06-longhaul-v3">Nur neuer Durchlauf (Long-Haul)</option>
+              </select>
             </div>
           </details>
 
@@ -247,6 +274,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                     {deal.departureDate
                       ? ` · ${new Date(deal.departureDate).toLocaleDateString("de-DE")}`
                       : " · Datum flexibel"}
+                    {deal.returnDate ? ` – ${new Date(deal.returnDate).toLocaleDateString("de-DE")}` : ""}
+                    {deal.nights ? ` · ${deal.nights} Nächte` : ""}
                   </p>
                 </div>
 

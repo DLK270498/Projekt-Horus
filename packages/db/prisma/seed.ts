@@ -118,6 +118,25 @@ const airports: Array<{
   { iataCode: "BOM", name: "Chhatrapati Shivaji Maharaj International Airport", city: "Mumbai", country: "India", latitude: 19.0896, longitude: 72.8656 },
   { iataCode: "DEL", name: "Indira Gandhi International Airport", city: "Delhi", country: "India", latitude: 28.5562, longitude: 77.1000 },
   { iataCode: "SEA", name: "Seattle-Tacoma International Airport", city: "Seattle", country: "USA", latitude: 47.4502, longitude: -122.3088 },
+
+  // Added for the long-haul, value-focused route batch (2026-09, see
+  // apps/worker/src/index.ts): destinations picked for plausibly softer
+  // business fares (African/South & Southeast Asian long-haul served by
+  // value-oriented carriers - Turkish, Ethiopian, Gulf connections, local
+  // flag carriers) rather than premium-tier long-haul hubs that structurally
+  // never discount into a sub-2,500€ round-trip business band.
+  { iataCode: "NBO", name: "Jomo Kenyatta International Airport", city: "Nairobi", country: "Kenya", latitude: -1.3192, longitude: 36.9278 },
+  { iataCode: "ADD", name: "Addis Ababa Bole International Airport", city: "Addis Ababa", country: "Ethiopia", latitude: 8.9779, longitude: 38.7993 },
+  { iataCode: "CMB", name: "Bandaranaike International Airport", city: "Colombo", country: "Sri Lanka", latitude: 7.1808, longitude: 79.8841 },
+  { iataCode: "MLE", name: "Velana International Airport", city: "Malé", country: "Maldives", latitude: 4.1918, longitude: 73.5291 },
+  { iataCode: "KUL", name: "Kuala Lumpur International Airport", city: "Kuala Lumpur", country: "Malaysia", latitude: 2.7456, longitude: 101.7099 },
+  { iataCode: "MNL", name: "Ninoy Aquino International Airport", city: "Manila", country: "Philippines", latitude: 14.5086, longitude: 121.0198 },
+  { iataCode: "SGN", name: "Tan Son Nhat International Airport", city: "Ho Chi Minh City", country: "Vietnam", latitude: 10.8188, longitude: 106.6520 },
+  { iataCode: "HAN", name: "Noi Bai International Airport", city: "Hanoi", country: "Vietnam", latitude: 21.2212, longitude: 105.8072 },
+  { iataCode: "LOS", name: "Murtala Muhammed International Airport", city: "Lagos", country: "Nigeria", latitude: 6.5774, longitude: 3.3212 },
+  { iataCode: "ACC", name: "Kotoka International Airport", city: "Accra", country: "Ghana", latitude: 5.6052, longitude: -0.1669 },
+  { iataCode: "DAC", name: "Hazrat Shahjalal International Airport", city: "Dhaka", country: "Bangladesh", latitude: 23.8433, longitude: 90.3978 },
+  { iataCode: "MRU", name: "Sir Seewoosagur Ramgoolam International Airport", city: "Mauritius", country: "Mauritius", latitude: -20.4302, longitude: 57.6836 },
 ];
 
 /**
