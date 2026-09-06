@@ -1,4 +1,5 @@
 import { googleFlightsUrl } from "./googleFlights";
+import { FilterBar } from "./FilterBar";
 
 type Deal = {
   id: string;
@@ -39,24 +40,9 @@ async function getJson<T>(path: string, params?: Record<string, string | undefin
   return res.json();
 }
 
-const HAUL_TYPE_LABELS: Record<string, string> = {
-  LONG: "Langstrecke",
-  MID: "Mittelstrecke",
-  SHORT: "Kurzstrecke",
-};
-
 function formatPrice(price: number, currency: string) {
   return new Intl.NumberFormat("de-DE", { style: "currency", currency }).format(price);
 }
-
-// Shared sizing so every filter control (text input, date field, select,
-// button) lines up at the same height instead of drifting by a few px
-// depending on each element's default vertical padding. text-base (16px)
-// on mobile avoids iOS Safari's auto-zoom-on-focus for any input under
-// 16px; sm:text-sm restores the tighter desktop look above the 640px
-// breakpoint.
-const FIELD_CLASS =
-  "h-10 shrink-0 rounded-full border border-slate-700 bg-slate-900 px-4 text-base placeholder:text-slate-500 sm:text-sm";
 
 // All secondary/muted ("shadow") text across the page shares this size -
 // previously these drifted between text-xs and text-sm depending on where
@@ -110,138 +96,12 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
       </header>
 
       <div className="sticky top-0 z-20 mt-8 -mx-6 border-b border-slate-800 bg-slate-950/90 px-6 py-3 backdrop-blur">
-        {/* Every filter lives in a single scrollable row now. Native
-            <select>/<input> controls never need an absolutely-positioned
-            overlay to show their options, so they're immune to the CSS
-            overflow-clipping quirk that made the old popover-based
-            "Weitere Filter" panel dead-on-click (overflow-x: auto forces
-            overflow-y to compute as auto too, silently clipping anything
-            positioned to overflow vertically). */}
-        <form method="get" className="relative">
-          <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1">
-            <input
-              name="origin"
-              list="airport-options"
-              placeholder="Von"
-              defaultValue={filters.origin}
-              className={`w-24 ${FIELD_CLASS}`}
-            />
-            <input
-              name="destination"
-              list="airport-options"
-              placeholder="Nach"
-              defaultValue={filters.destination}
-              className={`w-24 ${FIELD_CLASS}`}
-            />
-            <datalist id="airport-options">
-              {airports.map((airport) => (
-                <option key={airport.id} value={airport.iataCode}>
-                  {airport.city}
-                </option>
-              ))}
-            </datalist>
-
-            <div className={`flex items-center gap-1.5 px-3 ${FIELD_CLASS}`}>
-              <span className="text-xs text-slate-500">Ab</span>
-              <input
-                name="fromDate"
-                type="date"
-                defaultValue={filters.fromDate}
-                className="w-[110px] bg-transparent text-base text-slate-300 [color-scheme:dark] sm:text-sm"
-              />
-            </div>
-
-            <div className={`flex items-center gap-1.5 px-3 ${FIELD_CLASS}`}>
-              <span className="text-xs text-slate-500">Bis</span>
-              <input
-                name="toDate"
-                type="date"
-                defaultValue={filters.toDate}
-                className="w-[110px] bg-transparent text-base text-slate-300 [color-scheme:dark] sm:text-sm"
-              />
-            </div>
-
-            <input
-              name="maxPrice"
-              type="number"
-              placeholder="Budget (€)"
-              defaultValue={filters.maxPrice}
-              className={`w-28 ${FIELD_CLASS}`}
-            />
-
-            <select name="minNights" defaultValue={filters.minNights ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
-              <option value="">Aufenthalt egal</option>
-              <option value="7">≥ 1 Woche</option>
-              <option value="14">≥ 2 Wochen</option>
-              <option value="21">≥ 3 Wochen</option>
-            </select>
-
-            <select name="airline" defaultValue={filters.airline ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
-              <option value="">Alle Airlines</option>
-              {airlines.map((airline) => (
-                <option key={airline.id} value={airline.iataCode}>
-                  {airline.name}
-                </option>
-              ))}
-            </select>
-
-            <select name="minRating" defaultValue={filters.minRating ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
-              <option value="">Rating egal</option>
-              <option value="5">★★★★★+</option>
-              <option value="4">★★★★+</option>
-              <option value="3">★★★+</option>
-            </select>
-
-            <select name="haulType" defaultValue={filters.haulType ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
-              <option value="">Haul-Typ egal</option>
-              {Object.entries(HAUL_TYPE_LABELS).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-
-            <input
-              name="minDiscount"
-              type="number"
-              placeholder="Min. Ersparnis %"
-              defaultValue={filters.minDiscount}
-              className={`w-36 ${FIELD_CLASS}`}
-            />
-
-            <label className={`flex items-center gap-2 text-slate-300 ${FIELD_CLASS}`}>
-              <input
-                type="checkbox"
-                name="onlyRealDeals"
-                value="true"
-                defaultChecked={filters.onlyRealDeals === "true"}
-                className="h-4 w-4 rounded border-slate-600 bg-slate-900 accent-emerald-500"
-              />
-              Nur echte Deals
-            </label>
-
-            {/* Lets you compare the newest ingestion batch against older
-                data before deciding to prune anything - see
-                apps/worker/src/index.ts's BATCH_LABEL. */}
-            <select name="batch" defaultValue={filters.batch ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
-              <option value="">Alle Durchläufe</option>
-              <option value="2026-09-06-valuehubs-v4">Nur neuester Durchlauf (Value-Hubs)</option>
-              <option value="2026-09-06-longhaul-v3">Nur vorheriger Durchlauf (Long-Haul)</option>
-            </select>
-
-            <button type="submit" className={`${FIELD_CLASS} bg-sky-500 px-5 font-medium text-slate-950 hover:bg-sky-400`}>
-              Filtern
-            </button>
-            <a href="/" className={`${FIELD_CLASS} flex items-center border-transparent text-slate-400 hover:text-slate-200`}>
-              Zurücksetzen
-            </a>
-          </div>
-          {/* Fade + arrow hint that the row scrolls further right - the
-              filter bar overflowed silently before with no visual cue. */}
-          <div className="pointer-events-none absolute right-0 top-0 flex h-10 w-10 items-center justify-end bg-gradient-to-l from-slate-950 to-transparent text-slate-500">
-            ›
-          </div>
-        </form>
+        {/* Client Component: submitting via router.push (instead of a
+            native form GET) triggers Next's client-side navigation, which
+            shows loading.tsx's skeleton while this page's Server
+            Component re-fetches - a plain form GET would instead do a
+            full hard page reload with no perceptible loading state. */}
+        <FilterBar airlines={airlines} airports={airports} />
       </div>
 
       <section className="mt-8">
@@ -339,7 +199,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                     rel="nofollow sponsored noopener"
                     className="mt-4 block rounded-lg bg-sky-500 px-4 py-2 text-center text-sm font-medium text-slate-950 hover:bg-sky-400"
                   >
-                    {deal.departureDate ? "Bei Google Flights prüfen" : "Zum Angebot"}
+                    zu Google Flights
                   </a>
                 </article>
               ))}
