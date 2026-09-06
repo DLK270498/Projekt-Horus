@@ -99,10 +99,11 @@ model PriceObservation {
   sourceId          String
   source            Source     @relation(fields: [sourceId], references: [id])
   cabinClass        CabinClass @default(BUSINESS)
-  departureDate     DateTime
+  departureDate     DateTime? // null for forum/blog deals that only give a travel window, not a fixed date
   returnDate        DateTime?
   price             Decimal    @db.Decimal(10, 2)
   currency          String     @default("EUR")
+  sourceUrl         String? // deep link to the specific post/result this price came from
   rawPayload        Json?
   observedAt        DateTime   @default(now())
 

@@ -1,4 +1,4 @@
-import { PrismaClient, type HaulType } from "../generated/client/index.js";
+import { PrismaClient, type HaulType, type SourceType } from "../generated/client/index.js";
 
 const prisma = new PrismaClient();
 
@@ -54,14 +54,77 @@ const airlines: Array<{
   { iataCode: "DE", name: "Condor", homeCountry: "Germany", skytraxRating: 3, haulTypes: ["LONG", "MID"] },
 ];
 
+/**
+ * Airports: German origin hubs + a first batch of common long-haul
+ * destinations, enough to test ingestion end-to-end. Extend as new
+ * routes get scraped.
+ */
+const airports: Array<{
+  iataCode: string;
+  name: string;
+  city: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+}> = [
+  { iataCode: "FRA", name: "Frankfurt Airport", city: "Frankfurt", country: "Germany", latitude: 50.0379, longitude: 8.5622 },
+  { iataCode: "MUC", name: "Munich Airport", city: "Munich", country: "Germany", latitude: 48.3538, longitude: 11.7861 },
+  { iataCode: "DUS", name: "Düsseldorf Airport", city: "Düsseldorf", country: "Germany", latitude: 51.2895, longitude: 6.7668 },
+  { iataCode: "BER", name: "Berlin Brandenburg Airport", city: "Berlin", country: "Germany", latitude: 52.3667, longitude: 13.5033 },
+  { iataCode: "HAM", name: "Hamburg Airport", city: "Hamburg", country: "Germany", latitude: 53.6304, longitude: 9.9882 },
+  { iataCode: "JFK", name: "John F. Kennedy International Airport", city: "New York", country: "USA", latitude: 40.6413, longitude: -73.7781 },
+  { iataCode: "SIN", name: "Singapore Changi Airport", city: "Singapore", country: "Singapore", latitude: 1.3644, longitude: 103.9915 },
+  { iataCode: "DXB", name: "Dubai International Airport", city: "Dubai", country: "UAE", latitude: 25.2532, longitude: 55.3657 },
+  { iataCode: "HND", name: "Tokyo Haneda Airport", city: "Tokyo", country: "Japan", latitude: 35.5494, longitude: 139.7798 },
+  { iataCode: "BKK", name: "Suvarnabhumi Airport", city: "Bangkok", country: "Thailand", latitude: 13.6900, longitude: 100.7501 },
+  { iataCode: "SYD", name: "Sydney Kingsford Smith Airport", city: "Sydney", country: "Australia", latitude: -33.9399, longitude: 151.1753 },
+  { iataCode: "JNB", name: "OR Tambo International Airport", city: "Johannesburg", country: "South Africa", latitude: -26.1392, longitude: 28.2460 },
+  { iataCode: "GRU", name: "São Paulo–Guarulhos International Airport", city: "São Paulo", country: "Brazil", latitude: -23.4356, longitude: -46.4731 },
+  { iataCode: "LAX", name: "Los Angeles International Airport", city: "Los Angeles", country: "USA", latitude: 33.9416, longitude: -118.4085 },
+  { iataCode: "HKG", name: "Hong Kong International Airport", city: "Hong Kong", country: "Hong Kong", latitude: 22.3080, longitude: 113.9185 },
+];
+
+/**
+ * Ingestion sources. google_flights is a SCRAPER (Playwright), the rest are
+ * FORUM/deal-blog feeds crawled via RSS/JSON. See apps/worker.
+ */
+const sources: Array<{
+  name: string;
+  type: SourceType;
+  baseUrl: string;
+}> = [
+  { name: "google_flights", type: "SCRAPER", baseUrl: "https://www.google.com/travel/flights" },
+  { name: "secret_flying", type: "FORUM", baseUrl: "https://www.secretflying.com/feed/" },
+  { name: "mighty_travels", type: "FORUM", baseUrl: "https://www.mightytravels.com/feed/" },
+  { name: "loyalty_lobby", type: "FORUM", baseUrl: "https://loyaltylobby.com/feed/" },
+  { name: "reddit_awardtravel", type: "FORUM", baseUrl: "https://www.reddit.com/r/awardtravel/new.json?limit=25" },
+];
+
 async function main() {
   console.log(`Seeding ${airlines.length} airlines...`);
-
   for (const airline of airlines) {
     await prisma.airline.upsert({
       where: { iataCode: airline.iataCode },
       update: airline,
       create: airline,
+    });
+  }
+
+  console.log(`Seeding ${airports.length} airports...`);
+  for (const airport of airports) {
+    await prisma.airport.upsert({
+      where: { iataCode: airport.iataCode },
+      update: airport,
+      create: airport,
+    });
+  }
+
+  console.log(`Seeding ${sources.length} sources...`);
+  for (const source of sources) {
+    await prisma.source.upsert({
+      where: { name: source.name },
+      update: source,
+      create: source,
     });
   }
 

@@ -1,0 +1,23 @@
+{
+  "name": "@horus/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "NODE_USE_ENV_PROXY=1 tsx src/index.ts",
+    "test": "node --import tsx --test src/**/*.test.ts",
+    "lint": "eslint --config ../../eslint.config.mjs .",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@horus/db": "workspace:*",
+    "playwright": "^1.49.1",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.2"
+  }
+}
