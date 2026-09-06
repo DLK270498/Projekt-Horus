@@ -57,7 +57,11 @@ function formatPrice(price: number, currency: string) {
 // breakpoint.
 const FIELD_CLASS =
   "h-10 shrink-0 rounded-full border border-slate-700 bg-slate-900 px-4 text-base placeholder:text-slate-500 sm:text-sm";
-const PANEL_FIELD_CLASS = "h-10 rounded-lg border border-slate-700 bg-slate-950 px-3 text-base sm:text-sm";
+
+// All secondary/muted ("shadow") text across the page shares this size -
+// previously these drifted between text-xs and text-sm depending on where
+// they were added.
+const MUTED_TEXT_CLASS = "text-xs text-slate-400";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -95,151 +99,128 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
               <path d="M2 16 Q9 4 16 14 Q23 4 30 16" />
             </svg>
           </div>
-          <div>
-            <h1 className="text-lg font-semibold tracking-tight">Horus</h1>
-            <p className="text-xs text-slate-500">Business Class Deals ex Deutschland</p>
-          </div>
+          <h1 className="text-lg font-semibold tracking-tight">Horus</h1>
         </div>
-        <a href="/airlines" className="text-sm text-sky-400 hover:underline">
-          Airline-Longlist →
-        </a>
       </header>
 
       <div className="sticky top-0 z-20 mt-8 -mx-6 border-b border-slate-800 bg-slate-950/90 px-6 py-3 backdrop-blur">
-        <form method="get">
-          {/* Primary filters: horizontally scrollable on narrow screens.
-              This row must NOT also contain the "Weitere Filter" popover -
-              overflow-x-auto implicitly makes overflow-y "auto" too (CSS
-              spec quirk), which silently clipped the popover instead of
-              showing it, looking like the button did nothing on click. */}
-          <div className="relative">
-            <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1">
+        {/* Every filter lives in a single scrollable row now. Native
+            <select>/<input> controls never need an absolutely-positioned
+            overlay to show their options, so they're immune to the CSS
+            overflow-clipping quirk that made the old popover-based
+            "Weitere Filter" panel dead-on-click (overflow-x: auto forces
+            overflow-y to compute as auto too, silently clipping anything
+            positioned to overflow vertically). */}
+        <form method="get" className="relative">
+          <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-1">
+            <input
+              name="origin"
+              list="airport-options"
+              placeholder="Von"
+              defaultValue={filters.origin}
+              className={`w-24 ${FIELD_CLASS}`}
+            />
+            <input
+              name="destination"
+              list="airport-options"
+              placeholder="Nach"
+              defaultValue={filters.destination}
+              className={`w-24 ${FIELD_CLASS}`}
+            />
+            <datalist id="airport-options">
+              {airports.map((airport) => (
+                <option key={airport.id} value={airport.iataCode}>
+                  {airport.city}
+                </option>
+              ))}
+            </datalist>
+
+            <div className={`flex items-center gap-1.5 px-3 ${FIELD_CLASS}`}>
+              <span className="text-xs text-slate-500">Ab</span>
               <input
-                name="origin"
-                list="airport-options"
-                placeholder="Von"
-                defaultValue={filters.origin}
-                className={`w-24 ${FIELD_CLASS}`}
+                name="fromDate"
+                type="date"
+                defaultValue={filters.fromDate}
+                className="w-[110px] bg-transparent text-base text-slate-300 [color-scheme:dark] sm:text-sm"
               />
-              <input
-                name="destination"
-                list="airport-options"
-                placeholder="Nach"
-                defaultValue={filters.destination}
-                className={`w-24 ${FIELD_CLASS}`}
-              />
-              <datalist id="airport-options">
-                {airports.map((airport) => (
-                  <option key={airport.id} value={airport.iataCode}>
-                    {airport.city}
-                  </option>
-                ))}
-              </datalist>
-
-              <div className={`flex items-center gap-1.5 px-3 ${FIELD_CLASS}`}>
-                <span className="text-xs text-slate-500">Ab</span>
-                <input
-                  name="fromDate"
-                  type="date"
-                  defaultValue={filters.fromDate}
-                  className="w-[110px] bg-transparent text-base text-slate-300 [color-scheme:dark] sm:text-sm"
-                />
-              </div>
-
-              <div className={`flex items-center gap-1.5 px-3 ${FIELD_CLASS}`}>
-                <span className="text-xs text-slate-500">Bis</span>
-                <input
-                  name="toDate"
-                  type="date"
-                  defaultValue={filters.toDate}
-                  className="w-[110px] bg-transparent text-base text-slate-300 [color-scheme:dark] sm:text-sm"
-                />
-              </div>
-
-              <input
-                name="maxPrice"
-                type="number"
-                placeholder="Budget (€)"
-                defaultValue={filters.maxPrice}
-                className={`w-32 ${FIELD_CLASS}`}
-              />
-
-              <select name="minNights" defaultValue={filters.minNights ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
-                <option value="">Aufenthalt egal</option>
-                <option value="7">≥ 1 Woche</option>
-                <option value="14">≥ 2 Wochen</option>
-                <option value="21">≥ 3 Wochen</option>
-              </select>
             </div>
-            {/* Fade + arrow hint that the row scrolls further right - the
-                filter bar overflowed silently before with no visual cue. */}
-            <div className="pointer-events-none absolute right-0 top-0 flex h-10 w-10 items-center justify-end bg-gradient-to-l from-slate-950 to-transparent text-slate-500">
-              ›
+
+            <div className={`flex items-center gap-1.5 px-3 ${FIELD_CLASS}`}>
+              <span className="text-xs text-slate-500">Bis</span>
+              <input
+                name="toDate"
+                type="date"
+                defaultValue={filters.toDate}
+                className="w-[110px] bg-transparent text-base text-slate-300 [color-scheme:dark] sm:text-sm"
+              />
             </div>
-          </div>
 
-          {/* Secondary row: never scrolls, wraps normally if it runs out of
-              space, so the "Weitere Filter" popover always has room to
-              render without being clipped. */}
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <details className="relative">
-              <summary className={`cursor-pointer list-none ${FIELD_CLASS} flex items-center text-slate-300 hover:border-slate-600`}>
-                Weitere Filter ⌄
-              </summary>
-              <div className="absolute left-0 top-full z-30 mt-2 flex w-72 flex-col gap-2 rounded-xl border border-slate-700 bg-slate-900 p-3 shadow-xl">
-                <select name="airline" defaultValue={filters.airline ?? ""} className={PANEL_FIELD_CLASS}>
-                  <option value="">Alle Airlines</option>
-                  {airlines.map((airline) => (
-                    <option key={airline.id} value={airline.iataCode}>
-                      {airline.name}
-                    </option>
-                  ))}
-                </select>
+            <input
+              name="maxPrice"
+              type="number"
+              placeholder="Budget (€)"
+              defaultValue={filters.maxPrice}
+              className={`w-28 ${FIELD_CLASS}`}
+            />
 
-                <select name="minRating" defaultValue={filters.minRating ?? ""} className={PANEL_FIELD_CLASS}>
-                  <option value="">Rating egal</option>
-                  <option value="5">★★★★★+</option>
-                  <option value="4">★★★★+</option>
-                  <option value="3">★★★+</option>
-                </select>
+            <select name="minNights" defaultValue={filters.minNights ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
+              <option value="">Aufenthalt egal</option>
+              <option value="7">≥ 1 Woche</option>
+              <option value="14">≥ 2 Wochen</option>
+              <option value="21">≥ 3 Wochen</option>
+            </select>
 
-                <select name="haulType" defaultValue={filters.haulType ?? ""} className={PANEL_FIELD_CLASS}>
-                  <option value="">Haul-Typ egal</option>
-                  {Object.entries(HAUL_TYPE_LABELS).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
+            <select name="airline" defaultValue={filters.airline ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
+              <option value="">Alle Airlines</option>
+              {airlines.map((airline) => (
+                <option key={airline.id} value={airline.iataCode}>
+                  {airline.name}
+                </option>
+              ))}
+            </select>
 
-                <input
-                  name="minDiscount"
-                  type="number"
-                  placeholder="Min. Ersparnis %"
-                  defaultValue={filters.minDiscount}
-                  className={`${PANEL_FIELD_CLASS} placeholder:text-slate-500`}
-                />
+            <select name="minRating" defaultValue={filters.minRating ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
+              <option value="">Rating egal</option>
+              <option value="5">★★★★★+</option>
+              <option value="4">★★★★+</option>
+              <option value="3">★★★+</option>
+            </select>
 
-                <label className="flex h-10 items-center gap-2 rounded-lg border border-slate-700 bg-slate-950 px-3 text-sm text-slate-300">
-                  <input
-                    type="checkbox"
-                    name="onlyRealDeals"
-                    value="true"
-                    defaultChecked={filters.onlyRealDeals === "true"}
-                    className="h-4 w-4 rounded border-slate-600 bg-slate-900 accent-emerald-500"
-                  />
-                  Nur echte Deals
-                </label>
+            <select name="haulType" defaultValue={filters.haulType ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
+              <option value="">Haul-Typ egal</option>
+              {Object.entries(HAUL_TYPE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
 
-                {/* Lets you compare the newest ingestion batch against
-                    older data before deciding to prune anything - see
-                    apps/worker/src/index.ts's BATCH_LABEL. */}
-                <select name="batch" defaultValue={filters.batch ?? ""} className={PANEL_FIELD_CLASS}>
-                  <option value="">Alle Durchläufe</option>
-                  <option value="2026-09-06-longhaul-v3">Nur neuer Durchlauf (Long-Haul)</option>
-                </select>
-              </div>
-            </details>
+            <input
+              name="minDiscount"
+              type="number"
+              placeholder="Min. Ersparnis %"
+              defaultValue={filters.minDiscount}
+              className={`w-36 ${FIELD_CLASS}`}
+            />
+
+            <label className={`flex items-center gap-2 text-slate-300 ${FIELD_CLASS}`}>
+              <input
+                type="checkbox"
+                name="onlyRealDeals"
+                value="true"
+                defaultChecked={filters.onlyRealDeals === "true"}
+                className="h-4 w-4 rounded border-slate-600 bg-slate-900 accent-emerald-500"
+              />
+              Nur echte Deals
+            </label>
+
+            {/* Lets you compare the newest ingestion batch against older
+                data before deciding to prune anything - see
+                apps/worker/src/index.ts's BATCH_LABEL. */}
+            <select name="batch" defaultValue={filters.batch ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
+              <option value="">Alle Durchläufe</option>
+              <option value="2026-09-06-longhaul-v3">Nur neuer Durchlauf (Long-Haul)</option>
+            </select>
 
             <button type="submit" className={`${FIELD_CLASS} bg-sky-500 px-5 font-medium text-slate-950 hover:bg-sky-400`}>
               Filtern
@@ -247,6 +228,11 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
             <a href="/" className={`${FIELD_CLASS} flex items-center border-transparent text-slate-400 hover:text-slate-200`}>
               Zurücksetzen
             </a>
+          </div>
+          {/* Fade + arrow hint that the row scrolls further right - the
+              filter bar overflowed silently before with no visual cue. */}
+          <div className="pointer-events-none absolute right-0 top-0 flex h-10 w-10 items-center justify-end bg-gradient-to-l from-slate-950 to-transparent text-slate-500">
+            ›
           </div>
         </form>
       </div>
@@ -263,9 +249,6 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           </div>
         ) : (
           <>
-            <p className="mb-4 text-center text-xs text-slate-500">
-              Preise zum Abgleich bei Google Flights - keine echten Buchungsseiten, Duffel hat keine öffentliche Angebotsseite
-            </p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {deals.map((deal) => (
                 <article
@@ -273,29 +256,35 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                   className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-5 transition-colors hover:border-slate-700"
                 >
                   {deal.isRealDeal && (
-                    <span className="absolute right-3 top-3 rounded-md bg-emerald-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-slate-950 shadow-lg">
+                    <span className="absolute right-3 top-3 rounded-md bg-emerald-500 px-2.5 py-1 text-xs font-bold tracking-wide text-slate-950 shadow-lg">
                       Deal
                     </span>
                   )}
                   <div>
-                    <div className="flex items-center justify-between pr-16 text-sm text-slate-400">
-                      <span>{deal.airline.name}</span>
+                    <div className={`flex items-center justify-between gap-2 pr-16 ${MUTED_TEXT_CLASS}`}>
+                      <span className="flex items-center gap-1.5">
+                        <img
+                          src={`https://images.kiwi.com/airlines/64x64/${deal.airline.iataCode}.png`}
+                          alt=""
+                          className="h-4 w-4 rounded-sm object-contain"
+                        />
+                        {deal.airline.name}
+                      </span>
                       <span className="text-amber-400">{"★".repeat(deal.airline.skytraxRating)}</span>
                     </div>
-                    <p className="mt-2 text-lg font-semibold leading-tight">
-                      {deal.origin.city} ({deal.origin.iataCode}) → {deal.destination.city} (
-                      {deal.destination.iataCode})
+                    <p className={`mt-1 ${MUTED_TEXT_CLASS}`}>
+                      ab {deal.origin.city} ({deal.origin.iataCode})
+                    </p>
+                    <p className="text-lg font-semibold leading-tight">
+                      {deal.destination.city} <span className="font-normal text-slate-500">({deal.destination.iataCode})</span>
                     </p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      <span className="rounded-full bg-slate-800 px-2.5 py-1 text-xs text-slate-400">
-                        {deal.cabinClass === "BUSINESS" ? "Business Class" : deal.cabinClass}
-                      </span>
-                      <span className="rounded-full bg-slate-800 px-2.5 py-1 text-xs text-slate-400">
+                      <span className={`rounded-full bg-slate-800 px-2.5 py-1 ${MUTED_TEXT_CLASS}`}>
                         {deal.departureDate ? new Date(deal.departureDate).toLocaleDateString("de-DE") : "Datum flexibel"}
                         {deal.returnDate ? ` – ${new Date(deal.returnDate).toLocaleDateString("de-DE")}` : ""}
                       </span>
                       {deal.nights && (
-                        <span className="rounded-full bg-slate-800 px-2.5 py-1 text-xs text-slate-400">{deal.nights} Nächte</span>
+                        <span className={`rounded-full bg-slate-800 px-2.5 py-1 ${MUTED_TEXT_CLASS}`}>{deal.nights} Nächte</span>
                       )}
                     </div>
                   </div>
@@ -306,7 +295,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                         {formatPrice(deal.price, deal.currency)}
                       </p>
                       {deal.discountPercent > 0 && (
-                        <p className="text-sm text-slate-500 line-through">
+                        <p className={`line-through ${MUTED_TEXT_CLASS}`}>
                           {formatPrice(deal.baselinePrice, deal.currency)}
                         </p>
                       )}
@@ -349,6 +338,16 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           </>
         )}
       </section>
+
+      <footer className={`mt-12 border-t border-slate-800 pt-6 text-center ${MUTED_TEXT_CLASS}`}>
+        <p>
+          Preise sind keine aktuellen Live-Preise - bitte vor Buchung bei Google Flights oder direkt bei der
+          Airline prüfen. Duffel hat keine öffentliche Angebotsseite.
+        </p>
+        <a href="/airlines" className="mt-2 inline-block text-sky-400 hover:underline">
+          Airline-Longlist →
+        </a>
+      </footer>
     </main>
   );
 }
