@@ -28,27 +28,35 @@ const MUC_ROUTES: string[] = [
   "CUN", "PUJ", "ATH", // leisure-heavy long/mid-haul, more price-elastic historically
 ];
 
-// Departure dates deliberately avoid German peak-travel windows (Christmas/
-// New Year, Easter, summer school holidays) where fares are structurally
-// higher regardless of any underlying "deal" - an anti-cyclical sample is
-// more likely to catch genuine troughs. Same date set for every route to
-// keep the request count predictable; extend/refine per-destination
-// seasonality later if the data warrants it.
+// Departure dates deliberately avoid German (Bavaria) peak-travel windows
+// (Christmas/New Year, Fasching, Easter, Pentecost, autumn half-term,
+// summer school holidays) where fares are structurally higher regardless
+// of any underlying "deal" - an anti-cyclical sample is more likely to
+// catch genuine troughs. Same date set for every route to keep the
+// request count predictable; extend/refine per-destination seasonality
+// later if the data warrants it.
+//
+// This is the SECOND sampling round - deliberately offset from the first
+// round's dates (2026-09-15 through 2027-06-01, see git history) so this
+// run adds new historical data points instead of re-querying periods we
+// already have observations for. Each date was nudged to skip Bavaria's
+// 2026/2027 school-holiday windows (autumn ~Nov 2-6, Fasching ~Feb 15-19,
+// Easter ~late Mar/early Apr).
 const OFF_PEAK_DEPARTURE_DATES: string[] = [
-  "2026-09-15",
-  "2026-09-29",
-  "2026-10-13",
-  "2026-10-27",
-  "2026-11-10",
-  "2026-11-24",
-  "2027-01-19",
-  "2027-02-02",
-  "2027-02-16",
-  "2027-03-02",
-  "2027-03-16",
-  "2027-05-04",
-  "2027-05-18",
-  "2027-06-01",
+  "2026-09-22",
+  "2026-10-06",
+  "2026-10-20",
+  "2026-10-30",
+  "2026-11-17",
+  "2026-12-01",
+  "2027-01-26",
+  "2027-02-09",
+  "2027-02-23",
+  "2027-03-09",
+  "2027-03-23",
+  "2027-05-11",
+  "2027-05-25",
+  "2027-06-08",
 ];
 
 // Round-trip business fares are what "a deal" means in this market (see
