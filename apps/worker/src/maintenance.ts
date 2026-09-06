@@ -25,6 +25,10 @@ import { prisma } from "./prisma.js";
 const MAINTENANCE_ROUTES: string[] = [
   "ACC", "NBO", "HKG", "ICN", "GRU", "JNB", "CPT", "BKK", "SGN", "SIN",
   "MNL", "KUL", "PVG",
+  // User-requested additions, no price history yet - kept even before
+  // being "proven" since the user explicitly wants them tracked
+  // (Bali especially: "interessiert mich sehr").
+  "HND", "DPS",
 ];
 
 const PEAK_MONTHS = new Set([6, 7, 11]); // July, August, December (0-indexed) - Bavarian summer/Christmas peak

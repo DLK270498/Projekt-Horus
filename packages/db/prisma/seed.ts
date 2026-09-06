@@ -177,6 +177,13 @@ const airports: Array<{
   { iataCode: "SSA", name: "Salvador International Airport", city: "Salvador", country: "Brazil", latitude: -12.9086, longitude: -38.3225 },
   { iataCode: "BOG", name: "El Dorado International Airport", city: "Bogotá", country: "Colombia", latitude: 4.7016, longitude: -74.1469 },
   { iataCode: "CGK", name: "Soekarno-Hatta International Airport", city: "Jakarta", country: "Indonesia", latitude: -6.1256, longitude: 106.6559 },
+
+  // User request: explicitly wants Bali tracked ("interessiert mich sehr").
+  // Tokyo (HND) was already seeded but never added to a route list - Bali
+  // (Denpasar) is new. Both added to the curated maintenance list
+  // (apps/worker/src/maintenance.ts) and the next exploration round's
+  // MUC_ROUTES (apps/worker/src/index.ts).
+  { iataCode: "DPS", name: "Ngurah Rai International Airport", city: "Denpasar (Bali)", country: "Indonesia", latitude: -8.7482, longitude: 115.1671 },
 ];
 
 /**

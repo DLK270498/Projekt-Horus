@@ -37,6 +37,7 @@ const NEW_AIRPORTS: Array<{ iataCode: string; name: string; city: string; countr
   { iataCode: "SSA", name: "Salvador International Airport", city: "Salvador", country: "Brazil", latitude: -12.9086, longitude: -38.3225 },
   { iataCode: "BOG", name: "El Dorado International Airport", city: "Bogotá", country: "Colombia", latitude: 4.7016, longitude: -74.1469 },
   { iataCode: "CGK", name: "Soekarno-Hatta International Airport", city: "Jakarta", country: "Indonesia", latitude: -6.1256, longitude: 106.6559 },
+  { iataCode: "DPS", name: "Ngurah Rai International Airport", city: "Denpasar (Bali)", country: "Indonesia", latitude: -8.7482, longitude: 115.1671 },
 ];
 
 export async function ensureFourthRoundSeed(): Promise<void> {

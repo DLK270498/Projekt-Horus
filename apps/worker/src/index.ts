@@ -38,6 +38,10 @@ const MUC_ROUTES: string[] = [
   // Airways/Turkish for East Africa, TAP for Brazil, Avianca for
   // Colombia, Garuda/Etihad/Turkish for Jakarta).
   "SEZ", "ZNZ", "KGL", "GIG", "SSA", "BOG", "CGK",
+  // User-requested additions (Tokyo already seeded as HND but never
+  // routed; Bali/Denpasar newly seeded as DPS) - Bali explicitly called
+  // out as a personal interest, tracked regardless of proven price yet.
+  "HND", "DPS",
 ];
 
 // User suggestion: also try Frankfurt. FRA is Lufthansa's main long-haul
@@ -108,8 +112,8 @@ const DUFFEL_ROUTES = [
 // browser page, ...) despite the per-request timeouts already in place
 // elsewhere, force-exit rather than leave a runaway process behind.
 // unref() means this alone won't keep the process alive - it only fires if
-// something else already is. Sized generously for this run's ~1,020 Duffel
-// requests ((34 MUC + 17 FRA routes) x 10 dates x 2 trip lengths) at
+// something else already is. Sized generously for this run's ~1,060 Duffel
+// requests ((36 MUC + 17 FRA routes) x 10 dates x 2 trip lengths) at
 // ~1.5-2s each (request + rate-limit delay) plus response time.
 const MAX_RUNTIME_MS = 55 * 60 * 1000;
 const watchdog = setTimeout(() => {
