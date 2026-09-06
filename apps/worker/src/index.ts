@@ -1,15 +1,25 @@
-import { runForumCrawlers } from "./forumCrawler.js";
 import { runBaselineCheck } from "./baseline.js";
 import { ingestDuffelRoute } from "./duffelClient.js";
+import { getUsage, DuffelBudgetExceededError } from "./duffelBudget.js";
 import { prisma } from "./prisma.js";
 
-// Routes/dates queried against Duffel per run. Several dates per route so
-// the baseline engine has more than one data point per (airline, route,
-// cabin) to compare against - see baseline.ts.
+// Forum/RSS crawling is disabled by default for now: of the 4 sources, 3
+// return nothing usable (blocked or dead) and the one that works finds no
+// matching posts currently (see project notes). The code in forumCrawler.ts
+// still works and is worth re-enabling once better sources are found -
+// `import { runForumCrawlers } from "./forumCrawler.js";` and call it below.
+
+// Routes/dates queried against Duffel per run, prioritized rather than
+// brute-forced: our strongest German hubs (FRA/MUC/DUS/BER), one route per
+// major world region, 3 dates each (the minimum baseline.ts needs to trust
+// a median). Keeps each run's request count - and therefore cost - small
+// and predictable; see duffelBudget.ts for the hard spending cap.
 const DUFFEL_ROUTES: Array<{ originIata: string; destinationIata: string; departureDates: string[] }> = [
-  { originIata: "FRA", destinationIata: "JFK", departureDates: ["2026-10-20", "2026-11-10", "2026-12-05", "2027-01-15"] },
-  { originIata: "MUC", destinationIata: "BKK", departureDates: ["2026-10-22", "2026-11-12", "2026-12-08", "2027-01-18"] },
-  { originIata: "FRA", destinationIata: "SIN", departureDates: ["2026-10-25", "2026-11-15", "2026-12-10", "2027-01-20"] },
+  { originIata: "FRA", destinationIata: "JFK", departureDates: ["2026-10-20", "2026-12-01", "2027-01-15"] }, // North America
+  { originIata: "MUC", destinationIata: "BKK", departureDates: ["2026-10-22", "2026-12-03", "2027-01-18"] }, // SE Asia
+  { originIata: "FRA", destinationIata: "SIN", departureDates: ["2026-10-25", "2026-12-05", "2027-01-20"] }, // SE Asia hub
+  { originIata: "DUS", destinationIata: "DXB", departureDates: ["2026-10-28", "2026-12-08", "2027-01-22"] }, // Middle East
+  { originIata: "BER", destinationIata: "ICN", departureDates: ["2026-10-30", "2026-12-10", "2027-01-25"] }, // NE Asia
 ];
 
 // Safety net: if anything hangs (a fetch without its own timeout, a stuck
@@ -25,10 +35,6 @@ const watchdog = setTimeout(() => {
 watchdog.unref();
 
 async function main() {
-  console.log("Running forum/RSS crawlers...");
-  const forumResults = await runForumCrawlers();
-  console.log(forumResults);
-
   const duffelToken = process.env.DUFFEL_ACCESS_TOKEN;
   if (!duffelToken) {
     console.warn("DUFFEL_ACCESS_TOKEN not set - skipping Duffel ingestion.");
@@ -37,7 +43,14 @@ async function main() {
     for (const route of DUFFEL_ROUTES) {
       const result = await ingestDuffelRoute(route, duffelToken);
       console.log(`${route.originIata} -> ${route.destinationIata}:`, result);
+
+      if (result.errors.some((e) => e.includes("Duffel-Budget"))) {
+        console.error("Duffel-Budget erreicht - breche weitere Routen ab.");
+        break;
+      }
     }
+    const usage = getUsage();
+    console.log(`Duffel-Nutzung insgesamt: ${usage.totalRequests} Requests, geschätzt ${usage.estimatedCostEur.toFixed(2)}€.`);
   }
 
   console.log("Running baseline/deal-detection pass...");
@@ -47,7 +60,11 @@ async function main() {
 
 main()
   .catch((error) => {
-    console.error(error);
+    if (error instanceof DuffelBudgetExceededError) {
+      console.error(error.message);
+    } else {
+      console.error(error);
+    }
     process.exitCode = 1;
   })
   .finally(async () => {

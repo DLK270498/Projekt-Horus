@@ -1,5 +1,13 @@
 import { prisma } from "./prisma.js";
+import { assertBudgetAvailable, recordRequest, DuffelBudgetExceededError } from "./duffelBudget.js";
 
+// IMPORTANT: PriceObservation has no test/live flag, and baseline.ts's
+// median calculation doesn't distinguish sources - mixing a test-token run
+// with a live-token run in the same DB silently corrupts every baseline
+// that spans both (already happened once; fixed by deleting the test-mode
+// rows and recomputing deals from scratch). Never run this against a
+// duffel_test_ token against a database that also holds duffel_live_ data,
+// or vice versa, without clearing the other environment's rows first.
 const DUFFEL_API_BASE = "https://api.duffel.com";
 const DUFFEL_API_VERSION = "v2";
 const REQUEST_TIMEOUT_MS = 30_000;
@@ -41,6 +49,8 @@ export async function fetchCheapestOffersByAirline(
   query: FlightQuery,
   accessToken: string,
 ): Promise<CheapestOfferByAirline[]> {
+  assertBudgetAvailable(); // throws DuffelBudgetExceededError if the cost cap is reached - never skipped
+
   const response = await fetch(`${DUFFEL_API_BASE}/air/offer_requests?return_offers=true`, {
     method: "POST",
     headers: {
@@ -58,6 +68,12 @@ export async function fetchCheapestOffersByAirline(
     }),
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
+
+  // Record as soon as the request went out, win or lose - we don't know
+  // Duffel's exact billing definition of "successful search", so count
+  // conservatively (better to stop the budget early than overshoot it).
+  const usage = recordRequest();
+  console.log(`  [Duffel-Budget] ${usage.totalRequests} Requests, geschätzt ${usage.estimatedCostEur.toFixed(2)}€ von 5€`);
 
   const payload = (await response.json()) as DuffelOfferRequestResponse;
 
@@ -139,6 +155,7 @@ export async function ingestDuffelRoute(
       }
     } catch (error) {
       errors.push(`${query.originIata}->${query.destinationIata} on ${departureDate}: ${(error as Error).message}`);
+      if (error instanceof DuffelBudgetExceededError) break; // no point trying more dates/routes this run
     }
   }
 

@@ -13,3 +13,6 @@ coverage/
 
 # Prisma
 packages/db/generated/
+
+# Local cost-tracking state, not shared data
+apps/worker/.duffel-usage.json
