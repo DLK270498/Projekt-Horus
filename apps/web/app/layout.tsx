@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Projekt Horus – Business Class Deals",
+  title: "Horus – Business Class Deals",
   description: "Business Class Flugdeals ex Deutschland",
 };
 

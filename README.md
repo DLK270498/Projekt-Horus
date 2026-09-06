@@ -1,4 +1,4 @@
-# Projekt Horus — Business Class Flight Deals
+# Horus — Business Class Flight Deals
 
 Findet, listet und (später) alarmiert bei Business-Class-Flugdeals ab Deutschland. Siehe das Konzept-/Phasen-Dokument für die Gesamtplanung; dieses README beschreibt nur das technische Setup.
 

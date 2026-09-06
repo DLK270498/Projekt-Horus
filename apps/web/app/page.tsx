@@ -73,7 +73,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
     <main className="mx-auto max-w-5xl px-6 py-10">
       <header className="flex items-baseline justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Projekt Horus</h1>
+          <h1 className="text-2xl font-semibold">Horus</h1>
           <p className="mt-1 text-sm text-slate-400">Business Class Deals ex Deutschland</p>
         </div>
         <a href="/airlines" className="text-sm text-sky-400 hover:underline">
