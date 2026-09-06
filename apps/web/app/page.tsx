@@ -18,7 +18,7 @@ type Deal = {
 type Airline = { id: string; iataCode: string; name: string };
 type Airport = { id: string; iataCode: string; city: string };
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/+$/, "");
 
 async function getJson<T>(path: string, params?: Record<string, string | undefined>): Promise<T> {
   const query = params
