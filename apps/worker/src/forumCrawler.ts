@@ -7,7 +7,7 @@ const REQUEST_TIMEOUT_MS = 15_000;
 
 // A generic bot User-Agent gets broadly blocked by basic WAF/Cloudflare
 // rules regardless of intent; a realistic browser UA + standard headers is
-// normal practice for reading public feeds/JSON and much less likely to be
+// normal practice for reading public feeds and much less likely to be
 // bucketed as "obviously a bot" by naive filters.
 const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
@@ -17,6 +17,8 @@ const BROWSER_LIKE_HEADERS = {
   "Accept-Language": "en-US,en;q=0.9,de;q=0.8",
 };
 
+// rss-parser handles both RSS 2.0 and Atom (used by Reddit's .rss feeds)
+// transparently, so one parser covers every source we crawl.
 const rssParser = new Parser({ timeout: REQUEST_TIMEOUT_MS, headers: BROWSER_LIKE_HEADERS });
 // Fallback for feeds with malformed/HTML-ish XML (unquoted attributes etc.)
 // that trip up strict XML parsing; only used when the strict parse fails.
@@ -32,17 +34,26 @@ async function loadKnownReferenceData(): Promise<{ airlines: KnownAirline[]; air
       where: { isActive: true },
       select: { id: true, iataCode: true, name: true },
     }),
-    prisma.airport.findMany({ select: { id: true, iataCode: true } }),
+    prisma.airport.findMany({ select: { id: true, iataCode: true, city: true, country: true } }),
   ]);
   return { airlines, airports };
 }
 
-async function persistObservation(
+/**
+ * Forum/deal-blog posts are already curated by a human/community as "this
+ * is a deal" (that's the entire premise of e.g. r/flightdeals) — unlike a
+ * raw Google Flights price crawl, there's no larger price history to
+ * compare against yet. So we persist the observation AND immediately turn
+ * it into a CANDIDATE deal, with discountPercent left at 0 until enough
+ * history accumulates to compute a real baseline (see baseline.ts, which
+ * only ever touches observations that don't already have a deal).
+ */
+async function persistCuratedDeal(
   sourceId: string,
   extracted: NonNullable<ReturnType<typeof extractDeal>>,
   sourceUrl: string,
 ) {
-  await prisma.priceObservation.create({
+  const observation = await prisma.priceObservation.create({
     data: {
       airlineId: extracted.airlineId as string,
       originAirportId: extracted.originAirportId,
@@ -52,6 +63,16 @@ async function persistObservation(
       price: extracted.price,
       currency: extracted.currency,
       sourceUrl,
+    },
+  });
+
+  await prisma.deal.create({
+    data: {
+      priceObservationId: observation.id,
+      baselinePrice: extracted.price,
+      discountPercent: 0,
+      status: "CANDIDATE",
+      clickoutUrl: sourceUrl,
     },
   });
 }
@@ -77,39 +98,7 @@ async function crawlRssFeed(source: Source, airlines: KnownAirline[], airports: 
     const extracted = extractDeal(text, airlines, airports);
     if (!extracted || !extracted.airlineId) continue;
 
-    await persistObservation(source.id, extracted, item.link ?? source.baseUrl!);
-    created++;
-  }
-
-  return created;
-}
-
-async function crawlRedditJson(source: Source, airlines: KnownAirline[], airports: KnownAirport[]) {
-  const response = await fetch(source.baseUrl!, {
-    headers: BROWSER_LIKE_HEADERS,
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  const payload = (await response.json()) as {
-    data?: { children?: Array<{ data?: { title?: string; selftext?: string; permalink?: string } }> };
-  };
-  const posts = payload.data?.children ?? [];
-  let created = 0;
-
-  for (const post of posts) {
-    const title = post.data?.title ?? "";
-    const selftext = post.data?.selftext ?? "";
-    const text = `${title} ${selftext}`;
-    const extracted = extractDeal(text, airlines, airports);
-    if (!extracted || !extracted.airlineId) continue;
-
-    const sourceUrl = post.data?.permalink
-      ? `https://www.reddit.com${post.data.permalink}`
-      : source.baseUrl!;
-    await persistObservation(source.id, extracted, sourceUrl);
+    await persistCuratedDeal(source.id, extracted, item.link ?? source.baseUrl!);
     created++;
   }
 
@@ -120,8 +109,8 @@ export type ForumCrawlResult = Record<string, number | { error: string }>;
 
 /**
  * Crawls all active FORUM sources and persists extracted Business Class
- * deal candidates as PriceObservations. One source failing (blocked,
- * changed format, ...) never aborts the others.
+ * deal candidates. One source failing (blocked, changed format, ...) never
+ * aborts the others.
  */
 export async function runForumCrawlers(): Promise<ForumCrawlResult> {
   const sources = await prisma.source.findMany({ where: { isActive: true, type: "FORUM" } });
@@ -136,11 +125,7 @@ export async function runForumCrawlers(): Promise<ForumCrawlResult> {
     }
 
     try {
-      const isJsonFeed = source.baseUrl.includes(".json");
-      const created = isJsonFeed
-        ? await crawlRedditJson(source, airlines, airports)
-        : await crawlRssFeed(source, airlines, airports);
-      results[source.name] = created;
+      results[source.name] = await crawlRssFeed(source, airlines, airports);
     } catch (error) {
       results[source.name] = { error: (error as Error).message };
     }

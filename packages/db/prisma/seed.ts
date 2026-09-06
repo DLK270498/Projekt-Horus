@@ -82,22 +82,57 @@ const airports: Array<{
   { iataCode: "GRU", name: "São Paulo–Guarulhos International Airport", city: "São Paulo", country: "Brazil", latitude: -23.4356, longitude: -46.4731 },
   { iataCode: "LAX", name: "Los Angeles International Airport", city: "Los Angeles", country: "USA", latitude: 33.9416, longitude: -118.4085 },
   { iataCode: "HKG", name: "Hong Kong International Airport", city: "Hong Kong", country: "Hong Kong", latitude: 22.3080, longitude: 113.9185 },
+
+  // Added after the first real forum-crawl run (r/flightdeals) surfaced
+  // these as common destinations in curated Business Class deal posts.
+  { iataCode: "VIE", name: "Vienna International Airport", city: "Vienna", country: "Austria", latitude: 48.1103, longitude: 16.5697 },
+  { iataCode: "ZRH", name: "Zurich Airport", city: "Zurich", country: "Switzerland", latitude: 47.4647, longitude: 8.5492 },
+  { iataCode: "BRU", name: "Brussels Airport", city: "Brussels", country: "Belgium", latitude: 50.9014, longitude: 4.4844 },
+  { iataCode: "ARN", name: "Stockholm Arlanda Airport", city: "Stockholm", country: "Sweden", latitude: 59.6519, longitude: 17.9186 },
+  { iataCode: "CPH", name: "Copenhagen Airport", city: "Copenhagen", country: "Denmark", latitude: 55.6180, longitude: 12.6560 },
+  { iataCode: "OSL", name: "Oslo Airport", city: "Oslo", country: "Norway", latitude: 60.1976, longitude: 11.1004 },
+  { iataCode: "HEL", name: "Helsinki-Vantaa Airport", city: "Helsinki", country: "Finland", latitude: 60.3172, longitude: 24.9633 },
+  { iataCode: "MAD", name: "Adolfo Suárez Madrid–Barajas Airport", city: "Madrid", country: "Spain", latitude: 40.4936, longitude: -3.5668 },
+  { iataCode: "FCO", name: "Rome Fiumicino Airport", city: "Rome", country: "Italy", latitude: 41.8003, longitude: 12.2389 },
+  { iataCode: "DUB", name: "Dublin Airport", city: "Dublin", country: "Ireland", latitude: 53.4213, longitude: -6.2701 },
+  { iataCode: "AMS", name: "Amsterdam Airport Schiphol", city: "Amsterdam", country: "Netherlands", latitude: 52.3105, longitude: 4.7683 },
+  { iataCode: "LHR", name: "London Heathrow Airport", city: "London", country: "United Kingdom", latitude: 51.4700, longitude: -0.4543 },
+  { iataCode: "ZAG", name: "Zagreb Airport", city: "Zagreb", country: "Croatia", latitude: 45.7429, longitude: 16.0688 },
+  { iataCode: "ICN", name: "Incheon International Airport", city: "Seoul", country: "South Korea", latitude: 37.4602, longitude: 126.4407 },
+  { iataCode: "PEK", name: "Beijing Capital International Airport", city: "Beijing", country: "China", latitude: 40.0799, longitude: 116.6031 },
+  { iataCode: "PVG", name: "Shanghai Pudong International Airport", city: "Shanghai", country: "China", latitude: 31.1443, longitude: 121.8083 },
+  { iataCode: "CPT", name: "Cape Town International Airport", city: "Cape Town", country: "South Africa", latitude: -33.9715, longitude: 18.6021 },
+  { iataCode: "CUN", name: "Cancún International Airport", city: "Cancun", country: "Mexico", latitude: 21.0365, longitude: -86.8771 },
+  { iataCode: "PUJ", name: "Punta Cana International Airport", city: "Punta Cana", country: "Dominican Republic", latitude: 18.5674, longitude: -68.3634 },
+  { iataCode: "ATH", name: "Athens International Airport", city: "Athens", country: "Greece", latitude: 37.9364, longitude: 23.9445 },
+  { iataCode: "BOS", name: "Boston Logan International Airport", city: "Boston", country: "USA", latitude: 42.3656, longitude: -71.0096 },
+  { iataCode: "ORD", name: "Chicago O'Hare International Airport", city: "Chicago", country: "USA", latitude: 41.9742, longitude: -87.9073 },
+  { iataCode: "YYZ", name: "Toronto Pearson International Airport", city: "Toronto", country: "Canada", latitude: 43.6777, longitude: -79.6248 },
+  { iataCode: "LIS", name: "Lisbon Airport", city: "Lisbon", country: "Portugal", latitude: 38.7813, longitude: -9.1359 },
 ];
 
 /**
  * Ingestion sources. google_flights is a SCRAPER (Playwright), the rest are
- * FORUM/deal-blog feeds crawled via RSS/JSON. See apps/worker.
+ * FORUM/deal-blog feeds crawled via RSS/Atom. See apps/worker.
+ *
+ * reddit_awardtravel is deactivated: it's a discussion sub about award/points
+ * bookings, not cash fare deals, so our price-based extraction never matched
+ * anything there. r/flightdeals actually posts curated cash-price deals in
+ * exactly the format we need ("Business Class Deal: City to City, Price"),
+ * and its .rss endpoint isn't blocked the way the .json API was.
  */
 const sources: Array<{
   name: string;
   type: SourceType;
   baseUrl: string;
+  isActive: boolean;
 }> = [
-  { name: "google_flights", type: "SCRAPER", baseUrl: "https://www.google.com/travel/flights" },
-  { name: "secret_flying", type: "FORUM", baseUrl: "https://www.secretflying.com/feed/" },
-  { name: "mighty_travels", type: "FORUM", baseUrl: "https://www.mightytravels.com/feed/" },
-  { name: "loyalty_lobby", type: "FORUM", baseUrl: "https://loyaltylobby.com/feed/" },
-  { name: "reddit_awardtravel", type: "FORUM", baseUrl: "https://www.reddit.com/r/awardtravel/new.json?limit=25" },
+  { name: "google_flights", type: "SCRAPER", baseUrl: "https://www.google.com/travel/flights", isActive: true },
+  { name: "secret_flying", type: "FORUM", baseUrl: "https://www.secretflying.com/feed/", isActive: true },
+  { name: "mighty_travels", type: "FORUM", baseUrl: "https://www.mightytravels.com/feed/", isActive: true },
+  { name: "loyalty_lobby", type: "FORUM", baseUrl: "https://loyaltylobby.com/feed/", isActive: true },
+  { name: "reddit_awardtravel", type: "FORUM", baseUrl: "https://www.reddit.com/r/awardtravel/new.json?limit=25", isActive: false },
+  { name: "reddit_flightdeals", type: "FORUM", baseUrl: "https://www.reddit.com/r/flightdeals/.rss?limit=100", isActive: true },
 ];
 
 async function main() {

@@ -204,13 +204,24 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                     <p className="text-2xl font-bold text-emerald-400">
                       {formatPrice(deal.price, deal.currency)}
                     </p>
-                    <p className="text-sm text-slate-500 line-through">
-                      {formatPrice(deal.baselinePrice, deal.currency)}
-                    </p>
+                    {deal.discountPercent > 0 && (
+                      <p className="text-sm text-slate-500 line-through">
+                        {formatPrice(deal.baselinePrice, deal.currency)}
+                      </p>
+                    )}
                   </div>
-                  <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400">
-                    −{deal.discountPercent.toFixed(0)}%
-                  </span>
+                  {deal.discountPercent > 0 ? (
+                    <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-sm font-medium text-emerald-400">
+                      −{deal.discountPercent.toFixed(0)}%
+                    </span>
+                  ) : (
+                    <span
+                      title="Von der Community als Deal kuratiert - noch keine eigene Preishistorie für einen berechneten Vergleichswert"
+                      className="rounded-full bg-sky-500/10 px-3 py-1 text-sm font-medium text-sky-400"
+                    >
+                      Community-Deal
+                    </span>
+                  )}
                 </div>
 
                 <a
