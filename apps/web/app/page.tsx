@@ -192,15 +192,15 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
             {deals.map((deal) => (
               <article
                 key={deal.id}
-                className="relative flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/50 p-5"
+                className="relative flex flex-col justify-between overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50 p-5"
               >
                 {deal.isRealDeal && (
-                  <span className="absolute -top-2 -left-2 rotate-[-8deg] rounded-md bg-emerald-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-slate-950 shadow-lg">
+                  <span className="absolute right-3 top-3 rounded-md bg-emerald-500 px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-slate-950 shadow-lg">
                     Deal
                   </span>
                 )}
                 <div>
-                  <div className="flex items-center justify-between text-sm text-slate-400">
+                  <div className="flex items-center justify-between pr-16 text-sm text-slate-400">
                     <span>{deal.airline.name}</span>
                     <span>{"★".repeat(deal.airline.skytraxRating)}</span>
                   </div>

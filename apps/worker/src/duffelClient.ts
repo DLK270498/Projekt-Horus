@@ -1,5 +1,5 @@
 import { prisma } from "./prisma.js";
-import { assertBudgetAvailable, recordRequest, DuffelBudgetExceededError } from "./duffelBudget.js";
+import { assertBudgetAvailable, recordRequest, hardCapEur, DuffelBudgetExceededError } from "./duffelBudget.js";
 
 // IMPORTANT: PriceObservation has no test/live flag, and baseline.ts's
 // median calculation doesn't distinguish sources - mixing a test-token run
@@ -48,6 +48,10 @@ export type FlightQuery = {
   originIata: string;
   destinationIata: string;
   departureDate: string; // YYYY-MM-DD
+  returnDate: string; // YYYY-MM-DD - round-trip only; one-way business fares are
+  // disproportionately expensive (often 60-80% of the round-trip price, not
+  // 50%) and aren't what "a deal" means in this market - see project notes
+  // for the real-world price mismatch this caused when we queried one-way.
 };
 
 export type CheapestOfferByAirline = {
@@ -55,6 +59,7 @@ export type CheapestOfferByAirline = {
   price: number;
   currency: string;
   departureDate: string;
+  returnDate: string;
   raw: {
     offerId: string;
     fareBrandName: string | null;
@@ -78,7 +83,10 @@ async function postOfferRequest(
     },
     body: JSON.stringify({
       data: {
-        slices: [{ origin: query.originIata, destination: query.destinationIata, departure_date: query.departureDate }],
+        slices: [
+          { origin: query.originIata, destination: query.destinationIata, departure_date: query.departureDate },
+          { origin: query.destinationIata, destination: query.originIata, departure_date: query.returnDate },
+        ],
         passengers: [{ type: "adult" }],
         cabin_class: "business",
       },
@@ -90,7 +98,7 @@ async function postOfferRequest(
   // Duffel's exact billing definition of "successful search", so count
   // conservatively (better to stop the budget early than overshoot it).
   const usage = recordRequest();
-  console.log(`  [Duffel-Budget] ${usage.totalRequests} Requests, geschätzt ${usage.estimatedCostEur.toFixed(2)}€ von 5€`);
+  console.log(`  [Duffel-Budget] ${usage.totalRequests} Requests, geschätzt ${usage.estimatedCostEur.toFixed(2)}€ von ${hardCapEur()}€`);
 
   const payload = (await response.json()) as DuffelOfferRequestResponse;
 
@@ -141,12 +149,15 @@ export async function fetchCheapestOffersByAirline(
 
     const slice = offer.slices[0];
     const segment = slice?.segments[0];
+    const returnSlice = offer.slices[1];
+    const returnSegment = returnSlice?.segments[0];
 
     cheapestByAirline.set(offer.owner.iata_code, {
       airlineIataCode: offer.owner.iata_code,
       price,
       currency: offer.total_currency,
       departureDate: segment?.departing_at?.slice(0, 10) ?? query.departureDate,
+      returnDate: returnSegment?.departing_at?.slice(0, 10) ?? query.returnDate,
       raw: {
         offerId: offer.id,
         fareBrandName: slice?.fare_brand_name ?? null,
@@ -161,14 +172,14 @@ export async function fetchCheapestOffersByAirline(
 }
 
 /**
- * Runs fetchCheapestOffersByAirline for a route across several departure
- * dates so the baseline engine (apps/worker/src/baseline.ts) has more than
- * one data point per (airline, route, cabin) to compare against - a single
- * snapshot can never be identified as "cheaper than usual". Waits a fixed
- * gap between requests to stay under Duffel's rate limit.
+ * Runs fetchCheapestOffersByAirline for a route across several round-trip
+ * date pairs so the baseline engine (apps/worker/src/baseline.ts) has more
+ * than one data point per (airline, route, cabin) to compare against - a
+ * single snapshot can never be identified as "cheaper than usual". Waits a
+ * fixed gap between requests to stay under Duffel's rate limit.
  */
 export async function ingestDuffelRoute(
-  query: { originIata: string; destinationIata: string; departureDates: string[] },
+  query: { originIata: string; destinationIata: string; tripDates: Array<{ departure: string; return: string }> },
   accessToken: string,
 ): Promise<{ observationsCreated: number; errors: string[] }> {
   const [origin, destination, source, airlines] = await Promise.all([
@@ -186,12 +197,12 @@ export async function ingestDuffelRoute(
   let observationsCreated = 0;
   const errors: string[] = [];
 
-  for (const [index, departureDate] of query.departureDates.entries()) {
+  for (const [index, trip] of query.tripDates.entries()) {
     if (index > 0) await sleep(DELAY_BETWEEN_REQUESTS_MS);
 
     try {
       const offers = await fetchCheapestOffersByAirline(
-        { originIata: query.originIata, destinationIata: query.destinationIata, departureDate },
+        { originIata: query.originIata, destinationIata: query.destinationIata, departureDate: trip.departure, returnDate: trip.return },
         accessToken,
       );
 
@@ -207,6 +218,7 @@ export async function ingestDuffelRoute(
             sourceId: source.id,
             cabinClass: "BUSINESS",
             departureDate: new Date(offer.departureDate),
+            returnDate: new Date(offer.returnDate),
             price: offer.price,
             currency: offer.currency,
             rawPayload: offer.raw,
@@ -215,7 +227,7 @@ export async function ingestDuffelRoute(
         observationsCreated++;
       }
     } catch (error) {
-      errors.push(`${query.originIata}->${query.destinationIata} on ${departureDate}: ${(error as Error).message}`);
+      errors.push(`${query.originIata}->${query.destinationIata} on ${trip.departure}: ${(error as Error).message}`);
       if (error instanceof DuffelBudgetExceededError) break; // no point trying more dates/routes this run
     }
   }

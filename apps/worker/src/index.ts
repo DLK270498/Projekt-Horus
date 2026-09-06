@@ -51,10 +51,26 @@ const OFF_PEAK_DEPARTURE_DATES: string[] = [
   "2027-06-01",
 ];
 
+// Round-trip business fares are what "a deal" means in this market (see
+// duffelClient.ts) - one-way pricing follows different, disproportionate
+// economics and isn't comparable. 9 nights is a plausible length for a
+// long-haul business trip (a working week plus travel days) without being
+// so long it reads as a leisure holiday.
+const TRIP_LENGTH_NIGHTS = 9;
+
+function addDays(dateStr: string, days: number): string {
+  const date = new Date(`${dateStr}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
 const DUFFEL_ROUTES = MUC_ROUTES.map((destinationIata) => ({
   originIata: "MUC",
   destinationIata,
-  departureDates: OFF_PEAK_DEPARTURE_DATES,
+  tripDates: OFF_PEAK_DEPARTURE_DATES.map((departure) => ({
+    departure,
+    return: addDays(departure, TRIP_LENGTH_NIGHTS),
+  })),
 }));
 
 // Safety net: if anything hangs (a fetch without its own timeout, a stuck

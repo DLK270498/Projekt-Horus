@@ -43,7 +43,7 @@ export async function dealRoutes(app: FastifyInstance) {
           include: { airline: true, originAirport: true, destinationAirport: true },
         },
       },
-      orderBy: { discountPercent: "desc" },
+      orderBy: { priceObservation: { price: "asc" } },
       take: 200,
     });
 

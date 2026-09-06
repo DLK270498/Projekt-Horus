@@ -15,7 +15,13 @@ import { dirname, join } from "node:path";
  * invoice, not a substitute for checking Duffel's own billing dashboard.
  */
 const ESTIMATED_COST_PER_REQUEST_EUR = 0.01;
-const HARD_CAP_EUR = 5;
+// Raised from 5€ to 11€ (user authorized ~7€ more on top of the 3.75€
+// already spent) after the round-trip fix required re-querying from
+// scratch. Duffel's own dashboard showed a 0.00€ balance even after the
+// first ~375 requests, suggesting the excess-search fee bills later/
+// differently than assumed - kept conservative here regardless, since
+// that can't be confirmed live (see comment below).
+const HARD_CAP_EUR = 11;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const USAGE_FILE = join(__dirname, "..", ".duffel-usage.json");
@@ -49,6 +55,10 @@ export function assertBudgetAvailable(): void {
       `Duffel-Budget erschöpft: geschätzt ${usage.estimatedCostEur.toFixed(2)}€ von ${HARD_CAP_EUR}€ bereits verbraucht (${usage.totalRequests} Requests). Weitere Live-Requests werden blockiert.`,
     );
   }
+}
+
+export function hardCapEur(): number {
+  return HARD_CAP_EUR;
 }
 
 /** Call immediately after a successful live Duffel search request. */
