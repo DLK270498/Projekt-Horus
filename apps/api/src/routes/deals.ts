@@ -62,6 +62,7 @@ export async function dealRoutes(app: FastifyInstance) {
       isRealDeal: Number(deal.discountPercent) > 0,
       cabinClass: deal.priceObservation.cabinClass,
       departureDate: deal.priceObservation.departureDate,
+      returnDate: deal.priceObservation.returnDate,
       clickoutUrl: deal.clickoutUrl,
       clickoutCheckedAt: deal.clickoutCheckedAt,
       clickoutIsValid: deal.clickoutIsValid,

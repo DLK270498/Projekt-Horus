@@ -1,3 +1,5 @@
+import { googleFlightsUrl } from "./googleFlights";
+
 type Deal = {
   id: string;
   price: number;
@@ -7,6 +9,7 @@ type Deal = {
   isRealDeal: boolean;
   cabinClass: string;
   departureDate: string | null;
+  returnDate: string | null;
   clickoutUrl: string;
   clickoutCheckedAt: string | null;
   clickoutIsValid: boolean;
@@ -260,17 +263,25 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                 </div>
 
                 <a
-                  href={deal.clickoutUrl}
+                  href={
+                    deal.departureDate
+                      ? googleFlightsUrl({
+                          origin: deal.origin.iataCode,
+                          destination: deal.destination.iataCode,
+                          departureDate: deal.departureDate.slice(0, 10),
+                          returnDate: deal.returnDate?.slice(0, 10),
+                          airlineIata: deal.airline.iataCode,
+                        })
+                      : deal.clickoutUrl
+                  }
                   target="_blank"
                   rel="nofollow sponsored noopener"
                   className="mt-4 block rounded-lg bg-sky-500 px-4 py-2 text-center text-sm font-medium text-slate-950 hover:bg-sky-400"
                 >
-                  Zum Angebot
+                  {deal.departureDate ? "Bei Google Flights prüfen" : "Zum Angebot"}
                 </a>
                 <p className="mt-2 text-center text-xs text-slate-500">
-                  {deal.clickoutCheckedAt
-                    ? `Link geprüft: ${new Date(deal.clickoutCheckedAt).toLocaleString("de-DE")}`
-                    : "Link noch nicht auf Aktualität geprüft"}
+                  Zum Preis-Abgleich - keine echte Buchungsseite, Duffel hat keine öffentliche Angebotsseite
                 </p>
               </article>
             ))}
