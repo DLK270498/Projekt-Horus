@@ -1,6 +1,7 @@
 import { runBaselineCheck } from "./baseline.js";
 import { ingestDuffelRoute } from "./duffelClient.js";
 import { getUsage, DuffelBudgetExceededError } from "./duffelBudget.js";
+import { ensureFourthRoundSeed } from "./ensureFourthRoundSeed.js";
 import { prisma } from "./prisma.js";
 
 // Forum/RSS crawling is disabled by default for now: of the 4 sources, 3
@@ -9,53 +10,65 @@ import { prisma } from "./prisma.js";
 // still works and is worth re-enabling once better sources are found -
 // `import { runForumCrawlers } from "./forumCrawler.js";` and call it below.
 
-// THIRD sampling round (2026-09, see git history for rounds 1-2). User
-// feedback after reviewing 110 real deals: too many were premium-tier
-// long-haul (North America, Premium Asia) that structurally never gets
-// below ~3,000€ round-trip business even at a real discount, and the same
-// handful of destinations (e.g. Delhi) showed up many times over. This
-// round targets destinations plausibly served by value-oriented carriers
-// (Turkish, Ethiopian, Gulf connections, local flag carriers) that are
-// more likely to actually land in a 2,000-2,500€ round-trip band - see
-// packages/db/prisma/seed.ts for the new airports added for this batch.
-// Short/medium-haul (e.g. Athens) is deliberately excluded - explicitly
-// long-haul only per the user's request.
+// FOURTH sampling round (2026-09, see git history for rounds 1-3). Round 3
+// found 128 deals but only 9 under 2,000€; analysis of that data showed
+// every one of the cheapest results came from an airline connecting via a
+// secondary hub away from Munich's own Lufthansa-Group network (British
+// Airways via London to Accra: 1,364€; Turkish via Istanbul to Nairobi:
+// 1,924€; Etihad via Abu Dhabi, LOT via Warsaw, TAP via Lisbon - all
+// meaningfully cheaper than direct/Lufthansa-Group pricing on comparable
+// routes). Our airline longlist was missing most of this carrier category
+// entirely (Ethiopian, Kenya Airways, EgyptAir, Air India, Royal Air
+// Maroc, Royal Jordanian, Saudia, Gulf Air, Oman Air, RwandAir, Avianca,
+// LATAM, Garuda - see packages/db/prisma/seed.ts), which means
+// fetchCheapestOffersByAirline (duffelClient.ts) was silently discarding
+// any offer Duffel already returned for them - real deals we'd already
+// paid for and thrown away. This round both adds those carriers and adds
+// destinations they plausibly serve cheaply, while explicitly avoiding
+// picks with no genuine tourism draw (user: "nicht Süd Sudan oder so").
 const MUC_ROUTES: string[] = [
-  // Kept from rounds 1-2 - already producing sub-2,700€ deals or plausible
-  // candidates for the target band.
+  // Kept from round 3 - still worth re-sampling now that the longlist
+  // covers the carriers actually undercutting these routes.
   "GRU", "JNB", "BOM", "SEA", "DXB", "SIN", "HKG", "ICN", "PEK", "PVG",
   "DEL", "BKK", "CPT", "CUN", "PUJ",
-  // North America dropped for this batch - every prior observation landed
-  // well above the target band (2,700€-5,700€) regardless of date.
-  // New for this round - value/leisure long-haul markets not tried yet.
   "NBO", "ADD", "CMB", "MLE", "KUL", "MNL", "SGN", "HAN", "LOS", "ACC",
   "DAC", "MRU",
+  // New for this round - appealing leisure destinations plausibly reached
+  // cheaply via the newly-added value-hub carriers (Ethiopian/Kenya
+  // Airways/Turkish for East Africa, TAP for Brazil, Avianca for
+  // Colombia, Garuda/Etihad/Turkish for Jakarta).
+  "SEZ", "ZNZ", "KGL", "GIG", "SSA", "BOG", "CGK",
 ];
 
-// Anti-cyclical dates, offset from rounds 1-2 (see git history) so this
+// Anti-cyclical dates, offset from rounds 1-3 (see git history) so this
 // batch samples periods we don't already have data for. Nudged around
-// Bavaria's 2026/2027 school-holiday windows same as before.
+// Bavaria's 2026/2027 school-holiday windows same as before, spread over
+// a longer ~14-month window for more chances to land on a fare dip.
 const OFF_PEAK_DEPARTURE_DATES: string[] = [
-  "2026-09-13",
-  "2026-10-01",
-  "2026-12-08",
-  "2027-01-12",
-  "2027-04-13",
-  "2027-06-15",
+  "2026-09-21",
+  "2026-10-19",
+  "2026-11-09",
+  "2026-12-01",
+  "2027-01-25",
+  "2027-02-08",
+  "2027-03-15",
+  "2027-05-10",
+  "2027-07-06",
+  "2027-08-24",
 ];
 
-// User wants to filter results by minimum time on the ground (>=1/2/3
-// weeks) - querying multiple actual trip lengths gives every band real
-// data to filter against, instead of everything being stuck at one fixed
-// duration. Round-trip business fares don't vary much with trip length
-// itself (route/season/day-of-week drive price far more), so these three
-// values are just samples across the bands users can filter by, not an
-// attempt to find the "best" duration.
-const TRIP_LENGTHS_NIGHTS = [7, 14, 21];
+// Round 3 queried 7/14/21 nights per date but the resulting prices were
+// nearly identical across all three for the same route/date (round-trip
+// business fares are driven by route+carrier+date, not trip length) - a
+// third of that round's budget bought no real extra information. Sampling
+// just the two extremes still covers every "≥1/2/3 weeks" frontend filter
+// band correctly (a 21-night observation satisfies gte 7/14/21 alike),
+// freeing that budget for more dates and destinations instead.
+const TRIP_LENGTHS_NIGHTS = [7, 21];
 
 // Tags every observation from this run so the frontend can compare this
 // batch against older data before anything gets deleted.
-const BATCH_LABEL = "2026-09-06-longhaul-v3";
+const BATCH_LABEL = "2026-09-06-valuehubs-v4";
 
 function addDays(dateStr: string, days: number): string {
   const date = new Date(`${dateStr}T00:00:00Z`);
@@ -82,9 +95,9 @@ const DUFFEL_ROUTES = MUC_ROUTES.map((destinationIata) => ({
 // browser page, ...) despite the per-request timeouts already in place
 // elsewhere, force-exit rather than leave a runaway process behind.
 // unref() means this alone won't keep the process alive - it only fires if
-// something else already is. Sized generously for this run's ~560 Duffel
-// requests (31 routes x 6 dates x 3 trip lengths) at ~1.5-2s each (request
-// + rate-limit delay) plus response time - roughly double rounds 1-2.
+// something else already is. Sized generously for this run's ~760 Duffel
+// requests (38 routes x 10 dates x 2 trip lengths) at ~1.5-2s each (request
+// + rate-limit delay) plus response time.
 const MAX_RUNTIME_MS = 55 * 60 * 1000;
 const watchdog = setTimeout(() => {
   console.error(`Worker exceeded max runtime of ${MAX_RUNTIME_MS}ms - force-exiting.`);
@@ -97,6 +110,7 @@ async function main() {
   if (!duffelToken) {
     console.warn("DUFFEL_ACCESS_TOKEN not set - skipping Duffel ingestion.");
   } else {
+    await ensureFourthRoundSeed();
     console.log(
       `Querying Duffel for ${DUFFEL_ROUTES.length} route(s) x ${OFF_PEAK_DEPARTURE_DATES.length} date(s) x ${TRIP_LENGTHS_NIGHTS.length} trip length(s) (batch "${BATCH_LABEL}")...`,
     );

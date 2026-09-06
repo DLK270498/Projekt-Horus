@@ -225,7 +225,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                 apps/worker/src/index.ts's BATCH_LABEL. */}
             <select name="batch" defaultValue={filters.batch ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
               <option value="">Alle Durchläufe</option>
-              <option value="2026-09-06-longhaul-v3">Nur neuer Durchlauf (Long-Haul)</option>
+              <option value="2026-09-06-valuehubs-v4">Nur neuester Durchlauf (Value-Hubs)</option>
+              <option value="2026-09-06-longhaul-v3">Nur vorheriger Durchlauf (Long-Haul)</option>
             </select>
 
             <button type="submit" className={`${FIELD_CLASS} bg-sky-500 px-5 font-medium text-slate-950 hover:bg-sky-400`}>

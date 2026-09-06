@@ -53,6 +53,31 @@ const airlines: Array<{
   // Mid/short-haul ex-Germany (Business often premium-economy grade)
   { iataCode: "EW", name: "Eurowings", homeCountry: "Germany", skytraxRating: 3, haulTypes: ["SHORT", "MID"], websiteUrl: "https://www.eurowings.com" },
   { iataCode: "DE", name: "Condor", homeCountry: "Germany", skytraxRating: 3, haulTypes: ["LONG", "MID"], websiteUrl: "https://www.condor.com" },
+
+  // "Value hub" carriers - routed via a secondary hub away from Munich's
+  // own Lufthansa-Group network. Data from the third sampling round showed
+  // every one of our cheapest sub-2,500€ business deals came from exactly
+  // this kind of carrier (British Airways via London, Turkish via Istanbul,
+  // Etihad via Abu Dhabi, LOT via Warsaw, TAP via Lisbon). These were
+  // missing from the longlist entirely, which means fetchCheapestOffersByAirline
+  // (apps/worker/src/duffelClient.ts) was silently discarding any offer
+  // Duffel already returned for them - likely real sub-2,000€ deals we'd
+  // already paid a Duffel request for and then threw away. Adding them
+  // costs nothing extra per request; ingestDuffelRoute just stops dropping
+  // their offers.
+  { iataCode: "ET", name: "Ethiopian Airlines", homeCountry: "Ethiopia", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.ethiopianairlines.com" },
+  { iataCode: "KQ", name: "Kenya Airways", homeCountry: "Kenya", skytraxRating: 3, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.kenya-airways.com" },
+  { iataCode: "MS", name: "EgyptAir", homeCountry: "Egypt", skytraxRating: 3, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.egyptair.com" },
+  { iataCode: "AI", name: "Air India", homeCountry: "India", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.airindia.com" },
+  { iataCode: "AT", name: "Royal Air Maroc", homeCountry: "Morocco", skytraxRating: 3, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.royalairmaroc.com" },
+  { iataCode: "RJ", name: "Royal Jordanian", homeCountry: "Jordan", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.rj.com" },
+  { iataCode: "SV", name: "Saudia", homeCountry: "Saudi Arabia", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.saudia.com" },
+  { iataCode: "GF", name: "Gulf Air", homeCountry: "Bahrain", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.gulfair.com" },
+  { iataCode: "WY", name: "Oman Air", homeCountry: "Oman", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.omanair.com" },
+  { iataCode: "WB", name: "RwandAir", homeCountry: "Rwanda", skytraxRating: 3, haulTypes: ["MID", "SHORT"], websiteUrl: "https://www.rwandair.com" },
+  { iataCode: "AV", name: "Avianca", homeCountry: "Colombia", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.avianca.com" },
+  { iataCode: "LA", name: "LATAM Airlines", homeCountry: "Chile", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.latamairlines.com" },
+  { iataCode: "GA", name: "Garuda Indonesia", homeCountry: "Indonesia", skytraxRating: 4, haulTypes: ["LONG", "MID", "SHORT"], websiteUrl: "https://www.garuda-indonesia.com" },
 ];
 
 /**
@@ -137,6 +162,21 @@ const airports: Array<{
   { iataCode: "ACC", name: "Kotoka International Airport", city: "Accra", country: "Ghana", latitude: 5.6052, longitude: -0.1669 },
   { iataCode: "DAC", name: "Hazrat Shahjalal International Airport", city: "Dhaka", country: "Bangladesh", latitude: 23.8433, longitude: 90.3978 },
   { iataCode: "MRU", name: "Sir Seewoosagur Ramgoolam International Airport", city: "Mauritius", country: "Mauritius", latitude: -20.4302, longitude: 57.6836 },
+
+  // Added for the "value hub" carrier batch (2026-09, see
+  // apps/worker/src/index.ts): destinations picked to be reachable
+  // cheaply via the newly-added connecting carriers (Ethiopian, Kenya
+  // Airways, TAP, Avianca, LATAM, Garuda) AND to be genuinely appealing
+  // leisure destinations, not just "technically long-haul" - explicitly
+  // avoided anywhere without a real tourism draw or with an active travel
+  // advisory.
+  { iataCode: "SEZ", name: "Seychelles International Airport", city: "Victoria", country: "Seychelles", latitude: -4.6743, longitude: 55.5218 },
+  { iataCode: "ZNZ", name: "Abeid Amani Karume International Airport", city: "Zanzibar City", country: "Tanzania", latitude: -6.2220, longitude: 39.2249 },
+  { iataCode: "KGL", name: "Kigali International Airport", city: "Kigali", country: "Rwanda", latitude: -1.9686, longitude: 30.1395 },
+  { iataCode: "GIG", name: "Rio de Janeiro–Galeão International Airport", city: "Rio de Janeiro", country: "Brazil", latitude: -22.8090, longitude: -43.2506 },
+  { iataCode: "SSA", name: "Salvador International Airport", city: "Salvador", country: "Brazil", latitude: -12.9086, longitude: -38.3225 },
+  { iataCode: "BOG", name: "El Dorado International Airport", city: "Bogotá", country: "Colombia", latitude: 4.7016, longitude: -74.1469 },
+  { iataCode: "CGK", name: "Soekarno-Hatta International Airport", city: "Jakarta", country: "Indonesia", latitude: -6.1256, longitude: 106.6559 },
 ];
 
 /**
