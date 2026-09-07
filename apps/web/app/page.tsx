@@ -13,6 +13,9 @@ type Deal = {
   returnDate: string | null;
   nights: number | null;
   batchLabel: string | null;
+  stops: number | null;
+  aircraft: string | null;
+  fareBrandName: string | null;
   clickoutUrl: string;
   clickoutCheckedAt: string | null;
   clickoutIsValid: boolean;
@@ -155,7 +158,13 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                       {deal.nights && (
                         <span className={`bg-slate-800 text-slate-400 ${PILL_CLASS}`}>{deal.nights} Nächte</span>
                       )}
+                      {deal.stops != null && (
+                        <span className={`bg-slate-800 text-slate-400 ${PILL_CLASS}`}>
+                          {deal.stops === 0 ? "Nonstop" : deal.stops === 1 ? "1 Stopp" : `${deal.stops} Stopps`}
+                        </span>
+                      )}
                     </div>
+                    {deal.aircraft && <p className={`mt-1.5 ${MUTED_TEXT_CLASS}`}>{deal.aircraft}</p>}
                   </div>
 
                   <div className="mt-4 flex items-end justify-between">

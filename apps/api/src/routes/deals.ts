@@ -18,6 +18,22 @@ type DealQuery = {
   uniqueDestinations?: string;
 };
 
+// Shape written by apps/worker/src/duffelClient.ts's CheapestOfferByAirline.raw
+// into PriceObservation.rawPayload - not every row has one (forum-curated
+// deals, older observations from before this was captured), so every
+// field is optional here too.
+type DuffelRawPayload = {
+  stops?: number;
+  aircraft?: string | null;
+  fareBrandName?: string | null;
+  operatingCarrier?: string | null;
+};
+
+function parseRawPayload(value: unknown): DuffelRawPayload | null {
+  if (!value || typeof value !== "object") return null;
+  return value as DuffelRawPayload;
+}
+
 export async function dealRoutes(app: FastifyInstance) {
   app.get<{ Querystring: DealQuery }>("/deals", async (request) => {
     const {
@@ -88,35 +104,41 @@ export async function dealRoutes(app: FastifyInstance) {
             return firstIndexForDestination === index;
           });
 
-    return dealsToReturn.map((deal) => ({
-      id: deal.id,
-      price: Number(deal.priceObservation.price),
-      currency: deal.priceObservation.currency,
-      baselinePrice: Number(deal.baselinePrice),
-      discountPercent: Number(deal.discountPercent),
-      isRealDeal: Number(deal.discountPercent) > 0,
-      cabinClass: deal.priceObservation.cabinClass,
-      departureDate: deal.priceObservation.departureDate,
-      returnDate: deal.priceObservation.returnDate,
-      nights: deal.priceObservation.nights,
-      batchLabel: deal.priceObservation.batchLabel,
-      clickoutUrl: deal.clickoutUrl,
-      clickoutCheckedAt: deal.clickoutCheckedAt,
-      clickoutIsValid: deal.clickoutIsValid,
-      airline: {
-        iataCode: deal.priceObservation.airline.iataCode,
-        name: deal.priceObservation.airline.name,
-        skytraxRating: deal.priceObservation.airline.skytraxRating,
-        haulTypes: deal.priceObservation.airline.haulTypes,
-      },
-      origin: {
-        iataCode: deal.priceObservation.originAirport.iataCode,
-        city: deal.priceObservation.originAirport.city,
-      },
-      destination: {
-        iataCode: deal.priceObservation.destinationAirport.iataCode,
-        city: deal.priceObservation.destinationAirport.city,
-      },
-    }));
+    return dealsToReturn.map((deal) => {
+      const raw = parseRawPayload(deal.priceObservation.rawPayload);
+      return {
+        id: deal.id,
+        price: Number(deal.priceObservation.price),
+        currency: deal.priceObservation.currency,
+        baselinePrice: Number(deal.baselinePrice),
+        discountPercent: Number(deal.discountPercent),
+        isRealDeal: Number(deal.discountPercent) > 0,
+        cabinClass: deal.priceObservation.cabinClass,
+        departureDate: deal.priceObservation.departureDate,
+        returnDate: deal.priceObservation.returnDate,
+        nights: deal.priceObservation.nights,
+        batchLabel: deal.priceObservation.batchLabel,
+        stops: raw?.stops ?? null,
+        aircraft: raw?.aircraft ?? null,
+        fareBrandName: raw?.fareBrandName ?? null,
+        clickoutUrl: deal.clickoutUrl,
+        clickoutCheckedAt: deal.clickoutCheckedAt,
+        clickoutIsValid: deal.clickoutIsValid,
+        airline: {
+          iataCode: deal.priceObservation.airline.iataCode,
+          name: deal.priceObservation.airline.name,
+          skytraxRating: deal.priceObservation.airline.skytraxRating,
+          haulTypes: deal.priceObservation.airline.haulTypes,
+        },
+        origin: {
+          iataCode: deal.priceObservation.originAirport.iataCode,
+          city: deal.priceObservation.originAirport.city,
+        },
+        destination: {
+          iataCode: deal.priceObservation.destinationAirport.iataCode,
+          city: deal.priceObservation.destinationAirport.city,
+        },
+      };
+    });
   });
 }
