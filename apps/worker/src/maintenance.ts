@@ -78,15 +78,27 @@ const DUFFEL_ROUTES = MAINTENANCE_ROUTES.map((destinationIata) => ({
   batchLabel: BATCH_LABEL,
 }));
 
-// Same defensive force-exit pattern as index.ts, sized down for this
-// script's much smaller ~80-request run (13 routes x 3 dates x 2 trip
-// lengths).
-const MAX_RUNTIME_MS = 10 * 60 * 1000;
-const watchdog = setTimeout(() => {
-  console.error(`Maintenance worker exceeded max runtime of ${MAX_RUNTIME_MS}ms - force-exiting.`);
+// Two-stage timeout, same reasoning as index.ts (see its comment): a
+// hard process.exit() watchdog can kill the process before it reaches
+// the free, local-only baseline pass, discarding real paid-for Duffel
+// data that was already collected. SOFT_TIMEOUT stops starting new
+// routes but still lets main() run the baseline pass; HARD_TIMEOUT is
+// only a last-resort force-exit for a genuine hang. Sized down from
+// index.ts's for this script's much smaller ~90-request run (15 routes x
+// 3 dates x 2 trip lengths).
+const SOFT_TIMEOUT_MS = 15 * 60 * 1000;
+const HARD_TIMEOUT_MS = 20 * 60 * 1000;
+let timedOut = false;
+const softWatchdog = setTimeout(() => {
+  console.error(`Maintenance worker exceeded soft runtime limit of ${SOFT_TIMEOUT_MS}ms - stopping further Duffel requests, still running the baseline pass on what we have.`);
+  timedOut = true;
+}, SOFT_TIMEOUT_MS);
+softWatchdog.unref();
+const hardWatchdog = setTimeout(() => {
+  console.error(`Maintenance worker exceeded hard runtime limit of ${HARD_TIMEOUT_MS}ms - force-exiting.`);
   process.exit(1);
-}, MAX_RUNTIME_MS);
-watchdog.unref();
+}, HARD_TIMEOUT_MS);
+hardWatchdog.unref();
 
 async function main() {
   const duffelToken = process.env.DUFFEL_ACCESS_TOKEN;
@@ -101,6 +113,8 @@ async function main() {
   );
 
   for (const route of DUFFEL_ROUTES) {
+    if (timedOut) break;
+
     const result = await ingestDuffelRoute(route, duffelToken);
     console.log(`${route.originIata} -> ${route.destinationIata}:`, result);
 

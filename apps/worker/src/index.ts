@@ -108,19 +108,33 @@ const DUFFEL_ROUTES = [
   ...FRA_ROUTES.map((destinationIata) => ({ originIata: "FRA", destinationIata, tripDates: TRIP_DATES, batchLabel: BATCH_LABEL })),
 ];
 
-// Safety net: if anything hangs (a fetch without its own timeout, a stuck
-// browser page, ...) despite the per-request timeouts already in place
-// elsewhere, force-exit rather than leave a runaway process behind.
-// unref() means this alone won't keep the process alive - it only fires if
-// something else already is. Sized generously for this run's ~1,060 Duffel
-// requests ((36 MUC + 17 FRA routes) x 10 dates x 2 trip lengths) at
-// ~1.5-2s each (request + rate-limit delay) plus response time.
-const MAX_RUNTIME_MS = 55 * 60 * 1000;
-const watchdog = setTimeout(() => {
-  console.error(`Worker exceeded max runtime of ${MAX_RUNTIME_MS}ms - force-exiting.`);
+// A prior run of this batch's real observed throughput (~925 requests in
+// 55 minutes, slower than the ~1.5-2s/request estimate below assumed -
+// Duffel's own response time plus occasional rate-limit retries add up)
+// hit a hard process.exit() watchdog mid-route, which killed the process
+// BEFORE it ever reached runBaselineCheck() below - meaning ~925 real,
+// paid Duffel requests' worth of PriceObservations sat in the DB with no
+// deals ever computed from them. Fixed with a two-stage timeout instead
+// of one hard kill: SOFT_TIMEOUT stops starting new routes but still lets
+// main() finish normally (ensureFourthRoundSeed already ran, so real
+// data must always reach the free, local-only baseline pass regardless
+// of how far ingestion got); HARD_TIMEOUT is a true last-resort
+// force-exit, only for the case where something is genuinely stuck
+// (e.g. the baseline pass itself hanging on a huge DB query) rather than
+// legitimately-slow-but-progressing Duffel calls.
+const SOFT_TIMEOUT_MS = 75 * 60 * 1000;
+const HARD_TIMEOUT_MS = 100 * 60 * 1000;
+let timedOut = false;
+const softWatchdog = setTimeout(() => {
+  console.error(`Worker exceeded soft runtime limit of ${SOFT_TIMEOUT_MS}ms - stopping further Duffel requests, still running the baseline pass on what we have.`);
+  timedOut = true;
+}, SOFT_TIMEOUT_MS);
+softWatchdog.unref();
+const hardWatchdog = setTimeout(() => {
+  console.error(`Worker exceeded hard runtime limit of ${HARD_TIMEOUT_MS}ms - force-exiting.`);
   process.exit(1);
-}, MAX_RUNTIME_MS);
-watchdog.unref();
+}, HARD_TIMEOUT_MS);
+hardWatchdog.unref();
 
 async function main() {
   const duffelToken = process.env.DUFFEL_ACCESS_TOKEN;
@@ -132,6 +146,8 @@ async function main() {
       `Querying Duffel for ${DUFFEL_ROUTES.length} route(s) x ${OFF_PEAK_DEPARTURE_DATES.length} date(s) x ${TRIP_LENGTHS_NIGHTS.length} trip length(s) (batch "${BATCH_LABEL}")...`,
     );
     for (const route of DUFFEL_ROUTES) {
+      if (timedOut) break;
+
       const result = await ingestDuffelRoute(route, duffelToken);
       console.log(`${route.originIata} -> ${route.destinationIata}:`, result);
 
