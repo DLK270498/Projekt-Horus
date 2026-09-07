@@ -54,16 +54,24 @@ async function main() {
   });
 
   console.log(`HTTP status: ${response.status}`);
-  // Diagnostic-only script probing an undocumented-to-us response shape -
-  // `any` is deliberate here, not a shortcut around real typed code.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const payload = (await response.json()) as any;
+  console.log(`Content-Type: ${response.headers.get("content-type")}`);
+
+  // First attempt from this script assumed a JSON body and crashed on a
+  // non-JSON 403 response, hiding the actual error text - read as text
+  // first so we always see something, then try to parse it as JSON.
+  const rawBody = await response.text();
 
   if (!response.ok) {
-    console.error("Duffel Stays request failed:", JSON.stringify(payload, null, 2));
+    console.error("Duffel Stays request failed. Raw response body:");
+    console.error(rawBody);
     process.exitCode = 1;
     return;
   }
+
+  // Diagnostic-only script probing an undocumented-to-us response shape -
+  // `any` is deliberate here, not a shortcut around real typed code.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const payload = JSON.parse(rawBody) as any;
 
   const results = payload.data?.results ?? payload.data ?? [];
   const count = Array.isArray(results) ? results.length : "unknown";
