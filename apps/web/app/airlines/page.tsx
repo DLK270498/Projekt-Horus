@@ -23,18 +23,18 @@ export default async function HomePage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <a href="/" className="text-sm text-sky-400 hover:underline">
+      <a href="/" className="text-sm text-sky-600 hover:underline dark:text-sky-400">
         ← zur Deal-Liste
       </a>
       <h1 className="mt-4 text-2xl font-semibold">Airline-Longlist (Debug)</h1>
-      <p className="mt-2 text-slate-400">
+      <p className="mt-2 text-slate-500 dark:text-slate-400">
         Rohdaten aus der Datenbank ({airlines.length} Airlines) zur Verifikation der
         Datenbasis.
       </p>
 
       <table className="mt-8 w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-slate-800 text-slate-400">
+          <tr className="border-b border-slate-200 text-slate-500 dark:border-slate-800 dark:text-slate-400">
             <th className="py-2 pr-4">IATA</th>
             <th className="py-2 pr-4">Airline</th>
             <th className="py-2 pr-4">Heimatland</th>
@@ -44,7 +44,7 @@ export default async function HomePage() {
         </thead>
         <tbody>
           {airlines.map((airline) => (
-            <tr key={airline.id} className="border-b border-slate-900">
+            <tr key={airline.id} className="border-b border-slate-100 dark:border-slate-900">
               <td className="py-2 pr-4 font-mono">{airline.iataCode}</td>
               <td className="py-2 pr-4">{airline.name}</td>
               <td className="py-2 pr-4">{airline.homeCountry}</td>

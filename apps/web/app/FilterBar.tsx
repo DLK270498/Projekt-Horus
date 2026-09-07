@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition, type FormEvent } from "react";
+import { FIELD_BG_BORDER } from "./theme";
 
 // Shape-only sizing so every filter control (text input, date field,
 // select, button) lines up at the same height - text-base (16px) on
@@ -15,7 +16,8 @@ import { useTransition, type FormEvent } from "react";
 // own single background/border color instead of layering one on top of
 // a shared one.
 const FIELD_SHAPE_CLASS = "h-10 shrink-0 rounded-full px-4 text-base placeholder:text-slate-500 sm:text-sm";
-const FIELD_CLASS = `${FIELD_SHAPE_CLASS} border border-slate-700 bg-slate-900`;
+const FIELD_CLASS = `${FIELD_SHAPE_CLASS} border ${FIELD_BG_BORDER}`;
+const FIELD_TEXT_CLASS = "text-slate-700 dark:text-slate-300";
 
 const HAUL_TYPE_LABELS: Record<string, string> = {
   LONG: "Langstrecke",
@@ -85,7 +87,7 @@ export function FilterBar({ airlines, airports }: { airlines: Airline[]; airport
             name="fromDate"
             type="date"
             defaultValue={get("fromDate")}
-            className="w-[110px] bg-transparent text-base text-slate-300 [color-scheme:dark] sm:text-sm"
+            className="w-[110px] bg-transparent text-base text-slate-700 dark:text-slate-300 sm:text-sm"
           />
         </div>
 
@@ -95,7 +97,7 @@ export function FilterBar({ airlines, airports }: { airlines: Airline[]; airport
             name="toDate"
             type="date"
             defaultValue={get("toDate")}
-            className="w-[110px] bg-transparent text-base text-slate-300 [color-scheme:dark] sm:text-sm"
+            className="w-[110px] bg-transparent text-base text-slate-700 dark:text-slate-300 sm:text-sm"
           />
         </div>
 
@@ -107,14 +109,14 @@ export function FilterBar({ airlines, airports }: { airlines: Airline[]; airport
           className={`w-28 ${FIELD_CLASS}`}
         />
 
-        <select name="minNights" defaultValue={get("minNights") ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
+        <select name="minNights" defaultValue={get("minNights") ?? ""} className={`${FIELD_CLASS} ${FIELD_TEXT_CLASS}`}>
           <option value="">Aufenthalt egal</option>
           <option value="7">≥ 1 Woche</option>
           <option value="14">≥ 2 Wochen</option>
           <option value="21">≥ 3 Wochen</option>
         </select>
 
-        <select name="airline" defaultValue={get("airline") ?? ""} className={`${FIELD_CLASS} max-w-[9rem] truncate text-slate-300`}>
+        <select name="airline" defaultValue={get("airline") ?? ""} className={`${FIELD_CLASS} max-w-[9rem] truncate ${FIELD_TEXT_CLASS}`}>
           <option value="">Alle Airlines</option>
           {airlines.map((airline) => (
             <option key={airline.id} value={airline.iataCode}>
@@ -123,14 +125,14 @@ export function FilterBar({ airlines, airports }: { airlines: Airline[]; airport
           ))}
         </select>
 
-        <select name="minRating" defaultValue={get("minRating") ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
+        <select name="minRating" defaultValue={get("minRating") ?? ""} className={`${FIELD_CLASS} ${FIELD_TEXT_CLASS}`}>
           <option value="">Rating egal</option>
           <option value="5">★★★★★+</option>
           <option value="4">★★★★+</option>
           <option value="3">★★★+</option>
         </select>
 
-        <select name="haulType" defaultValue={get("haulType") ?? ""} className={`${FIELD_CLASS} text-slate-300`}>
+        <select name="haulType" defaultValue={get("haulType") ?? ""} className={`${FIELD_CLASS} ${FIELD_TEXT_CLASS}`}>
           <option value="">Haul-Typ egal</option>
           {Object.entries(HAUL_TYPE_LABELS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -147,13 +149,13 @@ export function FilterBar({ airlines, airports }: { airlines: Airline[]; airport
           className={`w-24 ${FIELD_CLASS}`}
         />
 
-        <label className={`flex items-center gap-2 text-slate-300 ${FIELD_CLASS}`}>
+        <label className={`flex items-center gap-2 ${FIELD_TEXT_CLASS} ${FIELD_CLASS}`}>
           <input
             type="checkbox"
             name="onlyRealDeals"
             value="true"
             defaultChecked={get("onlyRealDeals") === "true"}
-            className="h-4 w-4 rounded border-slate-600 bg-slate-900 accent-emerald-500"
+            className="h-4 w-4 rounded border-slate-400 bg-white accent-emerald-500 dark:border-slate-600 dark:bg-slate-900"
           />
           Nur echte Deals
         </label>
@@ -161,7 +163,7 @@ export function FilterBar({ airlines, airports }: { airlines: Airline[]; airport
         {/* Lets you compare the newest ingestion batch against older data
             before deciding to prune anything - see
             apps/worker/src/index.ts's BATCH_LABEL. */}
-        <select name="batch" defaultValue={get("batch") ?? ""} className={`${FIELD_CLASS} max-w-[11rem] truncate text-slate-300`}>
+        <select name="batch" defaultValue={get("batch") ?? ""} className={`${FIELD_CLASS} max-w-[11rem] truncate ${FIELD_TEXT_CLASS}`}>
           <option value="">Alle Durchläufe</option>
           <option value="maintenance">Nur laufender Preis-Check</option>
           <option value="2026-09-06-valuehubs-v4">Nur neuester Durchlauf (Value-Hubs)</option>
@@ -178,14 +180,14 @@ export function FilterBar({ airlines, airports }: { airlines: Airline[]; airport
         <button
           type="button"
           onClick={handleReset}
-          className={`${FIELD_SHAPE_CLASS} flex items-center border border-transparent text-slate-400 hover:text-slate-200`}
+          className={`${FIELD_SHAPE_CLASS} flex items-center border border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200`}
         >
           Zurücksetzen
         </button>
       </div>
       {/* Fade + arrow hint that the row scrolls further right - the filter
           bar overflowed silently before with no visual cue. */}
-      <div className="pointer-events-none absolute right-0 top-0 flex h-10 w-10 items-center justify-end bg-gradient-to-l from-slate-950 to-transparent text-slate-500">
+      <div className="pointer-events-none absolute right-0 top-0 flex h-10 w-10 items-center justify-end bg-gradient-to-l from-white to-transparent text-slate-500 dark:from-slate-950">
         ›
       </div>
     </form>

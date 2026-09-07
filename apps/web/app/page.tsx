@@ -1,5 +1,19 @@
 import { googleFlightsUrl } from "./googleFlights";
 import { FilterBar } from "./FilterBar";
+import { ThemeToggle } from "./ThemeToggle";
+import {
+  MUTED_TEXT_CLASS,
+  PILL_CLASS,
+  PILL_BG_TEXT,
+  CARD_BG,
+  CARD_BORDER,
+  CARD_BORDER_HOVER,
+  HEADER_FOOTER_BORDER,
+  STICKY_BAR_BG,
+  LINK_TEXT,
+  PRICE_TEXT,
+  STAR_TEXT,
+} from "./theme";
 
 type Deal = {
   id: string;
@@ -47,17 +61,6 @@ function formatPrice(price: number, currency: string) {
   return new Intl.NumberFormat("de-DE", { style: "currency", currency }).format(price);
 }
 
-// All secondary/muted ("shadow") text across the page shares this size -
-// previously these drifted between text-xs and text-sm depending on where
-// they were added.
-const MUTED_TEXT_CLASS = "text-xs text-slate-400";
-
-// Every small rounded "pill" on a deal card (date range, nights, discount,
-// community-deal) shares this exact size/padding - previously the
-// discount/community pill used text-sm/px-3 while the others used
-// text-xs/px-2.5, so pills on the same card were visibly different sizes.
-const PILL_CLASS = "rounded-full px-2.5 py-1 text-xs font-medium";
-
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function HomePage({ searchParams }: { searchParams: SearchParams }) {
@@ -96,9 +99,10 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
           </div>
           <h1 className="text-lg font-semibold tracking-tight">Horus</h1>
         </div>
+        <ThemeToggle />
       </header>
 
-      <div className="sticky top-0 z-20 mt-8 -mx-6 border-b border-slate-800 bg-slate-950/90 px-6 py-3 backdrop-blur">
+      <div className={`sticky top-0 z-20 mt-8 -mx-6 border-b px-6 py-3 backdrop-blur ${HEADER_FOOTER_BORDER} ${STICKY_BAR_BG}`}>
         {/* Client Component: submitting via router.push (instead of a
             native form GET) triggers Next's client-side navigation, which
             shows loading.tsx's skeleton while this page's Server
@@ -109,8 +113,8 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
 
       <section className="mt-8">
         {deals.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-slate-800 p-10 text-center text-slate-400">
-            <p className="font-medium text-slate-300">Noch keine Deals gefunden.</p>
+          <div className={`rounded-xl border border-dashed p-10 text-center text-slate-500 dark:text-slate-400 ${HEADER_FOOTER_BORDER}`}>
+            <p className="font-medium text-slate-700 dark:text-slate-300">Noch keine Deals gefunden.</p>
             <p className="mt-2 text-sm">
               Der Scraper braucht mindestens 3 Preisbeobachtungen je Route/Airline, bevor er
               eine Baseline berechnen und Deals erkennen kann — oder die Filter sind zu eng
@@ -123,7 +127,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
               {deals.map((deal) => (
                 <article
                   key={deal.id}
-                  className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-5 transition-colors hover:border-slate-700"
+                  className={`relative flex flex-col justify-between overflow-hidden rounded-2xl border p-5 transition-colors ${CARD_BORDER} ${CARD_BG} ${CARD_BORDER_HOVER}`}
                 >
                   {deal.isRealDeal && (
                     <span className={`absolute right-3 top-3 bg-emerald-500 font-bold text-slate-950 shadow-lg ${PILL_CLASS}`}>
@@ -142,7 +146,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                         </span>
                         {deal.airline.name}
                       </span>
-                      <span className="text-amber-400">{"★".repeat(deal.airline.skytraxRating)}</span>
+                      <span className={STAR_TEXT}>{"★".repeat(deal.airline.skytraxRating)}</span>
                     </div>
                     <p className={`mt-1 ${MUTED_TEXT_CLASS}`}>
                       ab {deal.origin.city} ({deal.origin.iataCode})
@@ -151,15 +155,15 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                       {deal.destination.city} <span className="font-normal text-slate-500">({deal.destination.iataCode})</span>
                     </p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      <span className={`bg-slate-800 text-slate-400 ${PILL_CLASS}`}>
+                      <span className={`${PILL_BG_TEXT} ${PILL_CLASS}`}>
                         {deal.departureDate ? new Date(deal.departureDate).toLocaleDateString("de-DE") : "Datum flexibel"}
                         {deal.returnDate ? ` – ${new Date(deal.returnDate).toLocaleDateString("de-DE")}` : ""}
                       </span>
                       {deal.nights && (
-                        <span className={`bg-slate-800 text-slate-400 ${PILL_CLASS}`}>{deal.nights} Nächte</span>
+                        <span className={`${PILL_BG_TEXT} ${PILL_CLASS}`}>{deal.nights} Nächte</span>
                       )}
                       {deal.stops != null && (
-                        <span className={`bg-slate-800 text-slate-400 ${PILL_CLASS}`}>
+                        <span className={`${PILL_BG_TEXT} ${PILL_CLASS}`}>
                           {deal.stops === 0 ? "Nonstop" : deal.stops === 1 ? "1 Stopp" : `${deal.stops} Stopps`}
                         </span>
                       )}
@@ -169,7 +173,7 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
 
                   <div className="mt-4 flex items-end justify-between">
                     <div>
-                      <p className="text-2xl font-bold text-emerald-400">
+                      <p className={`text-2xl font-bold ${PRICE_TEXT}`}>
                         {formatPrice(deal.price, deal.currency)}
                       </p>
                       {deal.discountPercent > 0 && (
@@ -179,13 +183,13 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
                       )}
                     </div>
                     {deal.discountPercent > 0 ? (
-                      <span className={`bg-emerald-500/10 text-emerald-400 ${PILL_CLASS}`}>
+                      <span className={`bg-emerald-500/10 ${PRICE_TEXT} ${PILL_CLASS}`}>
                         −{deal.discountPercent.toFixed(0)}%
                       </span>
                     ) : (
                       <span
                         title="Von der Community als Deal kuratiert - noch keine eigene Preishistorie für einen berechneten Vergleichswert"
-                        className={`bg-sky-500/10 text-sky-400 ${PILL_CLASS}`}
+                        className={`bg-sky-500/10 ${LINK_TEXT} ${PILL_CLASS}`}
                       >
                         Community-Deal
                       </span>
@@ -217,12 +221,12 @@ export default async function HomePage({ searchParams }: { searchParams: SearchP
         )}
       </section>
 
-      <footer className={`mt-12 border-t border-slate-800 pt-6 text-center ${MUTED_TEXT_CLASS}`}>
+      <footer className={`mt-12 border-t pt-6 text-center ${HEADER_FOOTER_BORDER} ${MUTED_TEXT_CLASS}`}>
         <p>
           Preise sind keine aktuellen Live-Preise - bitte vor Buchung bei Google Flights oder direkt bei der
           Airline prüfen. Duffel hat keine öffentliche Angebotsseite.
         </p>
-        <a href="/airlines" className="mt-2 inline-block text-sky-400 hover:underline">
+        <a href="/airlines" className={`mt-2 inline-block hover:underline ${LINK_TEXT}`}>
           Airline-Longlist →
         </a>
       </footer>
