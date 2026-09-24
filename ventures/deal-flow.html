@@ -49,7 +49,7 @@ section{display:flex;flex-direction:column;gap:14px}
 .sec-head{display:flex;flex-direction:column;gap:4px}
 
 /* Portfolio picks */
-.picks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.picks{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 @media (max-width:760px){.picks{grid-template-columns:1fr}}
 .pick{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .pick .role{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
@@ -90,6 +90,7 @@ details.weights summary{cursor:pointer;font-weight:600;font-size:14px}
 .tag.dec-invest{background:var(--good-soft);color:var(--good);border-color:transparent}
 .tag.dec-later{background:var(--warn-soft);color:var(--warn);border-color:transparent}
 .tag.dec-pass{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.tag.neu{background:var(--ink);color:var(--bg);border-color:transparent}
 .tag.status{background:var(--accent-soft);color:var(--accent);border-color:transparent}
 .pitch{font-size:14px;color:var(--muted)}
 .bars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:4px}
@@ -132,9 +133,9 @@ td .num{white-space:nowrap}
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Projekt Horus · Micro-VC · Stand 24.09.2026</div>
+    <div class="eyebrow">Projekt Horus · Micro-VC · Stand 24.09.2026 · Runde 2</div>
     <h1>Horus Deal Flow</h1>
-    <p class="lead">32 Ideen aus fünf Suchfeldern, bewertet nach Umsatz pro Sale, MRR/Stickiness, Tempo bis 7,5k bzw. 20k €/Monat, Automatisierbarkeit und Supportaufwand. Tippe eine Idee an für Details, markiere sie mit <b>Invest</b>, <b>Später</b> oder <b>Pass</b> und schick mir unten die Auswahl.</p>
+    <p class="lead">100 Ideen aus fünf Suchfeldern (68 davon neu in Runde 2), bewertet nach Umsatz pro Sale, MRR/Stickiness, Tempo bis 7,5k bzw. 20k €/Monat, Automatisierbarkeit und Supportaufwand. Tippe eine Idee an für Details, markiere sie mit <b>Invest</b>, <b>Später</b> oder <b>Pass</b> und schick mir unten die Auswahl.</p>
   </header>
 
   <div class="kpis" id="kpis"></div>
@@ -142,47 +143,60 @@ td .num{white-space:nowrap}
   <section>
     <div class="sec-head">
       <div class="eyebrow">Empfehlung</div>
-      <h2>Vorgeschlagenes Portfolio: 3 Wetten</h2>
-      <p class="muted">Eine Cash-Maschine, ein MRR-Motor und ein Schnelltest. Zusammen decken sie kurzfristigen Cashflow und langfristig wiederkehrenden Umsatz ab.</p>
+      <h2>Vorgeschlagenes Portfolio: 4 Wetten</h2>
+      <p class="muted">Nach Runde 2 angepasst. Eine Cash-Maschine, zwei MRR-Motoren (einer davon nutzt Horus, das schon gebaut ist) und ein Schnelltest mit B2B-Abo. Die vier teilen sich Kanäle: Energie-Leads und Virtual Staging erreichen Eigentümer und Makler, Compliance und Staging werden per Kaltakquise an KMU verkauft.</p>
     </div>
     <div class="picks">
       <article class="pick">
         <div class="role">Cash-Maschine · Start sofort</div>
-        <h3>Energie- &amp; Klima-Leads</h3>
+        <h3>Eigenheim-Lead-Funnel</h3>
         <ul>
-          <li>Ein Funnel für PV, Speicher, Wärmepumpe und Klimaanlage. Die Saisons gleichen sich aus.</li>
-          <li>Installateure kaufen jeden Monat nach, das wirkt wie MRR.</li>
-          <li>Mit Meta- und Google-Ads nach 2–4 Wochen messbar.</li>
+          <li>Ein Funnel für PV, Speicher, Wärmepumpe und Klimaanlage, später Sanierung, Terrasse und Küche als Module.</li>
+          <li>Der Wärmeplan-Check liefert günstigen SEO-Traffic, weil Großstädte seit 30.06.2026 Wärmepläne haben.</li>
+          <li>Installateure kaufen jeden Monat nach, das wirkt fast wie MRR.</li>
         </ul>
         <dl class="path">
           <dt>7,5k</dt><dd>≈ 95 verkaufte Leads × 80 €</dd>
-          <dt>20k</dt><dd>≈ 250 Leads × 80 € (10–15 feste Abnehmer)</dd>
+          <dt>20k</dt><dd>≈ 250 Leads, 3–4 Module, 15 Stammabnehmer</dd>
         </dl>
       </article>
       <article class="pick">
-        <div class="role">MRR-Motor · Aufbau 2–3 Monate</div>
-        <h3>Pflichtschulungs-Plattform</h3>
+        <div class="role">MRR-Motor B2B · 2–3 Monate</div>
+        <h3>Compliance-Abo für KMU</h3>
         <ul>
-          <li>KI-Kompetenz (AI Act), Datenschutz, NIS2 und Hinweisgeberschutz als Online-Kurs mit Zertifikat.</li>
-          <li>Kaum Support, Jahreslizenz pro Firma, jährliche Wiederholungspflicht.</li>
-          <li>Vertrieb über Steuerberater, IT-Dienstleister und LinkedIn.</li>
+          <li>Pflichtschulung (KI-Kompetenz, Datenschutz) und Hinweisgeber-Meldestelle in einem Abo.</li>
+          <li>Kaum Support, jährliche Wiederholungspflicht, Vertrieb über Steuerberater.</li>
+          <li>Später erweiterbar um Widerrufsbutton, Green-Claims-Check und KI-Kennzeichnung.</li>
         </ul>
         <dl class="path">
-          <dt>7,5k</dt><dd>≈ 75 Firmen × 99 €/Monat</dd>
-          <dt>20k</dt><dd>≈ 200 Firmen oder 40 Reseller-Partner</dd>
+          <dt>7,5k</dt><dd>≈ 60 Firmen × 125 €/Monat im Bündel</dd>
+          <dt>20k</dt><dd>≈ 160 Firmen oder 30–40 Reseller</dd>
+        </dl>
+      </article>
+      <article class="pick">
+        <div class="role">MRR-Motor B2C · Asset schon da</div>
+        <h3>Horus Premium-Alerts</h3>
+        <ul>
+          <li>Das Going-Modell: gratis Deals mit Verzögerung, Premium sofort und mit Fehlerpreisen.</li>
+          <li>Voll automatisiert, fast kein Support, Jahresabo.</li>
+          <li>Upsells: Privatjet-Empty-Legs und Kreuzfahrten mit Provision.</li>
+        </ul>
+        <dl class="path">
+          <dt>7,5k</dt><dd>≈ 1.850 Abos × 49 €/Jahr</dd>
+          <dt>20k</dt><dd>≈ 4.900 Abos, braucht ≈ 120k Gratis-Leser</dd>
         </dl>
       </article>
       <article class="pick">
         <div class="role">Schnelltest · 2 Wochen</div>
-        <h3>KI-Bewerbungsfoto</h3>
+        <h3>Virtual Staging für Makler</h3>
         <ul>
-          <li>HeadshotPro/Aragon-Modell für DACH: Selfies hochladen, 40 Business-Portraits erhalten.</li>
-          <li>Voll automatisiert, einmal 39 €, testbar mit 500 € Ads-Budget.</li>
-          <li>Kein MRR, dafür schnellster Weg zu Cashflow und Ads-Know-how.</li>
+          <li>Leere Räume in Inseraten per KI möblieren, dazu Exposé-Texte.</li>
+          <li>Das Angebot verkauft sich selbst: Wir stagen das echte Inserat des Maklers gratis vor.</li>
+          <li>Makler sind zugleich Abnehmer für Immobilien- und Energieausweis-Leads.</li>
         </ul>
         <dl class="path">
-          <dt>7,5k</dt><dd>≈ 190 Sales × 39 € / Monat</dd>
-          <dt>20k</dt><dd>≈ 510 Sales, plus B2B-Teamfotos</dd>
+          <dt>7,5k</dt><dd>≈ 75 Makler × 99 €/Monat</dd>
+          <dt>20k</dt><dd>≈ 200 Makler, Bauträger und Verwalter</dd>
         </dl>
       </article>
     </div>
@@ -209,6 +223,7 @@ td .num{white-space:nowrap}
         <select id="decSel">
           <option value="all">Alle</option>
           <option value="open">Noch offen</option>
+          <option value="new">Neu in Runde 2</option>
           <option value="invest">Invest</option>
           <option value="later">Später</option>
           <option value="pass">Pass</option>
@@ -259,6 +274,7 @@ td .num{white-space:nowrap}
         <li><b>Bewusst ausgeschlossen:</b> Versicherungen, Strom-/Gasverträge, Kredite (Verträge); GLP-1-/Cannabis-Telemedizin (hohe Nachfrage, aber rechtlich instabil und reputationskritisch); Schönheits-OP-Leads (Heilmittelwerbegesetz).</li>
         <li><b>Regulatorik-Stand</b> (Sept. 2026): E-Rechnung Versandpflicht ab 01.01.2027 für Firmen über 800k € Umsatz, ab 2028 für alle. Entgelttransparenz-Richtlinie: Frist 07.06.2026 verpasst, Umsetzung Anfang 2027 geplant. AI Act Hochrisiko-Pflichten ab 02.08.2027. Digitale Zahlungspflicht ab 2027 geplant. Einträge mit „geplant“ sind noch nicht beschlossen.</li>
         <li>Quellen u. a.: <a href="https://www.ihk.de/erfurt/service/recht/aktuelles/gesetzliche-neuerungen-2026-im-ueberblick-6931608" target="_blank" rel="noopener">IHK Erfurt</a>, <a href="https://www.personalwirtschaft.de/news/verguetung/eu-entgelttransparenzrichtlinie-deutschland-verpasst-frist-das-sind-die-konsequenzen-203783/" target="_blank" rel="noopener">Personalwirtschaft</a>, <a href="https://www.haufe.de/personal/arbeitsrecht/eu-richtlinie-fuer-mehr-lohngleichheit_76_538404.html" target="_blank" rel="noopener">Haufe</a>, <a href="https://www.deutscheranwaltspiegel.de/deutscheranwaltspiegel/digitalisierung/elektronische-rechnungen-ab-2027-161931/" target="_blank" rel="noopener">Deutscher AnwaltSpiegel</a>, <a href="https://www.wirtschaft-und-industrie.de/digitale-zahlungspflicht-ab-2027-was-betriebe-jetzt-wissen-muessen/" target="_blank" rel="noopener">Wirtschaft und Industrie</a>. Marktzahlen: BWP, BSW-Solar, Branchenverbände; Lead-Preise aus gängigen Lead-Marktplätzen (Spannen).</li>
+        <li><b>Runde 2</b> ergänzt 68 Ideen. Neu geprüfte Stichtage: Widerrufsbutton seit 19.06.2026, Energy Sharing (§ 42c EnWG) seit 01.06.2026, EUDR ab 30.12.2026 bzw. 30.06.2027 für kleine Firmen, Verbot pauschaler Umweltaussagen ab 27.09.2026, Meldepflichten nach Cyber Resilience Act ab 11.09.2026, KI-Kennzeichnung (AI Act Art. 50) ab 02.08.2026. Quellen: <a href="https://www.ihk.de/schwaben/produktmarken/recht-und-steuern/onlinerecht/widerrufsbutton-6967978" target="_blank" rel="noopener">IHK Schwaben</a>, <a href="https://www.ihk.de/regensburg/fachthemen/nachhaltiges-wirtschaften/nachrichten-zur-nachhaltigkeit/eudr-vereinfachung-und-verschiebung-beschlossen-6926444" target="_blank" rel="noopener">IHK Regensburg</a>, <a href="https://stiftung-umweltenergierecht.de/der-1-juni-2026-als-startdatum-fuer-energy-sharing-was-bedeutet-das/" target="_blank" rel="noopener">Stiftung Umweltenergierecht</a>.</li>
         <li>Keine Rechts- oder Steuerberatung. Vor Start jeder Regulatorik-Idee den aktuellen Gesetzesstand prüfen.</li>
       </ul>
     </div>
@@ -547,6 +563,561 @@ const IDEAS = [
    channels:"SEO, YouTube-Tests.",
    examples:"Viele Vergleichsseiten und Händler.",
    risks:"Margen fallen, Amazon dominiert.",
+   next:"Nicht priorisieren."},
+
+  // ===== v2: 68 neue Ideen =====
+  // 1 — High-Ticket Provision
+  {id:"nachfolge", neu:1, cat:1, title:"Unternehmensnachfolge: Tippgeber für KMU-Verkäufe", pitch:"Zehntausende Inhaber suchen jährlich einen Nachfolger. Ein Bewertungs-Check bringt Verkäufer, M&A-Berater zahlen beim Abschluss.",
+   s:{ticket:5, mrr:1, speed:1, auto:3, support:3},
+   money:"5.000–20.000 € Tippgeberprovision je Deal (10–20 % des Beraterhonorars).",
+   path:"7,5k: ≈ 5 Deals pro Jahr. Ein Deal dauert 9–18 Monate.",
+   channels:"LinkedIn-Ads an Inhaber 55+, Steuerberater, Handwerkskammern, SEO „Firma verkaufen Wert“.",
+   examples:"DUB.de, Nexxt-Change (IHK), Unternehmensbörsen.",
+   risks:"Sehr lange Zyklen, Vertrauen nötig, Provision nur mit wasserdichtem Tippgebervertrag.",
+   next:"Unternehmenswert-Rechner als Lead-Magnet, 3 M&A-Boutiquen als Abnehmer."},
+  {id:"privatjet", neu:1, cat:1, title:"Privatjet-Charter-Vermittlung (Horus-Synergie)", pitch:"Horus-Nutzer fliegen schon Business. Anfragen für Charter und Empty Legs an Broker weiterleiten.",
+   s:{ticket:5, mrr:1, speed:2, auto:3, support:3},
+   money:"5–10 % Provision, also 1.250–2.500 € je Flug.",
+   path:"7,5k: ≈ 4 Charter pro Monat. Empty-Leg-Alerts steigern die Frequenz.",
+   channels:"Horus-App und Newsletter, Empty-Leg-Deals auf Instagram, Konzierge-Partner.",
+   examples:"Victor, Flyvictor, PrivateFly, JetVision.",
+   risks:"Kleine Zielgruppe, Broker-Abhängigkeit, Buchungen brauchen persönliche Abstimmung.",
+   next:"Empty-Leg-Feed in Horus einbauen, zwei Broker-Partnerschaften."},
+  {id:"yacht", neu:1, cat:1, title:"Yachtcharter-Vermittlung", pitch:"Segel- und Katamaran-Törns in Kroatien und Griechenland. Vergleichsportal mit Provision je Buchung.",
+   s:{ticket:4, mrr:1, speed:2, auto:3, support:3},
+   money:"10–15 % Provision, also 800–2.000 € je Buchung.",
+   path:"7,5k: ≈ 6 Buchungen pro Monat, stark saisonal (Buchung im Winter).",
+   channels:"SEO „Katamaran mieten Kroatien“, Instagram, Segler-Foren.",
+   examples:"Yachtico, Click&Boat, Boataround.",
+   risks:"Saisonal, große Plattformen dominieren die Suche.",
+   next:"Nicht priorisieren, eventuell als Horus-Travel-Erweiterung."},
+  {id:"reimport", neu:1, cat:1, title:"EU-Neuwagen-Vermittlung", pitch:"Neuwagen aus EU-Ländern sparen 15–25 %. Händler zahlen pro vermitteltem Auto.",
+   s:{ticket:4, mrr:1, speed:3, auto:3, support:3},
+   money:"300–800 € je verkauftem Auto oder 50–150 € je Anfrage.",
+   path:"7,5k: ≈ 15 Autos pro Monat. 20k: ≈ 40, mit Fokus auf E-Autos.",
+   channels:"SEO „[Modell] Rabatt“, YouTube-Preisvergleiche, Google Ads.",
+   examples:"carwow, MeinAuto.de, EU-Reimport-Händler.",
+   risks:"Kunden haben viele Rückfragen zu Lieferzeit und Garantie.",
+   next:"Mit 2 Reimport-Händlern starten, eine Modellnische wählen."},
+  {id:"autoankauf", neu:1, cat:1, title:"Gebrauchtwagen-Ankauf-Leads", pitch:"„Was ist mein Auto wert?“-Rechner. Verkäufer-Leads an regionale Händler statt an große Ankaufsketten.",
+   s:{ticket:2, mrr:3, speed:4, auto:4, support:2},
+   money:"40–120 € pro Verkäufer-Lead, Händler kaufen monatlich.",
+   path:"7,5k: ≈ 95 Leads × 80 €. 20k: Händler in 10 Städten.",
+   channels:"Google Ads „Auto verkaufen“, Meta-Ads, SEO-Rechner je Modell.",
+   examples:"wirkaufendeinauto.de, Autohero, carwow Verkaufen.",
+   risks:"Hohe Klickpreise, Händler wollen nur gute Fahrzeuge.",
+   next:"Rechner plus 5 Händler in einer Großstadt als Pilot."},
+  {id:"kueche", neu:1, cat:1, title:"Küchen-Leads", pitch:"Küchenplaner-Quiz mit Budgetrechner. Anfragen an Küchenstudios, die sonst teure Prospekt-Werbung zahlen.",
+   s:{ticket:3, mrr:3, speed:3, auto:4, support:2},
+   money:"60–150 € pro Lead, Küche im Schnitt 12–20k €.",
+   path:"7,5k: ≈ 85 Leads × 90 €. 20k: Studios in 15 Regionen.",
+   channels:"Pinterest und Meta-Ads (visuell), Google Ads „Küche planen“.",
+   examples:"Küchenquelle, Kuechen-Test, Aroundhome Küchen.",
+   risks:"Lange Entscheidung, Studios bewerten Leads kritisch.",
+   next:"Quiz-Funnel bauen, mit 3 Studios testen."},
+  {id:"sanierung", neu:1, cat:1, title:"Sanierungs-Leads: Dach, Fassade, Fenster", pitch:"Förderrechner für BEG-Zuschüsse (plus 5 % mit Sanierungsfahrplan). Anfragen an Handwerksbetriebe.",
+   s:{ticket:3, mrr:3, speed:3, auto:4, support:2},
+   money:"50–150 € pro Lead, Projekte 15–60k €.",
+   path:"7,5k: ≈ 85 Leads × 90 €. Passt in den Energie-Funnel.",
+   channels:"Google Ads, Förder-SEO, Energieberater als Partner.",
+   examples:"Aroundhome, Dachdecker-Portale, Fenster-Vergleich.",
+   risks:"Handwerker ausgelastet, Förderbedingungen ändern sich.",
+   next:"Als drittes Modul im Energie-Funnel."},
+  {id:"pool", neu:1, cat:1, title:"Poolbau-Leads", pitch:"Pool-Kostenrechner für Eigenheimbesitzer, Anfragen an Poolbauer.",
+   s:{ticket:4, mrr:2, speed:3, auto:4, support:2},
+   money:"80–200 € pro Lead, Pool 25–60k €.",
+   path:"7,5k: ≈ 55 Leads × 140 €, nur Februar bis Juli stark.",
+   channels:"Pinterest, Meta-Ads, SEO „Pool Kosten“.",
+   examples:"Poolbau-Portale, Aroundhome.",
+   risks:"Saisonal, kleine Abnehmerzahl je Region.",
+   next:"Nur saisonal mit dem Klima-Funnel bündeln."},
+  {id:"bestattung", neu:1, cat:1, title:"Bestattungs-Vergleich", pitch:"Rund 1 Mio. Sterbefälle pro Jahr. Transparente Festpreise und Vermittlung an Bestatter.",
+   s:{ticket:3, mrr:2, speed:3, auto:3, support:3},
+   money:"100–300 € pro Auftrag oder 5–10 % der Bestattungskosten.",
+   path:"7,5k: ≈ 40 Aufträge × 190 €.",
+   channels:"Google Ads (hohe Kaufabsicht), SEO „Bestattung Kosten [Stadt]“, Vorsorge-Content.",
+   examples:"Mymoria, Bestattungen.de, November.",
+   risks:"Sensibles Thema mit telefonischer Betreuung, Reputation.",
+   next:"Nicht priorisieren (Support und Tonalität)."},
+  {id:"teilverkauf", neu:1, cat:1, title:"Teilverkauf & Leibrente: Leads für Senioren-Eigentümer", pitch:"Rentner mit Immobilie und wenig Liquidität. Leads an Leibrenten- und Teilverkaufsanbieter.",
+   s:{ticket:5, mrr:1, speed:2, auto:3, support:2},
+   money:"200–500 € pro qualifiziertem Lead oder 1–1,5 % Tippgeberprovision.",
+   path:"7,5k: ≈ 20 Leads × 400 €. Bei Abschluss deutlich mehr.",
+   channels:"Print, Facebook-Ads 60+, Ratgeber-SEO „Haus verrenten“.",
+   examples:"Deutsche Leibrenten, Wertfaktor, Heimkapital.",
+   risks:"Branche nach Zinswende geschrumpft, Verbraucherschützer kritisch.",
+   next:"Mit Immobilien-Tippgeber-Funnel kombinieren."},
+  {id:"ringe", neu:1, cat:1, title:"Verlobungs- & Eheringe (Affiliate)", pitch:"≈ 350.000 Hochzeiten pro Jahr. Vergleichs- und Inspirationsseite mit Juwelier-Affiliates.",
+   s:{ticket:3, mrr:1, speed:3, auto:5, support:1},
+   money:"8–15 % Provision auf 1.500–4.000 €.",
+   path:"7,5k: ≈ 30 Sales × 250 €.",
+   channels:"Pinterest, SEO „Verlobungsring Budget“, Instagram.",
+   examples:"Christ, 123gold, Rauschmayer, Brilliant Earth (USA).",
+   risks:"Lange Recherchephase, Cookie-Laufzeiten.",
+   next:"Pinterest-Test mit 50 Pins."},
+  {id:"gewerbepv", neu:1, cat:1, title:"Gewerbe-PV & Speicher (B2B-Leads)", pitch:"Hallendächer von Handwerk und Logistik. Projekte ab 100k € für spezialisierte EPCs.",
+   s:{ticket:4, mrr:3, speed:2, auto:3, support:2},
+   money:"200–600 € pro qualifiziertem Lead.",
+   path:"7,5k: ≈ 20 Leads × 400 €.",
+   channels:"LinkedIn, Dachflächen-Analyse per Satellitendaten und Kaltakquise.",
+   examples:"Enviria, Klimapartner, Energieversorger-B2B.",
+   risks:"Lange B2B-Zyklen, Qualifizierung per Telefon.",
+   next:"Satelliten-Scan von Gewerbegebieten als Outreach-Liste."},
+  {id:"alarm", neu:1, cat:1, title:"Einbruchschutz & Alarmanlagen-Leads", pitch:"Sicherheits-Check mit Förderhinweis. Anfragen an Errichter.",
+   s:{ticket:3, mrr:2, speed:3, auto:4, support:2},
+   money:"40–90 € pro Lead, Anlage 3–10k €.",
+   path:"7,5k: ≈ 120 Leads × 60 €, stark im Herbst.",
+   channels:"Google Ads, SEO „Alarmanlage Kosten“, Meta-Ads im Herbst.",
+   examples:"Aroundhome Sicherheit, Errichter-Portale.",
+   risks:"Saisonal, viele DIY-Alternativen.",
+   next:"Modul im Eigenheim-Funnel."},
+  {id:"terrasse", neu:1, cat:1, title:"Terrassenüberdachung & Carport-Leads", pitch:"Konfigurator mit Preisrahmen, Anfragen an Metallbauer und Schreiner.",
+   s:{ticket:3, mrr:2, speed:3, auto:4, support:2},
+   money:"30–80 € pro Lead, Projekte 5–20k €.",
+   path:"7,5k: ≈ 140 Leads × 55 €.",
+   channels:"Pinterest, Meta-Ads im Frühjahr, SEO.",
+   examples:"Terrassendach-Portale, Hersteller-Konfiguratoren.",
+   risks:"Saisonal, regionale Abnehmer nötig.",
+   next:"Modul im Eigenheim-Funnel."},
+  {id:"uhren", neu:1, cat:1, title:"Luxusuhren-Ankauf-Leads", pitch:"„Was ist meine Rolex wert?“-Rechner, Anfragen an Händler.",
+   s:{ticket:3, mrr:2, speed:3, auto:4, support:2},
+   money:"50–200 € pro Ankaufsanfrage oder 1–3 % Affiliate.",
+   path:"7,5k: ≈ 60 Anfragen × 125 €.",
+   channels:"SEO nach Modellen, Uhren-Foren, Instagram.",
+   examples:"Chrono24 Ankauf, Watchmaster, Uhrinstinkt.",
+   risks:"Wenige Abnehmer, Betrugsrisiko bei Fälschungen.",
+   next:"Nicht priorisieren."},
+  {id:"kinderwunsch", neu:1, cat:1, title:"Kinderwunsch-Behandlung im Ausland", pitch:"Spanien und Tschechien bieten Verfahren, die in Deutschland verboten sind. Klinikvergleich.",
+   s:{ticket:4, mrr:1, speed:2, auto:3, support:4},
+   money:"100–250 € pro Patientin oder 5–10 % der Behandlung.",
+   path:"7,5k: ≈ 40 Patientinnen pro Monat, unrealistisch schnell.",
+   channels:"Foren, Instagram, SEO.",
+   examples:"IVF-Vergleichsportale, Klinik-Agenturen.",
+   risks:"Sehr sensible Beratung, Heilmittelwerbegesetz, ethisch heikel.",
+   next:"Nicht priorisieren."},
+
+  // 2 — Regulatorik
+  {id:"widerruf", neu:1, cat:2, title:"Widerrufsbutton-App für Onlineshops", pitch:"Seit 19.06.2026 Pflicht im B2C-Onlinehandel. Plugin mit Formular, Bestätigungsmail und Nachweis-Log.",
+   s:{ticket:1, mrr:5, speed:3, auto:5, support:2}, status:"in Kraft",
+   money:"5–19 €/Monat pro Shop.",
+   path:"7,5k: ≈ 700 Shops × 11 €. 20k: WooCommerce, Shopware und Shopify zusammen.",
+   channels:"App-Stores von Shopify und Shopware, Cold E-Mail an Shops ohne Button (automatisch prüfbar).",
+   examples:"IT-Recht Kanzlei, Händlerbund, e-recht24 (Rechtstexte).",
+   risks:"Shopsysteme bauen die Funktion selbst ein, Rechtstext-Anbieter bündeln sie.",
+   next:"Shops ohne Button crawlen, WooCommerce-Plugin zuerst (kein Standard)."},
+  {id:"greenclaims", neu:1, cat:2, title:"Green-Claims-Check für Shops & Marken", pitch:"Ab 27.09.2026 sind pauschale Umweltaussagen wie „klimaneutral“ verboten. Scanner findet riskante Claims.",
+   s:{ticket:3, mrr:3, speed:4, auto:3, support:3}, status:"ab 27.09.2026",
+   money:"Scan und Report 290–990 €, Monitoring 39–99 €/Monat.",
+   path:"7,5k: ≈ 10 Audits + 30 Abos.",
+   channels:"Gratis-Scan per Cold E-Mail, Agenturen, Abmahnungs-Content auf LinkedIn.",
+   examples:"Wettbewerbszentrale-Fälle, Nachhaltigkeitsberater.",
+   risks:"Abmahnwelle kommt ggf. verzögert, Beratung nötig.",
+   next:"Scanner mit KI-Klassifizierung, 300 Shops prüfen."},
+  {id:"cra", neu:1, cat:2, title:"Cyber-Resilience-Act-Kit für Hardware-Hersteller", pitch:"Meldepflichten ab 11.09.2026, volle Pflichten ab Dez. 2027. SBOM und Schwachstellen-Monitoring für kleine IoT-Firmen.",
+   s:{ticket:4, mrr:5, speed:2, auto:3, support:3}, status:"ab 09/2026",
+   money:"299–999 €/Monat.",
+   path:"7,5k: ≈ 15 Kunden × 500 €.",
+   channels:"Messen, LinkedIn, Elektronik-Verbände.",
+   examples:"ONEKEY, Cybellum, Anchore.",
+   risks:"Technisch anspruchsvoll, Konkurrenz von Security-Firmen.",
+   next:"Nur mit technischem Mitgründer."},
+  {id:"eudr", neu:1, cat:2, title:"EUDR-Sorgfaltserklärung für kleine Importeure", pitch:"Ab 30.12.2026 (klein: 30.06.2027) brauchen Kaffee, Kakao, Holz, Möbel & Co. Entwaldungsnachweise.",
+   s:{ticket:3, mrr:4, speed:3, auto:3, support:3}, status:"ab 12/2026",
+   money:"49–299 €/Monat.",
+   path:"7,5k: ≈ 60 Kunden × 125 €.",
+   channels:"Röstereien, Möbelhändler, Schokoladenhersteller, Verbände.",
+   examples:"osapiens, Preferred by Nature, Tracemark.",
+   risks:"Weitere Verschiebungen möglich, Vereinfachungen verkleinern den Markt.",
+   next:"Warteliste bei Röstereien, Produkt ab Q4 2026."},
+  {id:"hinweis", neu:1, cat:2, title:"Hinweisgeber-Meldestelle als Service", pitch:"Pflicht ab 50 Mitarbeitern. Portal, Ombudsperson und Fristenmanagement im Abo.",
+   s:{ticket:2, mrr:5, speed:2, auto:5, support:1}, status:"in Kraft",
+   money:"29–99 €/Monat je Firma.",
+   path:"7,5k: ≈ 130 Firmen × 59 €. Am besten im Bündel mit der Pflichtschulung.",
+   channels:"Steuerberater, Datenschutzbeauftragte, LinkedIn.",
+   examples:"EQS Integrity Line, Hintbox, Whistlelink.",
+   risks:"Markt seit 2023 verteilt, Wechselwillige gewinnen.",
+   next:"Als Upsell in die Pflichtschulungs-Plattform."},
+  {id:"foerder", neu:1, cat:2, title:"Fördermittel-Radar mit Berater-Vermittlung", pitch:"KMU finden passende Zuschüsse per KI-Matching. Berater zahlen für qualifizierte Anfragen.",
+   s:{ticket:4, mrr:3, speed:3, auto:4, support:2}, status:"laufend",
+   money:"100–300 € pro Lead oder 10–20 % der Berater-Erfolgsprovision. Optional Radar-Abo 29 €/Monat.",
+   path:"7,5k: ≈ 40 Leads × 190 €. 20k: Radar-Abo plus Vermittlung.",
+   channels:"SEO je Förderprogramm, LinkedIn, Newsletter.",
+   examples:"Förderdatenbank des Bundes, fördermittel.de, Deutsche Fördermittelberatung.",
+   risks:"Programme ändern sich laufend, Datenpflege nötig.",
+   next:"Förderdatenbank einlesen, 5 Berater als Abnehmer."},
+  {id:"thg", neu:1, cat:2, title:"THG-Quote für E-Auto-Halter", pitch:"Jährliche Prämie für jeden E-Auto-Halter. Die RED-III-Umsetzung soll Quoten und Preise anheben.",
+   s:{ticket:1, mrr:4, speed:3, auto:5, support:2}, status:"jährlich",
+   money:"10–40 € Marge pro Fahrzeug und Jahr.",
+   path:"7,5k: ≈ 3.000–4.000 Fahrzeuge pro Jahr, jedes Jahr neu.",
+   channels:"E-Auto-Communities, Autohäuser, Wallbox-Funnel.",
+   examples:"wirkaufendeinethg, Emobia, GELD für eAuto.",
+   risks:"Preise schwanken stark, viele Anbieter.",
+   next:"Als Upsell im Wallbox-Modul testen."},
+  {id:"energysharing", neu:1, cat:2, title:"Energy-Sharing-Software für Nachbarschaften", pitch:"Seit 01.06.2026 dürfen Haushalte Solarstrom teilen (§ 42c EnWG). Abrechnung und Verträge als Software.",
+   s:{ticket:3, mrr:5, speed:1, auto:3, support:4}, status:"seit 06/2026",
+   money:"2–5 € pro Teilnehmer und Monat oder 5–10 % des Stromerlöses.",
+   path:"7,5k: ≈ 2.000 Teilnehmer, erst wenn Smart Meter verbreitet sind.",
+   channels:"Energiegenossenschaften, Kommunen, Installateure.",
+   examples:"metergrid, Tepto, Energiegenossenschaften.",
+   risks:"Nur 5–6 % Smart-Meter-Quote, Netzbetreiber setzen teils erst 2027 um.",
+   next:"Beobachten, nicht jetzt."},
+  {id:"waermeplan", neu:1, cat:2, title:"Wärmeplan-Check: Was gilt für mein Haus?", pitch:"Großstädte mussten bis 30.06.2026 Wärmepläne vorlegen. Adresse eingeben, Ergebnis erhalten, Lead weitergeben.",
+   s:{ticket:3, mrr:2, speed:3, auto:4, support:2}, status:"in Kraft",
+   money:"Lead-Verkauf an Wärmepumpen-Betriebe und Energieberater (60–150 €).",
+   path:"Zubringer für den Energie-Funnel.",
+   channels:"SEO „Wärmeplan [Stadt]“, lokale Presse, Meta-Ads je Stadt.",
+   examples:"Kommunale Portale (oft unverständlich), Energieberater.",
+   risks:"GEG-Reform der Koalition könnte die Dringlichkeit senken.",
+   next:"Die 10 größten Städte als SEO-Seiten, Leads in den Energie-Funnel."},
+  {id:"fachkraefte", neu:1, cat:2, title:"Pflege-Fachkräfte aus Drittstaaten vermitteln", pitch:"Fachkräfteeinwanderungsgesetz und Chancenkarte. Kliniken zahlen hohe Vermittlungshonorare.",
+   s:{ticket:5, mrr:1, speed:1, auto:2, support:5}, status:"in Kraft",
+   money:"4.000–10.000 € pro vermittelter Fachkraft.",
+   path:"7,5k: ≈ 1–2 Vermittlungen pro Monat, aber erst nach 9–12 Monaten Anerkennung.",
+   channels:"Partneragenturen im Ausland, Kliniken, Pflegeheime.",
+   examples:"Triple Win (GIZ), private Pflege-Recruiter.",
+   risks:"Sehr hoher Betreuungsaufwand, Gütesiegel-Pflicht, Visa-Verzögerungen.",
+   next:"Nicht passend zu unserem Profil (Support)."},
+  {id:"deutschtest", neu:1, cat:2, title:"Einbürgerungs- & Deutschprüfungs-Trainer", pitch:"Einbürgerungen auf Rekordniveau. Die App trainiert „Leben in Deutschland“, B1-Prüfung und Pflege-Fachsprache.",
+   s:{ticket:2, mrr:3, speed:3, auto:5, support:2}, status:"in Kraft",
+   money:"19–49 € einmalig oder 9,99 €/Monat. B2B-Lizenzen für Sprachschulen.",
+   path:"7,5k: ≈ 300 Käufe × 25 €.",
+   channels:"App-Store-Optimierung, TikTok in Arabisch, Türkisch, Ukrainisch, Sprachschulen.",
+   examples:"Leben-in-Deutschland-Apps, telc-Übungsmaterial, Lingoda.",
+   risks:"Viele Gratis-Apps für den Einbürgerungstest, Mehrwert muss die B1-Prüfung sein.",
+   next:"B1-Sprechprüfung mit KI-Gesprächspartner als Kernfunktion."},
+  {id:"kilabel", neu:1, cat:2, title:"KI-Kennzeichnung für Agenturen & Verlage", pitch:"AI Act Art. 50 verlangt ab 02.08.2026 die Kennzeichnung von Deepfakes und KI-Texten. Tool für Labels und Nachweise.",
+   s:{ticket:2, mrr:4, speed:2, auto:5, support:2}, status:"ab 08/2026",
+   money:"29–149 €/Monat.",
+   path:"7,5k: ≈ 100 Kunden × 75 €.",
+   channels:"Agenturverbände, LinkedIn, Content-Tools-Marktplätze.",
+   examples:"C2PA-Tools, Adobe Content Credentials.",
+   risks:"Digital Omnibus könnte Fristen verschieben, Plattformen bauen es ein.",
+   next:"Beobachten, als Modul der Pflichtschulung."},
+  {id:"csc", neu:1, cat:2, title:"Software für Cannabis-Anbauvereine", pitch:"Mitglieder, Abgabemengen und Behördenberichte für Anbauvereinigungen nach dem CanG.",
+   s:{ticket:2, mrr:5, speed:1, auto:4, support:3}, status:"politisch unsicher",
+   money:"49–199 €/Monat je Verein.",
+   path:"7,5k: ≈ 75 Vereine. Der Markt ist klein.",
+   channels:"Verbände, Telegram-Gruppen.",
+   examples:"Mehrere Club-Software-Startups.",
+   risks:"Koalition evaluiert das Gesetz, kleiner Markt.",
+   next:"Nicht priorisieren."},
+  {id:"fruehstart", neu:1, cat:2, title:"Frühstart-Rente: Ratgeber & Depot-Vergleich", pitch:"Ab 2027 geplant: 10 € pro Monat vom Staat ins Depot jedes Kindes von 6 bis 18.",
+   s:{ticket:1, mrr:1, speed:3, auto:5, support:1}, status:"geplant 2027",
+   money:"30–80 € CPA pro eröffnetem Depot beim Broker.",
+   path:"7,5k: ≈ 150 Depots pro Monat.",
+   channels:"SEO, Eltern-Instagram, Finanz-YouTube.",
+   examples:"Finanztip, Finanzfluss.",
+   risks:"Ausgestaltung unklar, vielleicht nur staatliche Anbieter.",
+   next:"SEO-Seiten früh besetzen."},
+
+  // 3 — Kopierbar
+  {id:"goingclone", neu:1, cat:3, title:"Horus Premium: bezahlte Deal-Alerts (Going-Modell)", pitch:"Going (USA) hat über 2 Mio. Mitglieder mit Flug-Alerts. Horus ist schon gebaut, es fehlt nur die Bezahlschranke.",
+   s:{ticket:2, mrr:5, speed:2, auto:5, support:1},
+   money:"49–99 € pro Jahr. Gratis-Stufe mit verzögerten Deals.",
+   path:"7,5k: ≈ 1.850 Premium-Abos × 49 €/Jahr. Das braucht ≈ 40–60k Gratis-Abonnenten.",
+   channels:"Viral-Deals auf Instagram und TikTok, Presse bei Fehlerpreisen, Empfehlungsprogramm.",
+   examples:"Going.com, Jack's Flight Club, Travel-Dealz.",
+   risks:"Listenaufbau dauert, Business-Class-Zielgruppe ist kleiner als Economy.",
+   next:"Newsletter mit Gratis-Alerts starten, nach 5k Abonnenten Premium einführen."},
+  {id:"wohnungsalert", neu:1, cat:3, title:"Wohnungs-Alert für Mieter in Großstädten", pitch:"In Berlin und München zählt Minute eins. Suchende zahlen für sofortige Alerts und KI-Bewerbungstexte.",
+   s:{ticket:2, mrr:3, speed:4, auto:5, support:2},
+   money:"9–29 € pro Monat, im Schnitt 2–3 Monate Laufzeit.",
+   path:"7,5k: ≈ 450 aktive Suchende × 17 €.",
+   channels:"TikTok, Reddit, Uni- und Expat-Gruppen.",
+   examples:"Wohnungsbot, Immomio, Flatfox-Alerts.",
+   risks:"Portale verbieten Scraping (AGB), kurze Kundenbindung.",
+   next:"Rechtslage klären, nur öffentliche Quellen und Genossenschaften."},
+  {id:"ausschreibung", neu:1, cat:3, title:"KI-Ausschreibungs-Radar für Handwerk & KMU", pitch:"Öffentliche Aufträge sind schwer zu finden. KI filtert, fasst zusammen und schickt passende Ausschreibungen.",
+   s:{ticket:3, mrr:5, speed:2, auto:4, support:2},
+   money:"49–199 €/Monat je Betrieb.",
+   path:"7,5k: ≈ 75 Kunden × 99 €.",
+   channels:"Handwerkskammern, Kaltakquise, LinkedIn.",
+   examples:"DTAD, Vergabe24, Tender Impulse.",
+   risks:"Datenzugang je Vergabeplattform unterschiedlich.",
+   next:"Ein Gewerk (z. B. Elektro) und ein Bundesland als Pilot."},
+  {id:"versteigerung", neu:1, cat:3, title:"Zwangsversteigerungs-Alert mit Objekt-Analyse", pitch:"Gutachten per KI zusammenfassen, Marktwert vergleichen und Alerts per Suchprofil schicken.",
+   s:{ticket:1, mrr:4, speed:3, auto:5, support:1},
+   money:"19–49 €/Monat.",
+   path:"7,5k: ≈ 250 Abos × 30 €.",
+   channels:"SEO „Zwangsversteigerung [Stadt]“, Investoren-Communities, YouTube.",
+   examples:"Versteigerungspool, Argetra, ZVG-Portal.",
+   risks:"Nutzungsbedingungen der Justizportale prüfen.",
+   next:"Prototyp für ein Bundesland."},
+  {id:"staging", neu:1, cat:3, title:"Virtual Staging & Exposé-KI für Makler", pitch:"Leere Räume per KI möblieren, Exposé-Text und Grundriss-Aufbereitung in Minuten.",
+   s:{ticket:2, mrr:4, speed:4, auto:5, support:2},
+   money:"15–30 € pro Bild oder 49–149 €/Monat.",
+   path:"7,5k: ≈ 75 Makler × 99 €. 20k: Hausverwaltungen und Bauträger dazu.",
+   channels:"Kaltakquise mit Gratis-Beispiel aus eigenem Inserat, LinkedIn, Makler-Verbände.",
+   examples:"VirtualStagingAI, ApplyDesign, Styldod.",
+   risks:"Portale verlangen Kennzeichnung, Konkurrenz durch generische KI-Tools.",
+   next:"50 leere Inserate aus Portalen gratis stagen und an die Makler schicken."},
+  {id:"vereine", neu:1, cat:3, title:"Vereinsverwaltung als Software", pitch:"600.000 Vereine arbeiten noch mit Excel. Mitglieder, Beiträge, SEPA und E-Rechnung.",
+   s:{ticket:1, mrr:5, speed:2, auto:4, support:3},
+   money:"9–39 €/Monat je Verein.",
+   path:"7,5k: ≈ 380 Vereine × 20 €.",
+   channels:"SEO, Landessportbünde, Facebook-Gruppen von Kassenwarten.",
+   examples:"easyVerein, ClubDesk, Campai.",
+   risks:"Ehrenamtliche brauchen Support, Preiskampf.",
+   next:"Nicht priorisieren."},
+  {id:"vermieter", neu:1, cat:3, title:"Nebenkostenabrechnung für Kleinvermieter", pitch:"Rund 4 Mio. private Vermieter. Abrechnung inklusive CO2-Kostenaufteilung in 15 Minuten.",
+   s:{ticket:1, mrr:5, speed:2, auto:4, support:3},
+   money:"49–99 € pro Jahr und Objekt.",
+   path:"7,5k: ≈ 1.300 Objekte.",
+   channels:"SEO „Nebenkostenabrechnung erstellen“, Eigentümerverbände.",
+   examples:"objego, Vermietet.de, Immocloud.",
+   risks:"Saisonal (Jahresabrechnung), Fragen zu Rechtsfällen.",
+   next:"Nicht priorisieren."},
+  {id:"handwerkerweb", neu:1, cat:3, title:"KI-Website-Abo für Handwerker", pitch:"Website in 24 Stunden, Hosting, Google-Profil und Anfrageformular für eine Monatspauschale.",
+   s:{ticket:2, mrr:5, speed:3, auto:3, support:3},
+   money:"49–99 €/Monat, Setup 0–490 €.",
+   path:"7,5k: ≈ 110 Betriebe × 69 €.",
+   channels:"Kaltanrufe bei Betrieben ohne Website, Meta-Ads, Großhändler.",
+   examples:"Jimdo, Hey Handwerk, lokale Agenturen.",
+   risks:"Änderungswünsche erzeugen Support.",
+   next:"Mit dem Google-Profil-Service bündeln."},
+  {id:"unfallgutachter", neu:1, cat:3, title:"Kfz-Gutachter-Vermittlung nach Unfall", pitch:"Bei unverschuldetem Unfall zahlt die gegnerische Versicherung das Gutachten. Gutachter zahlen pro Auftrag.",
+   s:{ticket:3, mrr:3, speed:4, auto:4, support:2},
+   money:"60–150 € pro vermitteltem Gutachten.",
+   path:"7,5k: ≈ 75 Aufträge × 100 €. Gutachter kaufen monatlich.",
+   channels:"Google Ads „Unfall Gutachter [Stadt]“, Werkstätten, Abschleppdienste.",
+   examples:"Claimsforce, Gutachter-Portale, Kanzlei-Netzwerke.",
+   risks:"Nur unverschuldete Unfälle, Anzeigen dürfen nicht irreführen.",
+   next:"Eine Großstadt, 3 Gutachter, 500 € Ads."},
+  {id:"pflegebox", neu:1, cat:3, title:"Pflegehilfsmittel-Box (Leads an Anbieter)", pitch:"Die Pflegekasse zahlt bis 42 € pro Monat für Pflegehilfsmittel. Viele der 5 Mio. Pflegebedürftigen nutzen es nicht.",
+   s:{ticket:1, mrr:2, speed:4, auto:4, support:2},
+   money:"30–80 € pro Anmeldung bei präqualifizierten Anbietern.",
+   path:"7,5k: ≈ 150 Anmeldungen × 50 €.",
+   channels:"Facebook-Ads an pflegende Angehörige, Pflegegrad-Ratgeber.",
+   examples:"Curabox, Pflegebox.de, pflege.de.",
+   risks:"Umkämpfte Anzeigen, Anbieter wechseln Konditionen.",
+   next:"Zusammen mit dem Pflegegrad-Check."},
+  {id:"pflegegrad", neu:1, cat:3, title:"Pflegegrad-Check & Antragshilfe", pitch:"Viele Pflegebedürftige sind zu niedrig eingestuft. Selbsttest und Antragsvorlage, Leads an Pflegeberater.",
+   s:{ticket:2, mrr:1, speed:3, auto:4, support:2},
+   money:"29–79 € Antragshilfe oder 50–150 € pro Lead an Pflegedienste.",
+   path:"7,5k: ≈ 150 Käufe × 50 €.",
+   channels:"SEO, Meta-Ads an Angehörige 45–65.",
+   examples:"pflege.de, Pflegegrad-Rechner, pflegeberatung.",
+   risks:"Keine Rechtsberatung erlaubt, emotional belastete Kunden.",
+   next:"Bündeln mit Senioren-Leads und Pflegebox."},
+  {id:"ihkpruefung", neu:1, cat:3, title:"KI-Prüfungstrainer für IHK-Abschlussprüfungen", pitch:"Rund 400.000 Prüflinge pro Jahr. Die KI erklärt alte Prüfungsaufgaben je Ausbildungsberuf.",
+   s:{ticket:2, mrr:3, speed:3, auto:5, support:1},
+   money:"29–59 € je Prüfung oder B2B 5–10 € pro Azubi und Monat.",
+   path:"7,5k: ≈ 200 Käufe × 39 €. 20k: Ausbildungsbetriebe als B2B-Kunden.",
+   channels:"TikTok an Azubis, Berufsschulen, Ausbildungsbetriebe.",
+   examples:"U-Form Verlag, Prüfungsbücher, Simpleclub.",
+   risks:"Urheberrecht an IHK-Prüfungen, eigene Übungsaufgaben nötig.",
+   next:"Mit 3 großen Berufen starten (Kaufleute Büro, Einzelhandel, Fachinformatik)."},
+  {id:"qrorder", neu:1, cat:3, title:"Provisionsfreies Bestellsystem für Restaurants", pitch:"Eigener Online-Shop und QR-Bestellung statt 30 % Lieferando-Provision.",
+   s:{ticket:2, mrr:5, speed:2, auto:3, support:4},
+   money:"49–99 €/Monat.",
+   path:"7,5k: ≈ 110 Restaurants × 69 €.",
+   channels:"Walk-in-Vertrieb, Gastro-Großhandel, Meta-Ads.",
+   examples:"Orderbird, Gastronovi, Smartorder.",
+   risks:"Hoher Support im Abendgeschäft.",
+   next:"Nicht priorisieren (Support)."},
+  {id:"localseo", neu:1, cat:3, title:"Google-Unternehmensprofil-Betreuung per KI", pitch:"Posts, Fotos und Antworten auf Bewertungen automatisch. Lokale Betriebe ranken besser.",
+   s:{ticket:2, mrr:5, speed:3, auto:4, support:2},
+   money:"49–149 €/Monat.",
+   path:"7,5k: ≈ 95 Betriebe × 79 €.",
+   channels:"Kaltakquise mit Gratis-Audit, Bewertungs-Aufsteller als Einstieg.",
+   examples:"Paige (USA), Uberall, Partoo.",
+   risks:"Ergebnisse schwer messbar, Kündigungen nach 6 Monaten.",
+   next:"Mit den Bewertungs-Aufstellern bündeln."},
+  {id:"dubbing", neu:1, cat:3, title:"KI-Video-Übersetzung für Firmen & Creator", pitch:"Schulungsvideos, Webinare und YouTube-Videos per KI in 10 Sprachen synchronisieren.",
+   s:{ticket:2, mrr:4, speed:3, auto:5, support:2},
+   money:"1–3 € pro Minute oder 99–499 €/Monat.",
+   path:"7,5k: ≈ 40 Firmenkunden × 190 €.",
+   channels:"LinkedIn, Content an HR und Weiterbildung, YouTuber-Outreach.",
+   examples:"HeyGen, Rask, ElevenLabs Dubbing.",
+   risks:"Große Anbieter senken Preise schnell. Wir müssen den Workflow besetzen, nicht die Technik.",
+   next:"Nische wählen: Arbeitsschutz-Unterweisungen für Mitarbeiter mit anderer Muttersprache."},
+
+  // 4 — Content
+  {id:"branchenkurs", neu:1, cat:4, title:"KI-Praxiskurs für eine Branche", pitch:"„KI für Makler“ oder „KI im Steuerbüro“: Kurs mit fertigen Prompts und Workflows.",
+   s:{ticket:4, mrr:1, speed:3, auto:4, support:3},
+   money:"297–997 € je Teilnehmer, Firmenlizenz 1.990 €.",
+   path:"7,5k: ≈ 15 Verkäufe × 497 €.",
+   channels:"Webinare, LinkedIn, Branchenverbände.",
+   examples:"Viele Branchen-Coachings, KI-Kurse auf Udemy.",
+   risks:"Schnell veraltet, Käufer erwarten Q&A.",
+   next:"Mit Virtual-Staging-Kunden (Makler) als Zielgruppe verknüpfen."},
+  {id:"pseo", neu:1, cat:4, title:"Programmatic-SEO-Verzeichnis mit Premium-Einträgen", pitch:"Tausende Seiten wie „Pflegedienst in [Stadt]“, Betriebe zahlen für Top-Platzierung und Anfragen.",
+   s:{ticket:2, mrr:4, speed:2, auto:5, support:1},
+   money:"29–99 € pro Monat und Eintrag.",
+   path:"7,5k: ≈ 150 Premium-Einträge × 50 €.",
+   channels:"Google-Suche, Kaltakquise der gelisteten Betriebe.",
+   examples:"Jameda-Modell, Gelbe Seiten, Nischenverzeichnisse.",
+   risks:"KI-Antworten in der Google-Suche kosten Klicks.",
+   next:"Nische mit Pflicht zur Auswahl wählen, z. B. Pflegedienste."},
+  {id:"ghostwriting", neu:1, cat:4, title:"LinkedIn-Ghostwriting als Produkt", pitch:"KI-gestützte Posts für Geschäftsführer, 12 Posts pro Monat zum Festpreis.",
+   s:{ticket:4, mrr:4, speed:3, auto:2, support:4},
+   money:"500–1.500 €/Monat je Kunde.",
+   path:"7,5k: ≈ 8–10 Kunden. 20k braucht Texter im Team.",
+   channels:"Eigenes LinkedIn, Empfehlungen.",
+   examples:"Viele Agenturen, Taplio (Tool).",
+   risks:"Abstimmungsaufwand pro Kunde, Dienstleistung statt Produkt.",
+   next:"Nicht priorisieren (Support)."},
+  {id:"paidnews", neu:1, cat:4, title:"Bezahl-Newsletter: Immobilien- & Finanz-Deals", pitch:"Kuratiertes Research (z. B. Versteigerungen, Renditeobjekte) für Privatinvestoren.",
+   s:{ticket:1, mrr:5, speed:2, auto:4, support:1},
+   money:"8–15 €/Monat pro Abonnent.",
+   path:"7,5k: ≈ 700 zahlende Leser.",
+   channels:"Twitter/X, YouTube, Empfehlungsprogramm.",
+   examples:"Steady-Newsletter, Substack-Finanz-Newsletter.",
+   risks:"Keine Anlageberatung erlaubt, Vertrauensaufbau dauert.",
+   next:"Aus dem Versteigerungs-Alert als Content-Zweitverwertung."},
+  {id:"kidsvideo", neu:1, cat:4, title:"KI-Lernvideos für Kinder", pitch:"Zahlen, Tiere, Deutsch als Zweitsprache: animierte Kurzvideos und eine Lern-App.",
+   s:{ticket:1, mrr:3, speed:2, auto:4, support:1},
+   money:"Niedrige Werbeerlöse (Kinderinhalte), App-Abo 4,99 €/Monat.",
+   path:"7,5k: über die App mit ≈ 1.500 Abos.",
+   channels:"YouTube Kids, App-Stores.",
+   examples:"Cocomelon (Maßstab), viele KI-Kinderkanäle.",
+   risks:"Qualitätskritik an KI-Kinderinhalten, geringe RPM.",
+   next:"Nicht priorisieren."},
+  {id:"podcast", neu:1, cat:4, title:"B2B-Nischen-Podcast mit Sponsoring", pitch:"Interview-Podcast zu einer Branche, parallel als LinkedIn-Clips.",
+   s:{ticket:3, mrr:3, speed:1, auto:3, support:1},
+   money:"300–1.500 € je Folge vom Sponsor.",
+   path:"7,5k: ≈ 6–8 gesponserte Folgen pro Monat. Dauert 12+ Monate.",
+   channels:"Spotify, LinkedIn-Clips, Gäste teilen die Folgen.",
+   examples:"OMR Podcast, Handwerk-Podcasts.",
+   risks:"Langsam, Gäste-Akquise kostet Zeit.",
+   next:"Nur als Vertriebskanal für B2B-Produkte."},
+  {id:"kdp", neu:1, cat:4, title:"Sachbücher & Hörbücher mit KI (Amazon)", pitch:"Ratgeber zu gesuchten Nischen, als E-Book, Taschenbuch und Hörbuch.",
+   s:{ticket:1, mrr:2, speed:2, auto:4, support:1},
+   money:"3–8 € Tantieme je Verkauf.",
+   path:"7,5k: ≈ 1.500 Verkäufe pro Monat.",
+   channels:"Amazon-Suche, Amazon Ads.",
+   examples:"Viele Ratgeber-Verlage auf KDP.",
+   risks:"Amazon begrenzt KI-Veröffentlichungen, gesättigt.",
+   next:"Nicht priorisieren."},
+  {id:"eduki", neu:1, cat:4, title:"Unterrichtsmaterial für Lehrkräfte", pitch:"Arbeitsblätter und Stundenentwürfe auf eduki verkaufen, passend zum Lehrplan.",
+   s:{ticket:1, mrr:2, speed:3, auto:5, support:1},
+   money:"2–10 € je Material, 50–70 % Anteil.",
+   path:"7,5k: ≈ 2.000 Verkäufe pro Monat, Top-Verkäufer schaffen das.",
+   channels:"eduki-Suche, Lehrer-Instagram, Pinterest.",
+   examples:"eduki (Deutschland), Teachers Pay Teachers (USA).",
+   risks:"Qualität muss stimmen, lange Anlaufzeit.",
+   next:"Nicht priorisieren."},
+  {id:"pinterest", neu:1, cat:4, title:"Pinterest-Affiliate für Wohnen & Garten", pitch:"Ideen-Pins führen auf Vergleichsseiten mit Affiliate-Links.",
+   s:{ticket:1, mrr:2, speed:3, auto:4, support:1},
+   money:"3–10 % auf Möbel und Garten.",
+   path:"7,5k: ≈ 1–2 Mio. monatliche Pin-Aufrufe nötig.",
+   channels:"Pinterest.",
+   examples:"Interior-Blogs mit Pinterest-Fokus.",
+   risks:"Niedrige Provisionen, Algorithmus-Abhängigkeit.",
+   next:"Als Zubringer für Terrassen- und Küchen-Leads."},
+  {id:"pruefapps", neu:1, cat:4, title:"Nischen-Prüfungs-Apps (Angelschein, Jagd, Boot)", pitch:"Tausende legen jährlich Angel-, Jagd- oder Sportbootprüfungen ab. Fragenkataloge sind öffentlich.",
+   s:{ticket:1, mrr:5, speed:2, auto:5, support:2},
+   money:"9,99–29,99 € einmalig oder 4,99 €/Monat.",
+   path:"7,5k: ≈ 5 Apps mit je ≈ 100 Käufen pro Monat.",
+   channels:"App-Store-Optimierung, Vereine, Foren.",
+   examples:"Angelschein-Apps, Jagdschein-Trainer, Sportbootführerschein-Apps.",
+   risks:"Kleine Märkte je App, Fragenkataloge ändern sich.",
+   next:"Eine App-Vorlage bauen und auf viele Prüfungen übertragen."},
+
+  // 5 — Hohe Nachfrage
+  {id:"notstrom", neu:1, cat:5, title:"Notstrom & Krisenvorsorge", pitch:"Nach den Berliner Stromausfällen ist Vorsorge gefragt. Powerstations, Notfallsets, Checklisten.",
+   s:{ticket:2, mrr:1, speed:4, auto:4, support:1},
+   money:"5–10 % Affiliate auf 500–3.000 € Powerstations.",
+   path:"7,5k: ≈ 75 Sales × 100 €.",
+   channels:"YouTube-Tests, SEO, Meta-Ads bei Anlässen.",
+   examples:"EcoFlow, Anker Solix, Bluetti (Partnerprogramme).",
+   risks:"Nachfrage in Wellen nach Ereignissen.",
+   next:"Vergleichsseite plus BBK-Checkliste als Lead-Magnet."},
+  {id:"bluttest", neu:1, cat:5, title:"Heim-Bluttests & Longevity", pitch:"Vitamin D, Eisen, Hormone, HbA1c: Test zu Hause, Ergebnis per App.",
+   s:{ticket:1, mrr:3, speed:3, auto:5, support:1},
+   money:"10–20 % Affiliate auf 50–200 €, Abo-Tests wiederkehrend.",
+   path:"7,5k: ≈ 500 Tests pro Monat.",
+   channels:"Longevity-Content auf YouTube und Instagram, SEO.",
+   examples:"Cerascreen, Lykon, Aware.",
+   risks:"Werbung für Gesundheitsprodukte unterliegt strengen Regeln.",
+   next:"Content-Kanal „Longevity auf Deutsch“ prüfen."},
+  {id:"glp1", neu:1, cat:5, title:"Begleitprodukte für GLP-1-Nutzer", pitch:"Millionen nehmen Abnehmspritzen. Sie brauchen Protein, Ballaststoffe und Elektrolyte gegen Muskelabbau.",
+   s:{ticket:1, mrr:5, speed:2, auto:4, support:2},
+   money:"29–49 € pro Monat im Abo, Marge 55–65 %.",
+   path:"7,5k: ≈ 250 Abos. Braucht 10–15k € Kapital.",
+   channels:"Communities zu Mounjaro und Wegovy, TikTok, Ärzte-Kooperationen.",
+   examples:"In den USA viele Marken, in DE noch wenige.",
+   risks:"Keine Heilversprechen, Health-Claims-Verordnung.",
+   next:"Private Label testen, sobald Kapital da ist."},
+  {id:"seniorenmobil", neu:1, cat:5, title:"Seniorenmobile & Pflegebetten", pitch:"Elektromobile, Rollatoren, Pflegebetten: Vergleich und Anfragen an Sanitätshäuser.",
+   s:{ticket:2, mrr:2, speed:3, auto:4, support:2},
+   money:"30–80 € pro Lead oder 5–8 % Affiliate.",
+   path:"7,5k: ≈ 150 Leads × 50 €.",
+   channels:"Google Ads, Angehörigen-Ads.",
+   examples:"Sanitätshaus-Portale, Rehadat.",
+   risks:"Kassenleistungen sind kompliziert.",
+   next:"Bündeln mit Senioren-Leads."},
+  {id:"hitzeschutz", neu:1, cat:5, title:"Hitzeschutz: Außenjalousien, Markisen, Folien", pitch:"Nach jedem Hitzesommer steigt die Nachfrage. Anfragen an Sonnenschutz-Betriebe.",
+   s:{ticket:3, mrr:2, speed:3, auto:4, support:2},
+   money:"40–80 € pro Lead, Projekte 3–10k €.",
+   path:"7,5k: ≈ 125 Leads × 60 €.",
+   channels:"Google Ads bei Hitze, Meta-Ads, SEO.",
+   examples:"Aroundhome, Rollladen-Portale.",
+   risks:"Wetterabhängig.",
+   next:"Modul im Klima-Funnel."},
+  {id:"maehroboter", neu:1, cat:5, title:"Mähroboter ohne Begrenzungsdraht", pitch:"Neue Geräte-Generation mit RTK und Kamera. Vergleichsseite mit Affiliate.",
+   s:{ticket:1, mrr:1, speed:3, auto:5, support:1},
+   money:"5–8 % auf 1.000–3.000 €.",
+   path:"7,5k: ≈ 90 Sales × 85 €, stark im Frühjahr.",
+   channels:"YouTube-Tests, SEO.",
+   examples:"Vergleichsportale, Technik-YouTuber.",
+   risks:"Saisonal, starke Konkurrenz.",
+   next:"Nicht priorisieren."},
+  {id:"gartenhaus", neu:1, cat:5, title:"Gartenhäuser & Tiny Houses", pitch:"Vom Gerätehaus bis zum Gartenbüro. Vergleich und Konfigurator.",
+   s:{ticket:3, mrr:1, speed:3, auto:4, support:2},
+   money:"5–8 % Affiliate auf 3–40k €.",
+   path:"7,5k: ≈ 25 Sales × 300 €.",
+   channels:"Pinterest, SEO, Meta-Ads.",
+   examples:"Gartenhaus-Shops, Tiny-House-Hersteller.",
+   risks:"Baurecht-Fragen, Speditionsware.",
+   next:"Mit Terrassen-Leads bündeln."},
+  {id:"menopause", neu:1, cat:5, title:"Wechseljahre: Programm & Nahrungsergänzung", pitch:"Stark wachsendes Thema, bisher unterversorgt. App-Programm plus Abo-Produkte.",
+   s:{ticket:1, mrr:5, speed:2, auto:4, support:2},
+   money:"9,99 €/Monat App oder 29–39 € Abo-Produkte.",
+   path:"7,5k: ≈ 350 Abos.",
+   channels:"Instagram, Podcasts, Frauenärztinnen.",
+   examples:"Wechselweise, Balance (UK), Mimi Health.",
+   risks:"Gesundheits-Claims, Vertrauensaufbau.",
+   next:"Nicht priorisieren."},
+  {id:"petabo", neu:1, cat:5, title:"Premium-Hundesnacks im Abo", pitch:"Hundehalter geben viel aus und bleiben treu. Funktionale Snacks (Gelenke, Zähne) im Abo.",
+   s:{ticket:1, mrr:5, speed:2, auto:3, support:3},
+   money:"25–40 € pro Monat.",
+   path:"7,5k: ≈ 250 Abos, Kapital für Ware nötig.",
+   channels:"Instagram, Hundeschulen, TikTok.",
+   examples:"Tails.com, Lassie, Anifit.",
+   risks:"Logistik, Wettbewerb, Rücksendungen.",
+   next:"Nicht priorisieren."},
+  {id:"refurb", neu:1, cat:5, title:"Refurbished Business-Laptops für KMU", pitch:"Geprüfte Leasingrückläufer mit Garantie, als Paket mit Einrichtung.",
+   s:{ticket:2, mrr:2, speed:3, auto:2, support:3},
+   money:"15–25 % Marge auf 300–1.000 €.",
+   path:"7,5k: ≈ 100 Geräte pro Monat.",
+   channels:"B2B-Kaltakquise, Google Ads.",
+   examples:"Backmarket Pro, Afb, Everphone.",
+   risks:"Lager, Garantiefälle, Support.",
+   next:"Nicht priorisieren."},
+  {id:"wasserfilter", neu:1, cat:5, title:"Wasserenthärtung & Filteranlagen", pitch:"Kalkschäden und Mikroplastik-Sorge. Anfragen an Sanitärbetriebe.",
+   s:{ticket:2, mrr:2, speed:3, auto:4, support:2},
+   money:"30–70 € pro Lead, Anlagen 1,5–3k €.",
+   path:"7,5k: ≈ 150 Leads × 50 €.",
+   channels:"SEO „Wasserhärte [Stadt]“, Meta-Ads.",
+   examples:"BWT, Judo, Grünbeck-Händlernetz.",
+   risks:"Nachweis des Nutzens umstritten.",
+   next:"Modul im Eigenheim-Funnel."},
+  {id:"dsb", neu:1, cat:2, title:"Externer Datenschutzbeauftragter als Paket", pitch:"Pflicht ab 20 Personen mit Datenverarbeitung. Festpreis-Abo mit Vorlagen, Schulung und Audit.",
+   s:{ticket:2, mrr:5, speed:3, auto:2, support:4}, status:"in Kraft",
+   money:"79–199 €/Monat je Firma.",
+   path:"7,5k: ≈ 60 Firmen × 125 €. Braucht zertifizierte Person.",
+   channels:"Steuerberater, IT-Systemhäuser, Kaltakquise.",
+   examples:"Proliance, DataGuard, Heydata.",
+   risks:"Persönliche Haftung und Anfragen erzeugen viel Support.",
+   next:"Nur als Partner-Vermittlung in der Pflichtschulung."},
+  {id:"uebersetzung", neu:1, cat:3, title:"Beglaubigte Übersetzungen online", pitch:"Zeugnisse, Urkunden, Führerscheine: Upload, Festpreis, Versand. Vereidigte Übersetzer als Partner.",
+   s:{ticket:2, mrr:1, speed:3, auto:3, support:3},
+   money:"40–90 € pro Seite, 25–35 % Vermittlungsmarge.",
+   path:"7,5k: ≈ 400 Seiten pro Monat.",
+   channels:"SEO „beglaubigte Übersetzung [Sprache]“, Migrations-Communities.",
+   examples:"Lingoking, Translate-Online, Übersetzungsbüros.",
+   risks:"Qualitätskontrolle, Eilaufträge erzeugen Support.",
    next:"Nicht priorisieren."}
 ];
 
@@ -565,7 +1136,23 @@ const PROV = [
   ["Klimaanlage (Split)", "3.500 €", "40–90 € je Lead", "≈ 200.000", "0,4 %", "40–60k €"],
   ["Außensauna / Whirlpool", "9.000 €", "5–8 % (300–900 €)", "≈ 80.000", "0,15 %", "50–70k €"],
   ["Kreuzfahrt", "4.000 €", "3–8 % (150–450 €)", "≈ 3 Mio. Passagiere", "0,01 %", "60–90k €"],
-  ["Premium-E-Bike", "4.000 €", "5–8 % (150–400 €)", "≈ 2 Mio.", "0,02 %", "70–100k €"]
+  ["Premium-E-Bike", "4.000 €", "5–8 % (150–400 €)", "≈ 2 Mio.", "0,02 %", "70–100k €"],
+  ["Unternehmensnachfolge (KMU)", "1,5 Mio. €", "5.000–20.000 € je Deal", "≈ 30.000 Übergaben", "0,02 %", "40–90k €"],
+  ["Privatjet-Charter", "25.000 €", "5–10 % (1.250–2.500 €)", "≈ 60.000 Flüge", "0,05 %", "40–75k €"],
+  ["Yachtcharter", "10.000 €", "10–15 % (800–2.000 €)", "≈ 150.000 Buchungen", "0,03 %", "45–70k €"],
+  ["EU-Neuwagen", "40.000 €", "300–800 € je Auto", "≈ 2,8 Mio. Neuzulassungen", "0,005 %", "40–110k €"],
+  ["Gebrauchtwagen-Ankauf", "15.000 €", "40–120 € je Lead", "≈ 6,5 Mio. Halterwechsel", "0,03 %", "100–160k €"],
+  ["Küche", "15.000 €", "60–150 € je Lead", "≈ 1 Mio.", "0,15 %", "110–140k €"],
+  ["Dach, Fassade, Fenster", "30.000 €", "50–150 € je Lead", "≈ 500.000 Projekte", "0,3 %", "100–140k €"],
+  ["Poolbau", "40.000 €", "80–200 € je Lead", "≈ 30.000", "1 %", "35–50k €"],
+  ["Bestattung", "8.000 €", "100–300 € je Auftrag", "≈ 1 Mio. Sterbefälle", "0,03 %", "45–70k €"],
+  ["Teilverkauf / Leibrente", "400.000 €", "1–1,5 % oder 200–500 € je Lead", "≈ 3.000 Abschlüsse", "1 %", "60–120k €"],
+  ["Verlobungs- & Eheringe", "2.500 €", "8–15 % (200–375 €)", "≈ 350.000 Hochzeiten", "0,1 %", "60–90k €"],
+  ["Gewerbe-PV & Speicher", "150.000 €", "200–600 € je Lead", "≈ 40.000 Projekte", "0,5 %", "60–100k €"],
+  ["Alarmanlage / Einbruchschutz", "5.000 €", "40–90 € je Lead", "≈ 300.000", "0,3 %", "45–65k €"],
+  ["Terrassendach / Carport", "12.000 €", "30–80 € je Lead", "≈ 250.000", "0,4 %", "45–65k €"],
+  ["Luxusuhren-Ankauf", "8.000 €", "50–200 € je Anfrage", "≈ 400.000 Transaktionen", "0,1 %", "40–60k €"],
+  ["Kinderwunsch Ausland", "7.000 €", "100–250 € je Patientin", "≈ 20.000", "0,5 %", "15–25k €"]
 ];
 
 const LS_W = "horus-weights-v1", LS_D = "horus-decisions-v1", LS_F = "horus-filter-v1";
@@ -631,6 +1218,7 @@ function renderList(){
   let rows = IDEAS.map(i => ({i, s: score(i)}));
   if (state.cat !== "all") rows = rows.filter(r => String(r.i.cat) === String(state.cat));
   if (state.dec === "open") rows = rows.filter(r => !decisions[r.i.id]);
+  else if (state.dec === "new") rows = rows.filter(r => r.i.neu);
   else if (state.dec !== "all") rows = rows.filter(r => decisions[r.i.id] === state.dec);
   const key = state.sort;
   rows.sort((a, b) => {
@@ -646,7 +1234,7 @@ function renderList(){
       <summary>
         <div class="score ${band(s)}" aria-label="Score ${s} von 100">${s}<small>SCORE</small></div>
         <div class="ihead">
-          <div class="tags"><span class="tag">${i.cat} · ${esc(CATS[i.cat])}</span>${i.status ? `<span class="tag status">${esc(i.status)}</span>` : ""}${dec ? `<span class="tag dec-${dec}">${DEC_LABEL[dec]}</span>` : ""}</div>
+          <div class="tags"><span class="tag">${i.cat} · ${esc(CATS[i.cat])}</span>${i.neu ? `<span class="tag neu">NEU</span>` : ""}${i.status ? `<span class="tag status">${esc(i.status)}</span>` : ""}${dec ? `<span class="tag dec-${dec}">${DEC_LABEL[dec]}</span>` : ""}</div>
           <h3>${esc(i.title)}</h3>
           <p class="pitch">${esc(i.pitch)}</p>
           <div class="bars">${CRIT.map(c => `<div class="bar"><span>${c.short || c.label}</span>${segs(i.s[c.k], c.neg)}</div>`).join("")}</div>
