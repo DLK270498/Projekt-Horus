@@ -1,0 +1,707 @@
+<title>Horus Deal Flow</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F1F2F6; --surface:#FFFFFF; --surface-2:#F7F8FB; --ink:#141726; --muted:#5A6073; --line:#DCDFE8;
+  --accent:#2E43C8; --accent-ink:#FFFFFF; --accent-soft:#E5E8FB;
+  --good:#1D8657; --good-soft:#DDF3E8; --warn:#A8700F; --warn-soft:#FBEFD8; --bad:#BE3B34; --bad-soft:#FBE3E1;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0D0F17; --surface:#161925; --surface-2:#1C2030; --ink:#E7E9F2; --muted:#9A9FB3; --line:#2A2F41;
+    --accent:#8D9BFF; --accent-ink:#0D0F17; --accent-soft:#222852;
+    --good:#4DC28B; --good-soft:#15322A; --warn:#E3AA4B; --warn-soft:#382B14; --bad:#F0736A; --bad-soft:#3A1C1B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0D0F17; --surface:#161925; --surface-2:#1C2030; --ink:#E7E9F2; --muted:#9A9FB3; --line:#2A2F41;
+  --accent:#8D9BFF; --accent-ink:#0D0F17; --accent-soft:#222852;
+  --good:#4DC28B; --good-soft:#15322A; --warn:#E3AA4B; --warn-soft:#382B14; --bad:#F0736A; --bad-soft:#3A1C1B;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:20px 64px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,6vw,40px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:800}
+h3{font-size:17px;font-weight:600}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header{display:flex;flex-direction:column;gap:10px}
+header .lead{max-width:62ch;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.kpi b{font-family:var(--mono);font-size:20px;font-weight:600}
+.kpi span{font-size:12.5px;color:var(--muted)}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+
+section{display:flex;flex-direction:column;gap:14px}
+.sec-head{display:flex;flex-direction:column;gap:4px}
+
+/* Portfolio picks */
+.picks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:760px){.picks{grid-template-columns:1fr}}
+.pick{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.pick .role{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.pick ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.path{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13.5px;background:var(--surface-2);border-radius:8px;padding:10px}
+.path dt{font-family:var(--mono);font-weight:600;white-space:nowrap}
+.path dd{margin:0}
+
+/* Controls */
+.controls{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{appearance:none;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:500 13.5px var(--body);padding:7px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip:focus-visible,.btn:focus-visible,select:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+select{font:500 14px var(--body);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+details.weights summary{cursor:pointer;font-weight:600;font-size:14px}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 18px;margin-top:10px}
+.wgrid label{display:flex;flex-direction:column;gap:2px;font-size:13px}
+.wgrid label span{display:flex;justify-content:space-between}
+.wgrid input{width:100%;accent-color:var(--accent)}
+
+/* Idea list */
+.list{display:flex;flex-direction:column;gap:10px}
+.idea{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.idea[data-dec="invest"]{border-color:var(--good)}
+.idea[data-dec="pass"]{opacity:.62}
+.idea summary{list-style:none;cursor:pointer;padding:14px;display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start}
+.idea summary::-webkit-details-marker{display:none}
+.score{width:52px;height:52px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);font-weight:600;font-size:19px;line-height:1}
+.score small{font-size:9.5px;font-weight:400;letter-spacing:.05em;margin-top:3px;opacity:.85}
+.s-hi{background:var(--good-soft);color:var(--good)}
+.s-mid{background:var(--warn-soft);color:var(--warn)}
+.s-lo{background:var(--bad-soft);color:var(--bad)}
+.ihead{display:flex;flex-direction:column;gap:6px;min-width:0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:2px 7px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.tag.dec-invest{background:var(--good-soft);color:var(--good);border-color:transparent}
+.tag.dec-later{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.tag.dec-pass{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.tag.status{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.pitch{font-size:14px;color:var(--muted)}
+.bars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:4px}
+.bar{display:flex;flex-direction:column;gap:3px}
+.bar span{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.seg i{height:6px;border-radius:2px;background:var(--line)}
+.seg i.on{background:var(--accent)}
+.seg.neg i.on{background:var(--bad)}
+.ibody{padding:0 14px 16px;display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px}
+@media (max-width:640px){.facts{grid-template-columns:1fr}}
+.fact h4{margin:0 0 2px;font:600 11.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fact p{font-size:14px}
+.decide{display:flex;flex-wrap:wrap;gap:8px}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:600 13.5px var(--body);padding:8px 14px;border-radius:8px;cursor:pointer}
+.btn.invest[aria-pressed="true"]{background:var(--good);border-color:var(--good);color:var(--surface)}
+.btn.later[aria-pressed="true"]{background:var(--warn);border-color:var(--warn);color:var(--surface)}
+.btn.pass[aria-pressed="true"]{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.empty{padding:20px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px}
+
+/* Table */
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);position:sticky;top:0}
+td.r,th.r{text-align:right}
+tr:last-child td{border-bottom:0}
+td .num{white-space:nowrap}
+.note{font-size:13px;color:var(--muted);max-width:75ch}
+
+.export{display:flex;flex-direction:column;gap:8px}
+.export textarea{width:100%;min-height:110px;font:13px var(--mono);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:10px}
+.method{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.method ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.method a{color:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.idea{transition:border-color .15s,opacity .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Projekt Horus · Micro-VC · Stand 24.09.2026</div>
+    <h1>Horus Deal Flow</h1>
+    <p class="lead">32 Ideen aus fünf Suchfeldern, bewertet nach Umsatz pro Sale, MRR/Stickiness, Tempo bis 7,5k bzw. 20k €/Monat, Automatisierbarkeit und Supportaufwand. Tippe eine Idee an für Details, markiere sie mit <b>Invest</b>, <b>Später</b> oder <b>Pass</b> und schick mir unten die Auswahl.</p>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Empfehlung</div>
+      <h2>Vorgeschlagenes Portfolio: 3 Wetten</h2>
+      <p class="muted">Eine Cash-Maschine, ein MRR-Motor und ein Schnelltest. Zusammen decken sie kurzfristigen Cashflow und langfristig wiederkehrenden Umsatz ab.</p>
+    </div>
+    <div class="picks">
+      <article class="pick">
+        <div class="role">Cash-Maschine · Start sofort</div>
+        <h3>Energie- &amp; Klima-Leads</h3>
+        <ul>
+          <li>Ein Funnel für PV, Speicher, Wärmepumpe und Klimaanlage. Die Saisons gleichen sich aus.</li>
+          <li>Installateure kaufen jeden Monat nach, das wirkt wie MRR.</li>
+          <li>Mit Meta- und Google-Ads nach 2–4 Wochen messbar.</li>
+        </ul>
+        <dl class="path">
+          <dt>7,5k</dt><dd>≈ 95 verkaufte Leads × 80 €</dd>
+          <dt>20k</dt><dd>≈ 250 Leads × 80 € (10–15 feste Abnehmer)</dd>
+        </dl>
+      </article>
+      <article class="pick">
+        <div class="role">MRR-Motor · Aufbau 2–3 Monate</div>
+        <h3>Pflichtschulungs-Plattform</h3>
+        <ul>
+          <li>KI-Kompetenz (AI Act), Datenschutz, NIS2 und Hinweisgeberschutz als Online-Kurs mit Zertifikat.</li>
+          <li>Kaum Support, Jahreslizenz pro Firma, jährliche Wiederholungspflicht.</li>
+          <li>Vertrieb über Steuerberater, IT-Dienstleister und LinkedIn.</li>
+        </ul>
+        <dl class="path">
+          <dt>7,5k</dt><dd>≈ 75 Firmen × 99 €/Monat</dd>
+          <dt>20k</dt><dd>≈ 200 Firmen oder 40 Reseller-Partner</dd>
+        </dl>
+      </article>
+      <article class="pick">
+        <div class="role">Schnelltest · 2 Wochen</div>
+        <h3>KI-Bewerbungsfoto</h3>
+        <ul>
+          <li>HeadshotPro/Aragon-Modell für DACH: Selfies hochladen, 40 Business-Portraits erhalten.</li>
+          <li>Voll automatisiert, einmal 39 €, testbar mit 500 € Ads-Budget.</li>
+          <li>Kein MRR, dafür schnellster Weg zu Cashflow und Ads-Know-how.</li>
+        </ul>
+        <dl class="path">
+          <dt>7,5k</dt><dd>≈ 190 Sales × 39 € / Monat</dd>
+          <dt>20k</dt><dd>≈ 510 Sales, plus B2B-Teamfotos</dd>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section id="ideas">
+    <div class="sec-head">
+      <div class="eyebrow">Alle Ideen</div>
+      <h2>Ranking &amp; Review</h2>
+    </div>
+    <div class="controls">
+      <div class="chips" id="catChips" role="group" aria-label="Kategorie filtern"></div>
+      <div class="row">
+        <label for="sortSel" class="muted" style="font-size:13px">Sortieren</label>
+        <select id="sortSel">
+          <option value="score">Gesamt-Score</option>
+          <option value="ticket">Umsatz pro Sale</option>
+          <option value="mrr">MRR / Stickiness</option>
+          <option value="speed">Tempo bis 7,5k/20k</option>
+          <option value="auto">Automatisierbarkeit</option>
+          <option value="support">Wenig Support</option>
+        </select>
+        <label for="decSel" class="muted" style="font-size:13px">Status</label>
+        <select id="decSel">
+          <option value="all">Alle</option>
+          <option value="open">Noch offen</option>
+          <option value="invest">Invest</option>
+          <option value="later">Später</option>
+          <option value="pass">Pass</option>
+        </select>
+      </div>
+      <details class="weights">
+        <summary>Gewichtung anpassen</summary>
+        <div class="wgrid" id="wgrid"></div>
+      </details>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section id="provision">
+    <div class="sec-head">
+      <div class="eyebrow">Suchfeld 1 im Detail</div>
+      <h2>High-Ticket-Käufe mit Lead-Provision</h2>
+      <p class="note">Nur Einmalkäufe, keine Verträge. „Anteil“ ist ein konservativ erreichbarer Anteil am deutschen Jahresabsatz nach 12–18 Monaten, „Umsatz“ unser Provisionsumsatz daraus. Alle Werte sind Schätzungen aus Marktdaten und typischen Lead-Preisen; vor dem Start mit 3–5 Abnehmer-Gesprächen validieren.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th>Produkt</th><th class="r">Ø Kaufpreis</th><th>Provision</th><th class="r">Absatz DE p.a.</th><th class="r">Anteil</th><th class="r">Umsatz p.a. (uns)</th>
+        </tr></thead>
+        <tbody id="provBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="export">
+    <div class="sec-head">
+      <div class="eyebrow">Rückmeldung</div>
+      <h2>Deine Auswahl an mich</h2>
+      <p class="muted">Deine Markierungen bleiben nur in diesem Browser gespeichert. Kopiere die Zusammenfassung und füge sie in den Chat ein, dann plane ich die nächsten Schritte für die Invest-Ideen.</p>
+    </div>
+    <div class="export">
+      <textarea id="exportTxt" readonly aria-label="Zusammenfassung deiner Auswahl"></textarea>
+      <div class="row"><button class="btn primary" id="copyBtn" type="button">Auswahl kopieren</button><span id="copyMsg" class="muted" style="font-size:13px"></span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="method">
+      <h2>Methodik &amp; Annahmen</h2>
+      <ul>
+        <li><b>Score 0–100</b> = gewichteter Schnitt aus fünf Kriterien (je 1–5). Supportaufwand zählt negativ. Standardgewichte: Tempo 25, Umsatz/Sale 20, MRR 20, Automatisierung 20, Support 15.</li>
+        <li><b>Tempo</b> heißt: realistisch 7,5k €/Monat in ≤ 6 Monaten und 20k in ≤ 12–18 Monaten, mit zwei Personen in Teilzeit und ≤ 5k € Startkapital.</li>
+        <li><b>Bewusst ausgeschlossen:</b> Versicherungen, Strom-/Gasverträge, Kredite (Verträge); GLP-1-/Cannabis-Telemedizin (hohe Nachfrage, aber rechtlich instabil und reputationskritisch); Schönheits-OP-Leads (Heilmittelwerbegesetz).</li>
+        <li><b>Regulatorik-Stand</b> (Sept. 2026): E-Rechnung Versandpflicht ab 01.01.2027 für Firmen über 800k € Umsatz, ab 2028 für alle. Entgelttransparenz-Richtlinie: Frist 07.06.2026 verpasst, Umsetzung Anfang 2027 geplant. AI Act Hochrisiko-Pflichten ab 02.08.2027. Digitale Zahlungspflicht ab 2027 geplant. Einträge mit „geplant“ sind noch nicht beschlossen.</li>
+        <li>Quellen u. a.: <a href="https://www.ihk.de/erfurt/service/recht/aktuelles/gesetzliche-neuerungen-2026-im-ueberblick-6931608" target="_blank" rel="noopener">IHK Erfurt</a>, <a href="https://www.personalwirtschaft.de/news/verguetung/eu-entgelttransparenzrichtlinie-deutschland-verpasst-frist-das-sind-die-konsequenzen-203783/" target="_blank" rel="noopener">Personalwirtschaft</a>, <a href="https://www.haufe.de/personal/arbeitsrecht/eu-richtlinie-fuer-mehr-lohngleichheit_76_538404.html" target="_blank" rel="noopener">Haufe</a>, <a href="https://www.deutscheranwaltspiegel.de/deutscheranwaltspiegel/digitalisierung/elektronische-rechnungen-ab-2027-161931/" target="_blank" rel="noopener">Deutscher AnwaltSpiegel</a>, <a href="https://www.wirtschaft-und-industrie.de/digitale-zahlungspflicht-ab-2027-was-betriebe-jetzt-wissen-muessen/" target="_blank" rel="noopener">Wirtschaft und Industrie</a>. Marktzahlen: BWP, BSW-Solar, Branchenverbände; Lead-Preise aus gängigen Lead-Marktplätzen (Spannen).</li>
+        <li>Keine Rechts- oder Steuerberatung. Vor Start jeder Regulatorik-Idee den aktuellen Gesetzesstand prüfen.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+const CATS = {
+  1:"High-Ticket Provision",
+  2:"Regulatorik",
+  3:"Kopierbar",
+  4:"Content",
+  5:"Hohe Nachfrage"
+};
+const CRIT = [
+  {k:"ticket", label:"Umsatz/Sale", short:"€/Sale", w:20},
+  {k:"mrr", label:"MRR", w:20},
+  {k:"speed", label:"Tempo", w:25},
+  {k:"auto", label:"Automatisierung", short:"Auto", w:20},
+  {k:"support", label:"Support", w:15, neg:true}
+];
+
+// ticket, mrr, speed, auto: 1 (schwach) – 5 (stark). support: 1 (kaum) – 5 (sehr hoch).
+const IDEAS = [
+  // 1 — High-Ticket Provision
+  {id:"energie", cat:1, title:"Energie- & Klima-Leads (PV, Speicher, Wärmepumpe, Klima)", pitch:"Förder- und Kostenrechner als Funnel, qualifizierte Anfragen an regionale Installateure verkaufen.",
+   s:{ticket:3, mrr:3, speed:4, auto:4, support:2},
+   money:"60–150 € pro Lead, exklusiv bis 250 €. Alternativ 2–4 % Abschlussprovision (400–1.000 € je Anlage).",
+   path:"7,5k: ≈ 95 Leads × 80 €. 20k: ≈ 250 Leads bei 10–15 Stamm-Installateuren.",
+   channels:"Meta-Ads mit Rechner-Quiz, Google Ads („Wärmepumpe Kosten“, „Speicher nachrüsten“), SEO-Rechnerseiten, Abnehmer per Kaltakquise und über Lead-Marktplätze.",
+   examples:"Aroundhome, DAA, Wattbewerb, Selfmade Energy, heizungsfinder.",
+   risks:"Förderpolitik schwankt (GEG-Reform), Lead-Qualität entscheidet über Abnehmerbindung, Einwilligungen DSGVO-sauber einholen.",
+   next:"Ein Rechner (Speicher-Nachrüstung wegen Solarspitzengesetz), 1.000 € Ads, 5 Installateure als Pilotabnehmer."},
+  {id:"immo", cat:1, title:"Immobilien-Tippgeber: Verkäufer-Leads an Makler", pitch:"Wertermittlungs-Tool zieht verkaufswillige Eigentümer an, Makler zahlen Tippgeberprovision bei Abschluss.",
+   s:{ticket:5, mrr:1, speed:1, auto:3, support:2},
+   money:"1.500–3.500 € pro Abschluss (10–25 % der Courtage) oder 150–400 € pro qualifiziertem Eigentümer-Lead.",
+   path:"7,5k: ≈ 3–4 Abschlüsse/Monat. Realistisch erst nach 9–12 Monaten, weil ein Verkauf 6–12 Monate dauert.",
+   channels:"SEO „Immobilie bewerten [Stadt]“, Meta-Ads an Eigentümer 50+, Erbschafts- und Scheidungsthemen.",
+   examples:"Homeday, McMakler, immoverkauf24, Maklaro, Immowelt-Bewertung.",
+   risks:"Lange Zahlungsverzögerung, Provision nur mit sauberem Tippgebervertrag, reine Namensnennung sonst § 34c GewO.",
+   next:"Nebenbei als Zweitverwertung der Energie-Leads (Eigentümer-Datenbasis) testen."},
+  {id:"senior", cat:1, title:"Senioren-Leads: Treppenlift, Hörgeräte, Badumbau", pitch:"Ratgeber- und Förderrechner (Pflegekasse zahlt bis 4.180 € Wohnumfeld) als Einstieg.",
+   s:{ticket:3, mrr:3, speed:3, auto:4, support:2},
+   money:"Treppenlift 80–180 €/Lead, Hörgeräte 40–90 €/Lead, barrierefreies Bad 60–120 €/Lead.",
+   path:"7,5k: ≈ 90 Leads × 85 €. 20k: drei Produktlinien mit je ≈ 80 Leads.",
+   channels:"Google Ads (hohe Kaufabsicht), Facebook-Ads an Angehörige 45–60, Print-Kooperationen mit Pflegediensten.",
+   examples:"audibene (Hörgeräte-Leadmodell, >100 Mio. € Umsatz), Aroundhome Treppenlift, Treppenlift-Vergleich.",
+   risks:"Telefonische Qualifizierung oft nötig (kann ein KI-Voice-Agent übernehmen), Zielgruppe weniger online.",
+   next:"Treppenlift-Vergleichsseite plus Förderrechner, 3 regionale Händler anfragen."},
+  {id:"medtour", cat:1, title:"Medizintourismus: Haartransplantation & Zähne im Ausland", pitch:"Vergleichsportal für geprüfte Kliniken in Istanbul und Budapest, Provision je Behandlung.",
+   s:{ticket:4, mrr:1, speed:3, auto:3, support:3},
+   money:"Haar: 300–600 € je OP (10–20 %). Zähne (Implantate, Veneers): 500–1.200 € je Behandlung.",
+   path:"7,5k: ≈ 15 Behandlungen/Monat. 20k: ≈ 35–40, plus Content-Kanal mit Vorher/Nachher.",
+   channels:"TikTok/Instagram-Content, Google Ads, Foren, Vergleichsseiten mit Festpreisen.",
+   examples:"Elithair, Dentaprime, Bookimed, WhatClinic.",
+   risks:"Heilmittelwerbegesetz (keine Vorher/Nachher-Werbung für OPs in DE), Beschwerden bei schlechten Ergebnissen, Klinikauswahl ist Reputationsrisiko.",
+   next:"Nur mit 2–3 persönlich geprüften Kliniken, zuerst Zähne (weniger HWG-Probleme als Haar)."},
+  {id:"travel", cat:1, title:"Premium-Reisen: Business-Class & Kreuzfahrten", pitch:"Synergie mit Horus: Deal-Alerts monetarisieren über Buchungsprovision und Kreuzfahrt-Affiliate.",
+   s:{ticket:2, mrr:2, speed:3, auto:5, support:2},
+   money:"Kreuzfahrt 3–8 % (150–450 € je Buchung), Business-Class-Flug 1–3 % bzw. Markup über Duffel.",
+   path:"7,5k: ≈ 30 Kreuzfahrten × 250 €. 20k nur mit großer Alert-Liste (≥ 30k Abonnenten).",
+   channels:"Horus-Deal-Feed, Newsletter, Telegram/WhatsApp-Kanal, Meilen-Foren.",
+   examples:"Travel-Dealz, Urlaubspiraten, Secret Flying.",
+   risks:"Niedrige Provisionssätze bei Flügen, Abhängigkeit von Affiliate-Konditionen.",
+   next:"Bestehende Horus-App um Alert-Newsletter und Kreuzfahrt-Deals erweitern."},
+
+  // 2 — Regulatorik
+  {id:"pflicht", cat:2, title:"Pflichtschulungs-Plattform (KI-Kompetenz, Datenschutz, NIS2)", pitch:"AI Act Art. 4 verlangt seit Feb. 2025 KI-Kompetenz. Online-Kurse mit Zertifikat und Nachweis-Archiv für KMU.",
+   s:{ticket:3, mrr:4, speed:3, auto:5, support:2}, status:"in Kraft",
+   money:"49–299 €/Monat je Firma nach Mitarbeiterzahl, Reseller-Lizenz für Steuerberater und IT-Häuser.",
+   path:"7,5k: ≈ 75 Firmen × 99 €. 20k: ≈ 200 Firmen, am schnellsten über 30–40 Reseller.",
+   channels:"LinkedIn, Kaltakquise an Geschäftsführer, Partnerprogramm für Steuerberater, MSPs und Datenschutzbeauftragte.",
+   examples:"lawpilots, Proliance, SoSafe (Security), KI-Campus.",
+   risks:"Digital Omnibus könnte die Art.-4-Pflicht für Firmen abschwächen. Deshalb breit aufstellen (Datenschutz, Arbeitsschutz, Hinweisgeber).",
+   next:"KI-Kompetenz-Kurs (60 Min., KI-generierte Videos) plus Zertifikat bauen, 10 Pilotfirmen gratis."},
+  {id:"bfsg", cat:2, title:"Barrierefreiheit für Onlineshops (BFSG)", pitch:"Seit 28.06.2025 müssen B2C-Shops barrierefrei sein. Audit plus monatliches Monitoring gegen Abmahnungen.",
+   s:{ticket:3, mrr:4, speed:4, auto:3, support:3}, status:"in Kraft",
+   money:"Audit 490–1.500 € einmalig, Monitoring 49–149 €/Monat.",
+   path:"7,5k: ≈ 4 Audits + 60 Abos. 20k: Shopify- und Shopware-Agenturen als Wiederverkäufer.",
+   channels:"Cold E-Mail mit automatischem Gratis-Scan („Ihr Shop hat 37 Verstöße“), Shopify-App-Store, Agenturen.",
+   examples:"Eye-Able, UserWay, accessiBe, Aktion Mensch Checker.",
+   risks:"Kleinstunternehmen teils ausgenommen, Overlay-Tools allein genügen rechtlich nicht, Fixes erfordern Umsetzung.",
+   next:"Scanner auf Basis axe-core, 200 Shops scannen, Report als Lead-Magnet versenden."},
+  {id:"gpsr", cat:2, title:"EU-Verantwortliche Person & Verpackungs-Registrierung", pitch:"GPSR (seit Dez. 2024) und PPWR (ab 12.08.2026) zwingen Nicht-EU-Händler zu EU-Adresse und Registrierungen.",
+   s:{ticket:2, mrr:5, speed:3, auto:4, support:3}, status:"in Kraft",
+   money:"150–600 € pro Marke und Jahr, Zusatzgebühren je EU-Land für Verpackungs- und Batterie-Registrierung.",
+   path:"7,5k: ≈ 250 Marken × 360 €/Jahr. 20k: ≈ 650 Marken, Zugang über Agenturen in Shenzhen.",
+   channels:"Amazon-Listings ohne EU-Kontakt scrapen und anschreiben, Seller-Communities, chinesische Service-Agenturen.",
+   examples:"Pro-Compliance-Anbieter, EU-RP-Dienste, Lizenzero (Verpackung).",
+   risks:"Haftung als Wirtschaftsakteur (Versicherung nötig), Dokumentenprüfung kostet Zeit, starker Preiskampf.",
+   next:"Rechtliche Haftung klären, Pilot mit 20 Händlern aus Seller-Gruppen."},
+  {id:"entgelt", cat:2, title:"Entgelttransparenz-Tool für KMU", pitch:"Gehaltsbänder, Stellenanzeigen mit Gehaltsspanne und Pay-Gap-Bericht auf Knopfdruck.",
+   s:{ticket:3, mrr:5, speed:2, auto:4, support:3}, status:"geplant 2027",
+   money:"99–299 €/Monat je Firma (50–250 Mitarbeiter).",
+   path:"7,5k: ≈ 50 Firmen × 150 €. 20k: HR-Software-Integrationen (Personio) als Kanal.",
+   channels:"HR-Communities, LinkedIn, Partnerschaften mit Lohnbüros und Steuerberatern.",
+   examples:"Figures, Ravio, Beqom (Enterprise).",
+   risks:"Deutsches Gesetz erst Anfang 2027 erwartet; Nachfrage steigt erst mit Stichtag. Früh bauen, spät verkaufen.",
+   next:"Warteliste und Gratis-Check „Bin ich betroffen?“ jetzt, Produkt ab Kabinettsbeschluss."},
+  {id:"nis2", cat:2, title:"NIS2-Kit für den Mittelstand", pitch:"Betroffenheits-Check, Policy-Paket und Pflichtschulung der Geschäftsleitung für rund 29.000 betroffene Firmen.",
+   s:{ticket:4, mrr:3, speed:3, auto:3, support:3}, status:"in Kraft",
+   money:"Policy-Paket 990–2.990 € einmalig, Monitoring und Schulung 199 €/Monat.",
+   path:"7,5k: ≈ 4 Pakete + 20 Abos. 20k: über IT-Systemhäuser als Reseller.",
+   channels:"Gratis-Check als Lead-Magnet, LinkedIn-Ads an Geschäftsführer, IT-Systemhäuser.",
+   examples:"Secjur, DataGuard, Proliance.",
+   risks:"Käufer erwarten Beratung (Support steigt), großer Wettbewerb durch Beratungsfirmen.",
+   next:"In die Pflichtschulungs-Plattform integrieren statt eigenständig starten."},
+  {id:"erechnung", cat:2, title:"E-Rechnung-Umstellung für Kleinbetriebe", pitch:"Versandpflicht ab 01.01.2027 (über 800k €) und 2028 für alle. Einrichtung als Festpreis-Service.",
+   s:{ticket:2, mrr:3, speed:4, auto:3, support:4}, status:"Frist 2027/28",
+   money:"Einrichtung 299–990 €, danach 9–19 €/Monat Tool oder Affiliate an Buchhaltungssoftware.",
+   path:"7,5k: ≈ 15 Einrichtungen/Monat. Nach 2028 bricht die Nachfrage weg.",
+   channels:"Handwerkskammern, Google Ads „E-Rechnung Pflicht“, Steuerberater.",
+   examples:"lexoffice, sevdesk, easybill (Software); viele Einzelberater.",
+   risks:"Hoher Supportaufwand bei Integrationen, starke Software-Konkurrenz, Zeitfenster schließt 2028.",
+   next:"Nur als Content-/Ratgeber-Produkt verwerten (siehe Content), nicht als Service."},
+  {id:"aktivrente", cat:2, title:"Jobbörse für Aktivrentner", pitch:"Seit 01.01.2026 bleiben 2.000 €/Monat Arbeitslohn für Rentner steuerfrei. Eine Nischen-Jobbörse bringt beide Seiten zusammen.",
+   s:{ticket:2, mrr:2, speed:3, auto:5, support:1}, status:"in Kraft",
+   money:"149–299 € pro Stellenanzeige, Paket für Arbeitgeber 499 €/Quartal.",
+   path:"7,5k: ≈ 35 Anzeigen/Monat. 20k: ≈ 90 Anzeigen oder Arbeitgeber-Abos.",
+   channels:"Programmatic SEO („Minijob Rentner [Stadt]“), Facebook-Gruppen 60+, Kaltakquise bei Handwerk und Logistik.",
+   examples:"RemoteOK/Levels-Modell, Rentnerjobs.de, Senior-Experts.",
+   risks:"Henne-Ei-Problem der Jobbörse, Zielgruppe weniger digital.",
+   next:"Jobs aus der BA-Jobbörse aggregieren, Arbeitgeber mit Gratis-Anzeigen gewinnen."},
+  {id:"fuehrerschein", cat:2, title:"Online-Theorie für die Führerscheinreform", pitch:"Die geplante Reform soll Theorie ohne Präsenzpflicht erlauben. Eine App mit KI-Tutor wäre sofort startklar.",
+   s:{ticket:2, mrr:1, speed:3, auto:5, support:2}, status:"geplant",
+   money:"29–79 € einmalig pro Schüler, ≈ 1,2 Mio. Fahrschüler pro Jahr.",
+   path:"7,5k: ≈ 150 Käufe × 49 €. 20k: ≈ 400 Käufe, TikTok als Hauptkanal.",
+   channels:"TikTok/Instagram an 16–19-Jährige, Kooperationen mit Fahrschulen.",
+   examples:"Fahrschulcard, ClickClickDrive, Führerschein-Bestehen.",
+   risks:"Reform ist nicht beschlossen, Details offen, etablierte Apps reagieren schnell.",
+   next:"Gesetzgebung beobachten, Landingpage mit Warteliste."},
+  {id:"kartenpflicht", cat:2, title:"Kartenzahlungs-Pflicht: Terminal-Vergleich", pitch:"Ab 2027 sollen Handel und Gastronomie eine digitale Bezahlmöglichkeit anbieten müssen.",
+   s:{ticket:1, mrr:1, speed:3, auto:4, support:2}, status:"geplant 2027",
+   money:"20–60 € Affiliate pro Terminal, Einrichtungs-Service 99 €.",
+   path:"7,5k: ≈ 200 Terminals/Monat, sehr ambitioniert.",
+   channels:"Google Ads, Gastro-Verbände, lokale Kaltakquise.",
+   examples:"SumUp, Zettle, myPOS Partnerprogramme.",
+   risks:"Niedriges Ticket, Zahlungsdienste sind Verträge, Gesetz nicht final.",
+   next:"Nicht priorisieren."},
+
+  // 3 — Kopierbar
+  {id:"headshot", cat:3, title:"KI-Bewerbungsfoto (HeadshotPro-Modell für DACH)", pitch:"10–15 Selfies hochladen, 40–100 professionelle Portraits in einer Stunde erhalten.",
+   s:{ticket:2, mrr:1, speed:5, auto:5, support:2},
+   money:"29–59 € einmalig, Team-Pakete für Firmen 25 € pro Mitarbeiter.",
+   path:"7,5k: ≈ 190 Sales × 39 €. 20k: ≈ 510 Sales oder B2B-Teampakete für Kanzleien und Makler.",
+   channels:"Meta- und TikTok-Ads mit Vorher/Nachher, SEO „Bewerbungsfoto KI“, LinkedIn-Profilfoto-Content.",
+   examples:"HeadshotPro und Aragon (je Millionenumsatz), in DE erste lokale Anbieter.",
+   risks:"Bildqualität muss stimmen (Rückerstattungen), Modelkosten pro Auftrag 1–3 €, Plattformen könnten das Feature gratis anbieten.",
+   next:"Mit fertiger Bild-API in 2 Wochen bauen, 500 € Testbudget, Ziel CAC < 15 €."},
+  {id:"review", cat:3, title:"Google-Bewertungs-Aufsteller mit NFC", pitch:"Restaurants und Praxen bekommen Aufsteller plus Dashboard, das Gäste zu 5-Sterne-Bewertungen führt.",
+   s:{ticket:2, mrr:3, speed:4, auto:4, support:2},
+   money:"49–99 € Hardware-Set plus 19–39 €/Monat Software.",
+   path:"7,5k: ≈ 250 Kunden × 29 €. 20k: Vertriebspartner auf Provisionsbasis.",
+   channels:"Walk-in-Vertrieb, Kaltanrufe, Instagram-Ads an Gastronomen.",
+   examples:"Tapni, ReviewForest, viele Amazon-Anbieter.",
+   risks:"Günstige Nachahmer auf Amazon, Google-Richtlinien zu gefilterten Bewertungen beachten.",
+   next:"Mit 10 Betrieben in der eigenen Stadt pilotieren."},
+  {id:"cv", cat:3, title:"Lebenslauf- & Anschreiben-Generator", pitch:"Zety-Modell: Testzugang für 1,95 €, danach Abo. KI schreibt das Anschreiben passend zur Stelle.",
+   s:{ticket:2, mrr:4, speed:3, auto:5, support:3},
+   money:"1,95 € Test, danach 14,95–24,95 € pro 4 Wochen. Ø Kundenwert 30–50 €.",
+   path:"7,5k: ≈ 200 zahlende Kunden. 20k: SEO-Traffic auf Vorlagen-Seiten nötig.",
+   channels:"SEO „Lebenslauf Vorlage“, Google Ads, TikTok-Bewerbungstipps.",
+   examples:"Zety, Lebenslauf.de, Bewerbung.co, Resume.io.",
+   risks:"Abo-Fallen-Image, Kündigungsbutton-Pflicht, Chargebacks und Rückerstattungen erhöhen Support.",
+   next:"Fair gestaltetes Einmalpaket testen (19 €) statt verstecktem Abo."},
+  {id:"voice", cat:3, title:"KI-Telefonassistent für Handwerk & Praxen", pitch:"Nimmt verpasste Anrufe an, qualifiziert Aufträge und bucht Termine. GoHighLevel-Agenturmodell.",
+   s:{ticket:3, mrr:5, speed:3, auto:3, support:4},
+   money:"149–399 €/Monat plus 500 € Einrichtung.",
+   path:"7,5k: ≈ 30 Kunden × 250 €. 20k: ≈ 80 Kunden, mit Vorlagen je Branche.",
+   channels:"Kaltanrufe (Demo: „Rufen Sie mal an“), Meta-Ads an Handwerker, Branchenverbände.",
+   examples:"fonio.ai, Moin.ai, Synthflow-Agenturen.",
+   risks:"Einrichtung je Kunde und Fehlerfälle erzeugen Support, Modellkosten pro Minute.",
+   next:"Einen Vertikal (z. B. SHK-Betriebe) wählen, 5 Pilotkunden."},
+  {id:"jobboard", cat:3, title:"Nischen-Jobbörse + Newsletter", pitch:"RemoteOK-Modell: eine enge Nische (z. B. KI-Jobs DACH), Arbeitgeber zahlen pro Anzeige.",
+   s:{ticket:2, mrr:3, speed:2, auto:5, support:1},
+   money:"199–399 € pro Anzeige, Featured-Upgrade 99 €.",
+   path:"7,5k: ≈ 30 Anzeigen/Monat. 20k braucht Marktführerschaft in der Nische.",
+   channels:"Aggregierte Jobs für SEO, Newsletter, X/LinkedIn.",
+   examples:"RemoteOK, Web3.career, Berlin Startup Jobs.",
+   risks:"Langsamer Aufbau, die ersten 6 Monate kaum Umsatz.",
+   next:"Mit der Aktivrente-Idee kombinieren, gleiche Technik."},
+  {id:"energieausweis", cat:3, title:"Energieausweis online", pitch:"Pflicht bei Verkauf und Vermietung. Formular, Prüfung durch Partner-Aussteller, PDF per Mail.",
+   s:{ticket:2, mrr:1, speed:4, auto:4, support:2},
+   money:"49–149 € je Ausweis, Marge 30–80 €.",
+   path:"7,5k: ≈ 130 Ausweise/Monat. 20k: Makler und Hausverwaltungen als B2B-Kunden.",
+   channels:"Google Ads, SEO, Kooperation mit dem Immobilien-Tippgeber-Funnel.",
+   examples:"energieausweis-online-erstellen.de, Energieausweis48, ImmoScout-Partner.",
+   risks:"Ausstellerhaftung beim Partner, Preiskampf.",
+   next:"Als Zusatzprodukt im Energie-Funnel mitnehmen."},
+  {id:"kinderbuch", cat:3, title:"Personalisierte KI-Kinderbücher", pitch:"Wonderbly-Modell: Kind als Held, Name und Foto, gedruckt per Print-on-Demand.",
+   s:{ticket:2, mrr:1, speed:4, auto:4, support:2},
+   money:"29–39 € je Buch, Marge 12–18 €.",
+   path:"7,5k: ≈ 500 Bücher/Monat, stark saisonal (Q4).",
+   channels:"Meta-Ads an Eltern und Großeltern, Pinterest.",
+   examples:"Wonderbly, Framily, Librio.",
+   risks:"Niedrige Marge, Q4-Abhängigkeit, Druckreklamationen.",
+   next:"Nur als Q4-Saisontest."},
+
+  // 4 — Content
+  {id:"newsletter", cat:4, title:"B2B-Nischen-Newsletter mit Sponsoring", pitch:"Wöchentlicher Förder- und Regulatorik-Radar für Handwerk und KMU, KI-kuratiert.",
+   s:{ticket:3, mrr:4, speed:2, auto:4, support:1},
+   money:"300–1.500 € je Sponsor-Platz, dazu Leads für eigene Produkte.",
+   path:"7,5k: ≈ 15k Abonnenten, 1 Sponsor pro Ausgabe. 20k: Sponsoring plus eigene Produkte.",
+   channels:"LinkedIn, Empfehlungsprogramm, Cross-Promotion, Lead-Magnete aus Regulatorik-Ideen.",
+   examples:"Morning Brew-Modell, OMR-Newsletter, t3n.",
+   risks:"Listenaufbau dauert 6–12 Monate.",
+   next:"Als Verteilkanal für Pflichtschulung und Energie-Leads aufbauen."},
+  {id:"guides", cat:4, title:"Digitale Ratgeber zu Pflichtthemen", pitch:"Kompakte Leitfäden mit Vorlagen (E-Rechnung, Aktivrente, BFSG) über Digistore24 mit Upsell-Funnel.",
+   s:{ticket:2, mrr:1, speed:3, auto:5, support:1},
+   money:"27–97 € je Guide, Bundle 147 €, Affiliates erhalten 30–50 %.",
+   path:"7,5k: ≈ 150 Käufe × 50 €. 20k: Affiliate-Netzwerk von Digistore nutzen.",
+   channels:"Meta-Ads, YouTube-Shorts, Digistore-Affiliates, SEO.",
+   examples:"Viele Digistore-Bestseller im Business-Bereich.",
+   risks:"Themen veralten mit Gesetzesänderungen, Rückerstattungsquote 5–15 %.",
+   next:"Einen Guide als Lead-Magnet-Test für den Newsletter nutzen."},
+  {id:"youtube", cat:4, title:"Anonymer KI-YouTube-Kanal", pitch:"Deutsch: Finanzen, Steuern, Recht (RPM 6–15 €). Englisch: Geschichte, Doku (größerer Markt).",
+   s:{ticket:1, mrr:3, speed:2, auto:4, support:1},
+   money:"Werbeeinnahmen (RPM), dazu Affiliate-Links und Sponsoring.",
+   path:"7,5k: ≈ 0,7–1 Mio. Views/Monat im DE-Finanzbereich. Typisch nach 6–12 Monaten, bei vielen Kanälen nie.",
+   channels:"YouTube-Suche und Shorts als Zubringer.",
+   examples:"Viele erfolgreiche Faceless-Kanäle in Doku- und Finanznischen.",
+   risks:"YouTube-Richtlinie zu „unechten, massenproduzierten Inhalten“ (seit Juli 2025) trifft reine KI-Kanäle. Eigene Recherche und Skripte nötig.",
+   next:"Nur als Content-Zweitverwertung des Newsletters."},
+  {id:"templates", cat:4, title:"Vorlagen-Shop (Excel, Notion, Canva)", pitch:"Planner, Finanz-Tracker und Vorlagen auf Etsy und im eigenen Shop.",
+   s:{ticket:1, mrr:1, speed:3, auto:5, support:1},
+   money:"5–30 € je Vorlage.",
+   path:"7,5k: ≈ 500 Verkäufe/Monat. Selten ohne Bestseller.",
+   channels:"Etsy-Suche, Pinterest, TikTok.",
+   examples:"Top-Etsy-Shops für digitale Vorlagen.",
+   risks:"Stark gesättigt, niedriges Ticket.",
+   next:"Nicht priorisieren."},
+  {id:"tiktokshop", cat:4, title:"TikTok-Shop-Affiliate mit Faceless-Content", pitch:"TikTok Shop läuft seit März 2025 in Deutschland. Produktvideos gegen 10–20 % Provision.",
+   s:{ticket:1, mrr:1, speed:4, auto:3, support:1},
+   money:"10–20 % Provision auf 15–60 € Produkte.",
+   path:"7,5k: ≈ 1.500–2.500 Verkäufe/Monat.",
+   channels:"TikTok-Algorithmus, mehrere Accounts.",
+   examples:"Viele Faceless-Creator.",
+   risks:"Viraler Zufall, hoher Content-Ausstoß, Plattformregeln ändern sich häufig.",
+   next:"Nicht priorisieren."},
+  {id:"community", cat:4, title:"Bezahl-Community (Skool)", pitch:"Mitgliedschaft mit Kursen und Community zu einem Umsetzungsthema.",
+   s:{ticket:2, mrr:5, speed:2, auto:2, support:4},
+   money:"29–99 €/Monat je Mitglied.",
+   path:"7,5k: ≈ 150 Mitglieder × 49 €.",
+   channels:"Eigene Reichweite nötig (YouTube, LinkedIn).",
+   examples:"Skool-Top-Communities.",
+   risks:"Hoher Betreuungsaufwand, Mitglieder erwarten Präsenz.",
+   next:"Nicht priorisieren (Support)."},
+
+  // 5 — Hohe Nachfrage
+  {id:"klima", cat:5, title:"Split-Klimaanlagen-Leads", pitch:"Hitzesommer treiben die Nachfrage. Leads an Kältetechniker und Elektriker, als Sommer-Gegenstück zu Heizung.",
+   s:{ticket:3, mrr:2, speed:4, auto:4, support:2},
+   money:"40–90 € pro Lead, Anlage 2–5k €.",
+   path:"7,5k: ≈ 120 Leads im Sommer. Ganzjährig nur zusammen mit dem Energie-Funnel.",
+   channels:"Google Ads bei Hitzewellen, Meta-Ads, SEO „Klimaanlage nachrüsten Kosten“.",
+   examples:"Aroundhome, Klimaworld, lokale Fachbetriebe.",
+   risks:"Stark wetterabhängig, Fachkräftemangel bei Installateuren.",
+   next:"In den Energie-Funnel integrieren (siehe Portfolio)."},
+  {id:"supps", cat:5, title:"Supplement-Abo (Private Label)", pitch:"Kreatin, Magnesium, Elektrolyte im Monatsabo mit eigener Marke.",
+   s:{ticket:1, mrr:5, speed:2, auto:4, support:3},
+   money:"25–45 € je Monatspaket, Marge 50–65 %.",
+   path:"7,5k: ≈ 250 aktive Abos. Braucht 10–20k € Kapital für Ware und Ads.",
+   channels:"Meta-Ads, Influencer, Amazon.",
+   examples:"ESN, More Nutrition, Sunday Natural.",
+   risks:"Kapitalbindung, Lebensmittelrecht und Health-Claims, starke Marken dominieren.",
+   next:"Nicht priorisieren (Kapital)."},
+  {id:"wallbox", cat:5, title:"Wallbox- & E-Auto-Leads", pitch:"Neue einkommensabhängige E-Auto-Förderung 2026 treibt Wallbox-Installationen.",
+   s:{ticket:2, mrr:2, speed:3, auto:4, support:2},
+   money:"30–70 € pro Installations-Lead.",
+   path:"Nur als Erweiterung des Energie-Funnels sinnvoll.",
+   channels:"Google Ads, Förderrechner, E-Auto-Foren.",
+   examples:"Aroundhome, Wallbox-Installateure-Portale.",
+   risks:"Geringes Ticket, Autohäuser bieten Installation mit an.",
+   next:"Als Modul im Energie-Funnel."},
+  {id:"sauna", cat:5, title:"Außensauna & Eisbad (Affiliate oder D2C)", pitch:"Wellness-Trend mit hohem Warenkorb.",
+   s:{ticket:4, mrr:1, speed:3, auto:2, support:4},
+   money:"Affiliate 5–8 % (300–900 € je Sauna), D2C-Marge höher.",
+   path:"7,5k: ≈ 15 Saunen/Monat per Affiliate.",
+   channels:"Pinterest, Meta-Ads, SEO-Vergleichsseiten.",
+   examples:"Saunahersteller-Shops, Nordic-Wellness-Marken.",
+   risks:"D2C: Speditionsware, Reklamationen, Montagefragen. Nur als Affiliate vertretbar.",
+   next:"Nur als Affiliate-Vergleichsseite."},
+  {id:"bkw", cat:5, title:"Balkonkraftwerk mit Speicher", pitch:"Weiter hohe Nachfrage seit der 800-W-Regel, aber Preiskampf.",
+   s:{ticket:1, mrr:1, speed:3, auto:4, support:3},
+   money:"Affiliate 3–8 % auf 400–1.500 €.",
+   path:"7,5k: ≈ 200 Sets/Monat.",
+   channels:"SEO, YouTube-Tests.",
+   examples:"Viele Vergleichsseiten und Händler.",
+   risks:"Margen fallen, Amazon dominiert.",
+   next:"Nicht priorisieren."}
+];
+
+// Suchfeld-1-Tabelle: Einmalkäufe, keine Verträge.
+const PROV = [
+  ["Immobilienverkauf (Tippgeber)", "350.000 €", "1.500–3.500 € je Abschluss", "≈ 550.000", "0,01 %", "110–165k €"],
+  ["Fertighaus", "450.000 €", "150–400 € je Lead", "≈ 15.000", "2 % der Leads", "60–90k €"],
+  ["PV-Anlage + Speicher", "20.000 €", "60–150 € je Lead", "≈ 250.000", "0,3 %", "120–150k €"],
+  ["Wärmepumpe", "30.000 €", "70–150 € je Lead", "≈ 300.000", "0,25 %", "110–140k €"],
+  ["Speicher-Nachrüstung", "8.000 €", "50–120 € je Lead", "≈ 150.000", "0,4 %", "70–90k €"],
+  ["Treppenlift", "9.000 €", "80–180 € je Lead", "≈ 40.000", "0,8 %", "55–75k €"],
+  ["Hörgeräte (Privatanteil)", "2.500 €", "40–90 € je Lead", "≈ 800.000", "0,1 %", "70–100k €"],
+  ["Zahnimplantate/Veneers Ausland", "7.000 €", "500–1.200 € je Behandlung", "≈ 40.000", "0,2 %", "55–75k €"],
+  ["Haartransplantation Türkei", "3.000 €", "300–600 € je OP", "≈ 70.000", "0,2 %", "50–70k €"],
+  ["Augenlasern", "3.500 €", "50–120 € je Lead", "≈ 150.000", "0,5 %", "60–90k €"],
+  ["Klimaanlage (Split)", "3.500 €", "40–90 € je Lead", "≈ 200.000", "0,4 %", "40–60k €"],
+  ["Außensauna / Whirlpool", "9.000 €", "5–8 % (300–900 €)", "≈ 80.000", "0,15 %", "50–70k €"],
+  ["Kreuzfahrt", "4.000 €", "3–8 % (150–450 €)", "≈ 3 Mio. Passagiere", "0,01 %", "60–90k €"],
+  ["Premium-E-Bike", "4.000 €", "5–8 % (150–400 €)", "≈ 2 Mio.", "0,02 %", "70–100k €"]
+];
+
+const LS_W = "horus-weights-v1", LS_D = "horus-decisions-v1", LS_F = "horus-filter-v1";
+function load(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+let weights = Object.assign(Object.fromEntries(CRIT.map(c => [c.k, c.w])), load(LS_W, {}));
+let decisions = load(LS_D, {});
+let state = Object.assign({cat:"all", sort:"score", dec:"all"}, load(LS_F, {}));
+
+function norm(c, v){ return c.neg ? (5 - v) / 4 : (v - 1) / 4; }
+function score(idea){
+  let sum = 0, tw = 0;
+  for (const c of CRIT){ sum += weights[c.k] * norm(c, idea.s[c.k]); tw += weights[c.k]; }
+  return tw ? Math.round(sum / tw * 100) : 0;
+}
+function band(s){ return s >= 62 ? "s-hi" : s >= 50 ? "s-mid" : "s-lo"; }
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+const DEC_LABEL = {invest:"Invest", later:"Später", pass:"Pass"};
+
+function segs(v, neg){
+  let h = `<div class="seg${neg ? " neg" : ""}">`;
+  for (let i = 1; i <= 5; i++) h += `<i class="${i <= v ? "on" : ""}"></i>`;
+  return h + "</div>";
+}
+
+function renderKpis(){
+  const scored = IDEAS.map(i => ({i, s: score(i)})).sort((a, b) => b.s - a.s);
+  const inv = Object.values(decisions).filter(d => d === "invest").length;
+  const open = IDEAS.filter(i => !decisions[i.id]).length;
+  document.getElementById("kpis").innerHTML = `
+    <div class="kpi"><b>${IDEAS.length}</b><span>Ideen bewertet</span></div>
+    <div class="kpi"><b>${scored[0].s}</b><span>Top-Score: ${esc(scored[0].i.title.split(" (")[0])}</span></div>
+    <div class="kpi"><b>${scored.filter(x => x.s >= 62).length}</b><span>mit Score ≥ 62</span></div>
+    <div class="kpi"><b>${inv} / ${open}</b><span>Invest / noch offen</span></div>`;
+}
+
+function renderChips(){
+  const el = document.getElementById("catChips");
+  const opts = [["all", "Alle"], ...Object.entries(CATS).map(([k, v]) => [k, `${k} · ${v}`])];
+  el.innerHTML = opts.map(([k, v]) => `<button type="button" class="chip" data-cat="${k}" aria-pressed="${String(state.cat) === k}">${esc(v)}</button>`).join("");
+  el.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
+    state.cat = b.dataset.cat; save(LS_F, state); renderChips(); renderList();
+  }));
+}
+
+function renderWeights(){
+  const el = document.getElementById("wgrid");
+  el.innerHTML = CRIT.map(c => `<label for="w-${c.k}"><span>${c.label}${c.neg ? " (negativ)" : ""}<b class="num" id="wv-${c.k}">${weights[c.k]}</b></span>
+    <input type="range" id="w-${c.k}" min="0" max="40" step="5" value="${weights[c.k]}"></label>`).join("")
+    + `<div style="display:flex;align-items:end"><button class="btn" type="button" id="wreset">Standard wiederherstellen</button></div>`;
+  CRIT.forEach(c => document.getElementById("w-" + c.k).addEventListener("input", e => {
+    weights[c.k] = +e.target.value; document.getElementById("wv-" + c.k).textContent = weights[c.k];
+    save(LS_W, weights); renderList(); renderKpis();
+  }));
+  document.getElementById("wreset").addEventListener("click", () => {
+    weights = Object.fromEntries(CRIT.map(c => [c.k, c.w])); save(LS_W, weights); renderWeights(); renderList(); renderKpis();
+  });
+}
+
+function renderList(){
+  const open = new Set([...document.querySelectorAll(".idea[open]")].map(d => d.dataset.id));
+  let rows = IDEAS.map(i => ({i, s: score(i)}));
+  if (state.cat !== "all") rows = rows.filter(r => String(r.i.cat) === String(state.cat));
+  if (state.dec === "open") rows = rows.filter(r => !decisions[r.i.id]);
+  else if (state.dec !== "all") rows = rows.filter(r => decisions[r.i.id] === state.dec);
+  const key = state.sort;
+  rows.sort((a, b) => {
+    if (key === "score") return b.s - a.s;
+    const d = key === "support" ? a.i.s[key] - b.i.s[key] : b.i.s[key] - a.i.s[key];
+    return d || b.s - a.s;
+  });
+  const el = document.getElementById("list");
+  if (!rows.length){ el.innerHTML = `<div class="empty">Keine Ideen für diesen Filter. Wähle „Alle“ oder einen anderen Status.</div>`; return; }
+  el.innerHTML = rows.map(({i, s}) => {
+    const dec = decisions[i.id] || "";
+    return `<details class="idea" data-id="${i.id}" data-dec="${dec}"${open.has(i.id) ? " open" : ""}>
+      <summary>
+        <div class="score ${band(s)}" aria-label="Score ${s} von 100">${s}<small>SCORE</small></div>
+        <div class="ihead">
+          <div class="tags"><span class="tag">${i.cat} · ${esc(CATS[i.cat])}</span>${i.status ? `<span class="tag status">${esc(i.status)}</span>` : ""}${dec ? `<span class="tag dec-${dec}">${DEC_LABEL[dec]}</span>` : ""}</div>
+          <h3>${esc(i.title)}</h3>
+          <p class="pitch">${esc(i.pitch)}</p>
+          <div class="bars">${CRIT.map(c => `<div class="bar"><span>${c.short || c.label}</span>${segs(i.s[c.k], c.neg)}</div>`).join("")}</div>
+        </div>
+      </summary>
+      <div class="ibody">
+        <div class="facts">
+          <div class="fact"><h4>Umsatz pro Sale</h4><p>${esc(i.money)}</p></div>
+          <div class="fact"><h4>Pfad zu 7,5k / 20k pro Monat</h4><p>${esc(i.path)}</p></div>
+          <div class="fact"><h4>Lead- &amp; Akquise-Kanäle</h4><p>${esc(i.channels)}</p></div>
+          <div class="fact"><h4>Vorbilder zum Kopieren</h4><p>${esc(i.examples)}</p></div>
+          <div class="fact"><h4>Risiken</h4><p>${esc(i.risks)}</p></div>
+          <div class="fact"><h4>Nächster Schritt</h4><p>${esc(i.next)}</p></div>
+        </div>
+        <div class="decide" role="group" aria-label="Entscheidung">
+          ${["invest", "later", "pass"].map(d => `<button type="button" class="btn ${d}" data-id="${i.id}" data-dec="${d}" aria-pressed="${dec === d}">${DEC_LABEL[d]}</button>`).join("")}
+        </div>
+      </div>
+    </details>`;
+  }).join("");
+  el.querySelectorAll(".decide .btn").forEach(b => b.addEventListener("click", () => {
+    const id = b.dataset.id, d = b.dataset.dec;
+    if (decisions[id] === d) delete decisions[id]; else decisions[id] = d;
+    save(LS_D, decisions); renderList(); renderKpis(); renderExport();
+  }));
+}
+
+function renderProv(){
+  document.getElementById("provBody").innerHTML = PROV.map(r =>
+    `<tr><td><b>${esc(r[0])}</b></td><td class="r"><span class="num">${esc(r[1])}</span></td><td>${esc(r[2])}</td><td class="r"><span class="num">${esc(r[3])}</span></td><td class="r"><span class="num">${esc(r[4])}</span></td><td class="r"><span class="num"><b>${esc(r[5])}</b></span></td></tr>`
+  ).join("");
+}
+
+function renderExport(){
+  const lines = ["Horus Deal Flow – meine Auswahl"];
+  for (const d of ["invest", "later", "pass"]){
+    const items = IDEAS.filter(i => decisions[i.id] === d).map(i => `- ${i.title} (Score ${score(i)})`);
+    lines.push("", `${DEC_LABEL[d]}:`, ...(items.length ? items : ["- (keine)"]));
+  }
+  const changed = CRIT.some(c => weights[c.k] !== c.w);
+  if (changed) lines.push("", "Gewichtung: " + CRIT.map(c => `${c.label} ${weights[c.k]}`).join(", "));
+  document.getElementById("exportTxt").value = lines.join("\n");
+}
+
+document.getElementById("sortSel").value = state.sort;
+document.getElementById("decSel").value = state.dec;
+document.getElementById("sortSel").addEventListener("change", e => { state.sort = e.target.value; save(LS_F, state); renderList(); });
+document.getElementById("decSel").addEventListener("change", e => { state.dec = e.target.value; save(LS_F, state); renderList(); });
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const ta = document.getElementById("exportTxt"), msg = document.getElementById("copyMsg");
+  const fallback = () => { ta.focus(); ta.select(); msg.textContent = "Text ist markiert, bitte manuell kopieren."; };
+  try {
+    navigator.clipboard.writeText(ta.value).then(() => { msg.textContent = "Kopiert. Jetzt in den Chat einfügen."; }, fallback);
+  } catch(e){ fallback(); }
+});
+
+renderKpis(); renderChips(); renderWeights(); renderList(); renderProv(); renderExport();
+</script>
