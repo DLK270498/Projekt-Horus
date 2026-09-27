@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Winterziele 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#EEF2F4; --surface:#FFFFFF; --surface-2:#E3E9EC; --ink:#122033; --ink-2:#4A5A6C; --line:#CFD8DE;
+  --biz:#B7791F; --biz-soft:#FBEFD9; --eco:#16706F; --eco-soft:#DCF0EE;
+  --accent:#1D3F6E; --good:#2E7D4F; --warn:#B25E09; --bad:#B3261E;
+  --bar:#1D3F6E; --shadow:0 1px 2px rgba(18,32,51,.06),0 4px 14px rgba(18,32,51,.06);
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0D1520; --surface:#152130; --surface-2:#1C2B3D; --ink:#E6EDF3; --ink-2:#9DB0C3; --line:#2A3B50;
+    --biz:#E8B04F; --biz-soft:#3A2C12; --eco:#4CC3BF; --eco-soft:#0F3334;
+    --accent:#8DB6F0; --good:#5FCB8C; --warn:#F0A04B; --bad:#F2837B; --bar:#8DB6F0; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0D1520; --surface:#152130; --surface-2:#1C2B3D; --ink:#E6EDF3; --ink-2:#9DB0C3; --line:#2A3B50;
+  --biz:#E8B04F; --biz-soft:#3A2C12; --eco:#4CC3BF; --eco-soft:#0F3334;
+  --accent:#8DB6F0; --good:#5FCB8C; --warn:#F0A04B; --bad:#F2837B; --bar:#8DB6F0; --shadow:none;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:15px/1.5 var(--body);margin:0}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,8vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.lede{color:var(--ink-2);margin:8px 0 0;max-width:60ch}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.mono{font-family:var(--mono)}
+.num{font-variant-numeric:tabular-nums}
+header{display:grid;gap:10px;margin-bottom:18px}
+.stamp{display:flex;flex-wrap:wrap;gap:6px 14px;font:500 12px/1.3 var(--mono);color:var(--ink-2)}
+
+/* controls */
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);padding-block:10px;margin-inline:-16px;padding-inline:16px;border-bottom:1px solid var(--line);display:grid;gap:10px}
+.seg{display:flex;background:var(--surface-2);border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;color:var(--ink-2);font:600 13px/1 var(--body);padding:10px 6px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.row{display:flex;gap:8px;align-items:center}
+.row .seg{flex:1}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;min-height:46px;padding:0 12px;font:600 13px var(--body);cursor:pointer;white-space:nowrap}
+button:focus-visible,summary:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.weights{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:12px}
+.weights .presets{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:999px;padding:7px 12px;font:600 12px var(--body);cursor:pointer}
+.w{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.w label{font-size:13px;font-weight:500}
+.w output{font:600 12px var(--mono);color:var(--ink-2)}
+.w input{grid-column:1/-1;width:100%;accent-color:var(--accent)}
+
+/* list */
+.list{display:grid;gap:12px;margin-top:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.card summary{list-style:none;cursor:pointer;padding:14px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:start}
+.card summary::-webkit-details-marker{display:none}
+.rank{font:800 28px/1 var(--display);color:var(--ink-2);min-width:1.4em;font-variant-numeric:tabular-nums}
+.card[data-top="1"] .rank{color:var(--accent)}
+.name h3{font-size:19px;font-weight:700;line-height:1.2}
+.route{font:500 12px/1.4 var(--mono);color:var(--ink-2);margin-top:2px}
+.score{text-align:right}
+.score b{font:800 24px/1 var(--display);font-variant-numeric:tabular-nums}
+.score span{display:block;font:500 10px var(--mono);color:var(--ink-2);letter-spacing:.08em;text-transform:uppercase}
+.sbar{grid-column:2/-1;height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.sbar i{display:block;height:100%;background:var(--bar);border-radius:3px}
+.prices{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.price{border-radius:10px;padding:9px 10px;display:grid;gap:1px}
+.price.biz{background:var(--biz-soft)}
+.price.eco{background:var(--eco-soft)}
+.price .lbl{font:600 10px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.price.biz .lbl{color:var(--biz)} .price.eco .lbl{color:var(--eco)}
+.price .val{font:700 20px/1.15 var(--display);font-variant-numeric:tabular-nums}
+.price .sub{font-size:11.5px;color:var(--ink-2);line-height:1.3}
+.facts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pill{font:500 12px/1 var(--body);padding:6px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink);display:inline-flex;gap:5px;align-items:center;font-variant-numeric:tabular-nums}
+.pill.good{color:var(--good)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--bad)}
+.more{grid-column:1/-1;font:600 12px var(--body);color:var(--accent);margin-top:4px}
+.card[open] .more::after{content:"Schließen ▴"}
+.card:not([open]) .more::after{content:"Details ▾"}
+
+.detail{border-top:1px solid var(--line);padding:14px;display:grid;gap:18px}
+.detail h4{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin:0 0 8px}
+.wx{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.wx div{background:var(--surface-2);border-radius:10px;padding:8px;text-align:center}
+.wx b{display:block;font:700 18px/1.1 var(--display);font-variant-numeric:tabular-nums}
+.wx span{font-size:11px;color:var(--ink-2)}
+.note{font-size:13.5px;color:var(--ink-2);margin:8px 0 0}
+ul.acts{margin:0;padding-left:18px;display:grid;gap:4px;font-size:14px}
+.hotels{display:grid;gap:6px}
+.hotel{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.hotel:last-child{border-bottom:0}
+.tier{font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);min-width:52px}
+.hotel .n{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.flight{display:grid;gap:8px}
+.fl{border:1px solid var(--line);border-radius:10px;padding:10px;font-size:13.5px;display:grid;gap:3px}
+.fl .h{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.src{font-size:12px}
+.src a{color:var(--accent)}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.links a{font:600 13px var(--body);color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--surface-2);padding:9px 12px;border-radius:10px}
+.breakdown{display:grid;gap:6px}
+.bd{display:grid;grid-template-columns:110px 1fr 34px;gap:8px;align-items:center;font-size:12.5px}
+.bd .t{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden}
+.bd .t i{display:block;height:100%;background:var(--bar)}
+.bd output{font:600 12px var(--mono);text-align:right}
+.tag{font:600 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:middle}
+.tag.deal{background:var(--biz-soft);color:var(--biz)}
+.tag.est{background:var(--surface-2);color:var(--ink-2)}
+footer{margin-top:28px;font-size:12.5px;color:var(--ink-2);display:grid;gap:8px}
+footer a{color:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.sbar i,.bd .t i{transition:width .35s ease}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Ab FRA / MUC · Januar &amp; Februar 2027</span>
+    <h1>Winterziele 2027</h1>
+    <p class="lede">Elf Ziele für die Winterflucht, gerankt nach Business- und Economy-Preis, Wetter, Aktivitäten, Hotels und Anreise. Tippe auf ein Ziel für Details, stelle die Gewichtung selbst ein.</p>
+    <div class="stamp"><span>Preise: Stand 27.09.2026</span><span>Hin &amp; zurück, pro Person</span><span>Hotels: pro Nacht, DZ</span></div>
+  </header>
+
+  <div class="controls">
+    <div class="row">
+      <div class="seg" role="group" aria-label="Reisemonat">
+        <button type="button" id="m-jan" data-month="jan">Januar</button>
+        <button type="button" id="m-feb" data-month="feb">Februar</button>
+      </div>
+      <button type="button" class="iconbtn" id="toggleW" aria-expanded="false" aria-controls="weights">Gewichtung</button>
+    </div>
+    <div class="seg" role="group" aria-label="Sortierung">
+      <button type="button" id="s-score" data-sort="score">Ranking</button>
+      <button type="button" id="s-biz" data-sort="biz">Business</button>
+      <button type="button" id="s-eco" data-sort="eco">Economy</button>
+      <button type="button" id="s-wx" data-sort="wx">Wetter</button>
+    </div>
+    <div class="weights" id="weights" hidden>
+      <div class="presets">
+        <button type="button" class="chip" data-preset="bal">Ausgewogen</button>
+        <button type="button" class="chip" data-preset="biz">Business-Schnäppchen</button>
+        <button type="button" class="chip" data-preset="eco">Economy-Budget</button>
+        <button type="button" class="chip" data-preset="sun">Sonne zuerst</button>
+      </div>
+      <div id="sliders"></div>
+    </div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <footer>
+    <p><b>So entsteht das Ranking:</b> Jedes Ziel bekommt pro Kriterium 0–10 Punkte. Business-Preis: 10 Punkte bei ≤ 1.400 €, minus 1 Punkt je 150 € darüber. Economy-Preis: 10 Punkte bei ≤ 400 €, minus 1 Punkt je 80 €. Anreise: Flugzeit und Zeitverschiebung. Wetter, Aktivitäten und Hotel-Preis-Leistung sind redaktionelle Bewertungen für den gewählten Monat. Die Gesamtnote ist der gewichtete Durchschnitt (0–100).</p>
+    <p><b>Zu den Preisen:</b> <span class="tag deal">Deal</span> = konkretes Angebot, im September 2026 öffentlich gelistet (Quelle verlinkt). <span class="tag est">Richtwert</span> = typischer Tarif für die Route bei früher Buchung. Deals sind oft nur kurz buchbar und an bestimmte Tage gebunden; prüfe den Live-Preis über den Google-Flights-Link. Oman-Air-Sale: Buchung bis 01.10.2026, Sperrzeit 16.12.2026–31.01.2027.</p>
+    <p>Klimawerte sind langjährige Mittel. Hotelpreise sind Richtwerte für die Saison und schwanken stark nach Datum.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+// ---- Daten -----------------------------------------------------------------
+// biz/eco je Monat: [Preis in €, Quelle-Key|null, Hinweis]
+var SRC = {
+  cpt:{t:"reisetopia: Condor Business Kapstadt",u:"https://reisetopia.de/deals/condor-business-class-angebot-kapstadt/"},
+  mle:{t:"premium-flights: Etihad Business Malediven",u:"https://premium-flights.com/business-class-germany-maldives/"},
+  mru:{t:"reisetopia: Condor Business Mauritius",u:"https://reisetopia.de/deals/condor-business-class-von-deutschland-nach-mauritius/"},
+  wy:{t:"premium-flights: Oman Air Business Sale",u:"https://premium-flights.com/european-cities-to-asia-business-class-omam-air/"},
+  cun:{t:"frankfurtflyer: Condor Business Cancún",u:"https://frankfurtflyer.de/condor-business-class-frankfurt-nach-cancun/"},
+  puj:{t:"frankfurtflyer: Condor Business Karibik",u:"https://frankfurtflyer.de/condor-business-class-angebote-in-die-karibik-hin-und-rueckflug-ab-1-409-euro/"},
+  znz:{t:"businessclassflug.com: Discover Business",u:"https://www.businessclassflug.com/"},
+  omg:{t:"Oman Air Global Sale",u:"https://www.omanair.com/flights/en/globalsale"}
+};
+
+var D = [
+ {id:"cpt", name:"Kapstadt", country:"Südafrika", iata:"CPT", from:"FRA", hours:11.5, tz:1, stops:"nonstop",
+  biz:{jan:[1949,"cpt","Condor A330neo, Lie-Flat, nonstop FRA"],feb:[1949,"cpt","Condor A330neo, Lie-Flat, nonstop FRA"]},
+  eco:{jan:[650,900],feb:[650,900]}, ecoNote:"Condor/Lufthansa nonstop, sonst via IST/DXB",
+  wx:{jan:{t:27,sea:17,sun:11,rain:3},feb:{t:27,sea:18,sun:10,rain:3}},
+  wxScore:{jan:9.5,feb:9.5}, wxNote:"Hochsommer, trocken, oft windig (Cape Doctor). Atlantik kühl, False Bay wärmer.",
+  act:10, acts:["Tafelberg & Lion's Head bei Sonnenaufgang","Kap der Guten Hoffnung & Pinguine am Boulders Beach","Weinland Stellenbosch & Franschhoek","Garden Route als Roadtrip","Walbeobachtung erst ab Juni – im Winter eher Haie in Gansbaai"],
+  hot:9, hotels:[["Budget","Gästehaus in Gardens / Sea Point",55],["Mittel","Protea Fire & Ice, Gardens",120],["Top","Cape Grace, V&A Waterfront",450]],
+  hotNote:"Starker Euro-Kurs zum Rand: sehr viel Hotel fürs Geld."},
+
+ {id:"mle", name:"Malediven", country:"Malediven", iata:"MLE", from:"MUC", hours:12.5, tz:4, stops:"1 Stopp AUH",
+  biz:{jan:[1760,"mle","Etihad via Abu Dhabi, ab MUC (ab FRA 1.770 €)"],feb:[1760,"mle","Etihad via Abu Dhabi, ab MUC (ab FRA 1.770 €)"]},
+  eco:{jan:[700,950],feb:[650,900]}, ecoNote:"Condor nonstop FRA oder Golf-Airlines mit Stopp",
+  wx:{jan:{t:30,sea:28,sun:8,rain:6},feb:{t:30,sea:28,sun:9,rain:4}},
+  wxScore:{jan:9,feb:9.5}, wxNote:"Trockenzeit (Nordost-Monsun). Beste Sicht beim Schnorcheln.",
+  act:7, acts:["Mantas & Walhaie im Süd-Ari-Atoll","Hausriff-Schnorcheln, Tauchen","Sandbank-Picknick & Sunset-Dhoni","Local Islands wie Maafushi oder Thoddoo"],
+  hot:4, hotels:[["Budget","Gästehaus auf Local Island (Maafushi)",90],["Mittel","Meeru Island Resort",350],["Top","Soneva Fushi",2000]],
+  hotNote:"Resorts plus Wasserflugzeug-Transfer (400–800 € p. P.) sind der größte Kostenblock."},
+
+ {id:"mru", name:"Mauritius", country:"Mauritius", iata:"MRU", from:"FRA", hours:11.5, tz:3, stops:"nonstop",
+  biz:{jan:[2069,"mru","Condor A330neo, nonstop FRA"],feb:[2069,"mru","Condor A330neo, nonstop FRA"]},
+  eco:{jan:[750,1000],feb:[700,950]}, ecoNote:"Condor nonstop oder Air Mauritius / Emirates",
+  wx:{jan:{t:30,sea:27,sun:8,rain:15},feb:{t:30,sea:28,sun:8,rain:15}},
+  wxScore:{jan:6.5,feb:6}, wxNote:"Südsommer: heiß, feucht, kräftige Schauer. Januar–Februar ist Zyklonsaison, Reiserücktritt einplanen.",
+  act:7.5, acts:["Le Morne & Siebenfarbige Erde (Chamarel)","Black River Gorges Nationalpark","Katamaran zur Île aux Cerfs","Kitesurfen im Süden, Delfine bei Tamarin"],
+  hot:6, hotels:[["Budget","Gästehaus in Grand Baie",70],["Mittel","Veranda Paul et Virginie",180],["Top","LUX* Belle Mare",450]],
+  hotNote:"Halbpension lohnt sich, außerhalb der Hotels gibt es wenig Restaurants."},
+
+ {id:"hkt", name:"Phuket & Krabi", country:"Thailand", iata:"HKT", from:"MUC", hours:13.5, tz:6, stops:"1 Stopp MCT",
+  biz:{jan:[2599,null,"Januar liegt in der Oman-Air-Sperrzeit: Oman Air / EVA regulär"],feb:[1690,"wy","Oman Air via Muscat, ab MUC · Buchung bis 01.10.2026"]},
+  eco:{jan:[650,850],feb:[600,800]}, ecoNote:"Condor nonstop BKK + Inlandsflug, oder Golf-Airlines",
+  wx:{jan:{t:32,sea:28,sun:9,rain:3},feb:{t:33,sea:28,sun:9,rain:2}},
+  wxScore:{jan:9.5,feb:9.5}, wxNote:"Beste Reisezeit der Andamanensee: trocken, ruhige See.",
+  act:8.5, acts:["Similan-Inseln (nur Okt–Mai geöffnet)","Phang-Nga-Bucht per Kajak","Railay Beach & Klettern in Krabi","Old Town Phuket, Streetfood"],
+  hot:9.5, hotels:[["Budget","Boutique-Hotel Phuket Old Town",40],["Mittel","Katathani Phuket Beach Resort",150],["Top","Trisara",600]],
+  hotNote:"Hohe Qualität zu kleinen Preisen, Hochsaison-Zuschläge um Neujahr."},
+
+ {id:"cmb", name:"Sri Lanka Süd- & Westküste", country:"Sri Lanka", iata:"CMB", from:"FRA", hours:10.5, tz:4.5, stops:"nonstop / 1 Stopp",
+  biz:{jan:[2250,null,"Qatar / Etihad / Emirates mit Stopp, typischer Sale-Tarif"],feb:[2150,null,"Qatar / Etihad / Emirates mit Stopp, typischer Sale-Tarif"]},
+  eco:{jan:[750,950],feb:[700,900]}, ecoNote:"Condor nonstop FRA (ab 430 € einfach)",
+  wx:{jan:{t:30,sea:28,sun:8,rain:7},feb:{t:31,sea:28,sun:9,rain:6}},
+  wxScore:{jan:8.5,feb:9}, wxNote:"Süd- und Westküste in der Trockenzeit. Die Ostküste ist im Winter nass.",
+  act:9, acts:["Wale & Blauwale vor Mirissa (Dez–Apr)","Galle Fort (UNESCO)","Sigiriya & Kulturdreieck","Safari im Yala- oder Udawalawe-Nationalpark","Zugfahrt Kandy–Ella durchs Teeland"],
+  hot:9, hotels:[["Budget","Gästehaus in Mirissa",35],["Mittel","Jetwing Lighthouse, Galle",180],["Top","Amangalla, Galle Fort",700]],
+  hotNote:"Rundreise mit Fahrer kostet ca. 60–80 € pro Tag."},
+
+ {id:"cun", name:"Cancún & Riviera Maya", country:"Mexiko", iata:"CUN", from:"FRA", hours:11.5, tz:-7, stops:"nonstop",
+  biz:{jan:[1729,"cun","Condor A330neo, nonstop FRA"],feb:[1729,"cun","Condor A330neo, nonstop FRA"]},
+  eco:{jan:[600,800],feb:[600,800]}, ecoNote:"Condor / Discover nonstop FRA",
+  wx:{jan:{t:28,sea:26,sun:7,rain:6},feb:{t:29,sea:26,sun:8,rain:4}},
+  wxScore:{jan:8.5,feb:9}, wxNote:"Trockenzeit, wenig Seegras (Sargassum) im Winter.",
+  act:9, acts:["Cenoten schnorcheln & tauchen","Chichén Itzá, Tulum, Cobá","Tauchen vor Cozumel","Bacalar-Lagune der sieben Farben"],
+  hot:6.5, hotels:[["Budget","Hotel in Playa del Carmen",60],["Mittel","Hotel Mahekal, Playa del Carmen",220],["Top","Rosewood Mayakoba",900]],
+  hotNote:"All-inclusive in Cancún teuer, Tulum und Bacalar oft günstiger."},
+
+ {id:"znz", name:"Sansibar", country:"Tansania", iata:"ZNZ", from:"FRA", hours:9.5, tz:2, stops:"nonstop",
+  biz:{jan:[2199,"znz","Discover nonstop FRA · Verfügbarkeit Jan/Feb prüfen"],feb:[2199,"znz","Discover nonstop FRA · Verfügbarkeit Jan/Feb prüfen"]},
+  eco:{jan:[700,900],feb:[650,850]}, ecoNote:"Discover nonstop, Condor oder Qatar via DOH",
+  wx:{jan:{t:32,sea:28,sun:9,rain:6},feb:{t:32,sea:29,sun:9,rain:5}},
+  wxScore:{jan:8,feb:8.5}, wxNote:"Kurze Trockenzeit, heiß und sonnig. Starke Gezeiten an der Ostküste.",
+  act:8.5, acts:["Stone Town (UNESCO) & Gewürztour","Schnorcheln am Mnemba-Atoll","Kombi mit Safari: Kalbungszeit in der Serengeti (Jan–Feb)","Kitesurfen in Paje"],
+  hot:7.5, hotels:[["Budget","Gästehaus in Paje",50],["Mittel","Emerson Spice, Stone Town",180],["Top","Zuri Zanzibar",450]],
+  hotNote:"Safari-Verlängerung kostet ab ca. 300 € pro Person und Tag."},
+
+ {id:"mct", name:"Oman", country:"Oman", iata:"MCT", from:"FRA", hours:6.5, tz:3, stops:"nonstop",
+  biz:{jan:[2150,null,"Januar liegt in der Oman-Air-Sperrzeit: regulärer Tarif"],feb:[1550,"omg","Oman Air Sale, nonstop FRA · Sperrzeit bis 31.01."]},
+  eco:{jan:[450,650],feb:[400,600]}, ecoNote:"Oman Air nonstop FRA/MUC, Condor, Golf-Airlines",
+  wx:{jan:{t:25,sea:24,sun:9,rain:2},feb:{t:26,sea:24,sun:9,rain:2}},
+  wxScore:{jan:9,feb:9}, wxNote:"Perfektes Rundreisewetter, warm statt heiß. Zum Baden etwas frisch.",
+  act:8.5, acts:["Wadi Shab & Wadi Bani Khalid","Wüstennacht in den Wahiba Sands","Nizwa Fort & Jebel Shams (Grand Canyon Arabiens)","Meeresschildkröten in Ras al Jinz"],
+  hot:7, hotels:[["Budget","Hotel in Mutrah, Muscat",60],["Mittel","Shangri-La Barr Al Jissah",250],["Top","Alila Jabal Akhdar",500]],
+  hotNote:"Mietwagen (ab 30 € pro Tag) ist die beste Art zu reisen."},
+
+ {id:"puj", name:"Punta Cana & Samaná", country:"Dominikanische Republik", iata:"PUJ", from:"FRA", hours:10.5, tz:-5, stops:"nonstop",
+  biz:{jan:[1849,"puj","Condor nonstop FRA"],feb:[1849,"puj","Condor nonstop FRA"]},
+  eco:{jan:[550,750],feb:[550,750]}, ecoNote:"Condor / Discover nonstop FRA",
+  wx:{jan:{t:28,sea:26,sun:8,rain:7},feb:{t:28,sea:26,sun:8,rain:6}},
+  wxScore:{jan:8.5,feb:8.5}, wxNote:"Trockenzeit mit gelegentlichen kurzen Schauern.",
+  act:7, acts:["Buckelwale in der Bucht von Samaná (Mitte Jan – März)","Isla Saona per Katamaran","Hoyo Azul Cenote","Kolonialstadt Santo Domingo"],
+  hot:7, hotels:[["Budget","Apartment in Bávaro",70],["Mittel","Iberostar Selection Bávaro (All-incl.)",250],["Top","Eden Roc Cap Cana",700]],
+  hotNote:"All-inclusive dominiert und ist oft das beste Preis-Leistungs-Modell."},
+
+ {id:"sgn", name:"Südvietnam & Phu Quoc", country:"Vietnam", iata:"SGN", from:"FRA", hours:12, tz:6, stops:"nonstop",
+  biz:{jan:[2050,null,"Vietnam Airlines nonstop FRA oder Qatar via DOH, typischer Tarif"],feb:[2300,null,"Tết-Fest am 06.02.2027 treibt die Preise hoch"]},
+  eco:{jan:[600,800],feb:[750,1000]}, ecoNote:"Vietnam Airlines nonstop FRA, sonst via Golf",
+  wx:{jan:{t:32,sea:27,sun:8,rain:2},feb:{t:32,sea:27,sun:9,rain:1}},
+  wxScore:{jan:9,feb:9}, wxNote:"Trockenzeit im Süden. Hanoi und Halong-Bucht sind jetzt kühl und grau.",
+  act:8.5, acts:["Mekong-Delta mit schwimmenden Märkten","Saigon: Streetfood, Cu-Chi-Tunnel","Strände & Inselhopping auf Phu Quoc","Tết-Fest erleben (Anfang Feb, viel geschlossen)"],
+  hot:9.5, hotels:[["Budget","Stadthotel in Saigon, Distrikt 1",35],["Mittel","Salinda Resort Phu Quoc",150],["Top","JW Marriott Phu Quoc Emerald Bay",400]],
+  hotNote:"Rund um Tết (Anfang Februar) früh buchen, viele Geschäfte schließen."},
+
+ {id:"tfs", name:"Teneriffa", country:"Spanien (Kanaren)", iata:"TFS", from:"FRA", hours:4.5, tz:-1, stops:"nonstop",
+  biz:{jan:[550,null,"Lufthansa / Condor Europa-Business, freier Mittelsitz, kein Lie-Flat"],feb:[580,null,"Lufthansa / Condor Europa-Business, freier Mittelsitz, kein Lie-Flat"]},
+  eco:{jan:[180,300],feb:[200,320]}, ecoNote:"Condor, Eurowings, TUIfly ab vielen Flughäfen",
+  wx:{jan:{t:21,sea:19,sun:6,rain:5},feb:{t:22,sea:19,sun:7,rain:4}},
+  wxScore:{jan:6.5,feb:6.5}, wxNote:"Frühling statt Tropen. Der Süden ist sonniger als der Norden.",
+  act:7.5, acts:["Teide-Nationalpark & Sternwarte","Wandern im Anaga-Gebirge","Grindwale vor Los Gigantes","Karneval Santa Cruz (Anfang Feb 2027)"],
+  hot:7, hotels:[["Budget","Pension in Puerto de la Cruz",60],["Mittel","Hotel Botánico, Puerto de la Cruz",180],["Top","The Ritz-Carlton, Abama",450]],
+  hotNote:"Kurzstrecke: ideal für eine Woche ohne Jetlag."}
+];
+
+var CRIT = [
+  {k:"biz", label:"Business-Preis"},
+  {k:"eco", label:"Economy-Preis"},
+  {k:"wx", label:"Wetter"},
+  {k:"act", label:"Aktivitäten"},
+  {k:"hot", label:"Hotels (Preis-Leistung)"},
+  {k:"trip", label:"Anreise"}
+];
+var PRESETS = {
+  bal:{biz:25,eco:10,wx:25,act:20,hot:10,trip:10},
+  biz:{biz:45,eco:0,wx:20,act:15,hot:10,trip:10},
+  eco:{biz:0,eco:40,wx:20,act:15,hot:15,trip:10},
+  sun:{biz:10,eco:10,wx:45,act:20,hot:5,trip:10}
+};
+
+// ---- Zustand -----------------------------------------------------------------
+var store = {
+  get:function(k,d){try{var v=localStorage.getItem("wz27-"+k);return v?JSON.parse(v):d;}catch(e){return d;}},
+  set:function(k,v){try{localStorage.setItem("wz27-"+k,JSON.stringify(v));}catch(e){}}
+};
+var state = {
+  month: store.get("month","feb"),
+  sort: store.get("sort","score"),
+  w: Object.assign({}, PRESETS.bal, store.get("w",{})),
+  open: {}
+};
+
+// ---- Bewertung ---------------------------------------------------------------
+function clamp(x){return Math.max(0,Math.min(10,x));}
+function ecoMid(d){var e=d.eco[state.month];return (e[0]+e[1])/2;}
+function scores(d){
+  var m=state.month;
+  return {
+    biz: clamp(10-(d.biz[m][0]-1400)/150),
+    eco: clamp(10-(ecoMid(d)-400)/80),
+    wx: d.wxScore[m],
+    act: d.act,
+    hot: d.hot,
+    trip: clamp(10-d.hours*0.4-Math.abs(d.tz)*0.3)
+  };
+}
+function total(s){
+  var sum=0,ws=0;
+  CRIT.forEach(function(c){sum+=s[c.k]*state.w[c.k];ws+=state.w[c.k];});
+  return ws?Math.round(sum/ws*10):0;
+}
+
+// ---- Rendering ---------------------------------------------------------------
+var eur = new Intl.NumberFormat("de-DE",{maximumFractionDigits:0});
+function fmt(n){return eur.format(n)+" €";}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function gf(d,cabin){
+  var mon = state.month==="jan"?"January":"February";
+  var q = "Flights from "+d.from+" to "+d.iata+" "+(cabin==="biz"?"business class ":"")+"in "+mon+" 2027";
+  return "https://www.google.com/travel/flights?q="+encodeURIComponent(q);
+}
+function wxClass(v){return v>=8.5?"good":v>=7?"":v>=6?"warn":"bad";}
+function tz(n){return (n>0?"+":n<0?"−":"±")+String(Math.abs(n)).replace(".",",")+" h";}
+
+function render(){
+  var m=state.month;
+  var rows=D.map(function(d){var s=scores(d);return {d:d,s:s,t:total(s)};});
+  var byScore=rows.slice().sort(function(a,b){return b.t-a.t;});
+  byScore.forEach(function(r,i){r.rank=i+1;});
+  var sorters={
+    score:function(a,b){return b.t-a.t;},
+    biz:function(a,b){return a.d.biz[m][0]-b.d.biz[m][0];},
+    eco:function(a,b){return ecoMid(a.d)-ecoMid(b.d);},
+    wx:function(a,b){return b.d.wxScore[m]-a.d.wxScore[m]||b.t-a.t;}
+  };
+  rows.sort(sorters[state.sort]);
+
+  var html=rows.map(function(r){
+    var d=r.d,s=r.s,b=d.biz[m],e=d.eco[m],w=d.wx[m];
+    var src=b[1]?SRC[b[1]]:null;
+    var tag=src?'<span class="tag deal">Deal</span>':'<span class="tag est">Richtwert</span>';
+    var bd=CRIT.map(function(c){
+      return '<div class="bd"><span>'+c.label+'</span><span class="t"><i style="width:'+(s[c.k]*10)+'%"></i></span><output>'+s[c.k].toFixed(1).replace(".",",")+'</output></div>';
+    }).join("");
+    return '<details class="card" data-id="'+d.id+'" data-top="'+(r.rank===1?1:0)+'"'+(state.open[d.id]?" open":"")+'>'+
+      '<summary>'+
+        '<span class="rank" aria-label="Rang '+r.rank+'">'+r.rank+'</span>'+
+        '<div class="name"><h3>'+esc(d.name)+'</h3><div class="route">'+esc(d.country)+' · '+d.from+' → '+d.iata+' · '+esc(d.stops)+' · '+String(d.hours).replace(".",",")+' h</div></div>'+
+        '<div class="score"><b>'+r.t+'</b><span>Punkte</span></div>'+
+        '<div class="sbar" aria-hidden="true"><i style="width:'+r.t+'%"></i></div>'+
+        '<div class="prices">'+
+          '<div class="price biz"><span class="lbl">Business</span><span class="val">'+(src?"ab ":"ca. ")+fmt(b[0])+'</span><span class="sub">'+(src?"Deal gefunden":"Richtwert")+'</span></div>'+
+          '<div class="price eco"><span class="lbl">Economy</span><span class="val">'+eur.format(e[0])+'–'+fmt(e[1])+'</span><span class="sub">Richtwert, früh gebucht</span></div>'+
+        '</div>'+
+        '<div class="facts">'+
+          '<span class="pill '+wxClass(d.wxScore[m])+'">☀ '+w.t+' °C</span>'+
+          '<span class="pill">Meer '+w.sea+' °C</span>'+
+          '<span class="pill">'+w.sun+' h Sonne</span>'+
+          '<span class="pill">'+w.rain+' Regentage</span>'+
+          '<span class="pill">'+tz(d.tz)+'</span>'+
+        '</div>'+
+        '<span class="more"></span>'+
+      '</summary>'+
+      '<div class="detail">'+
+        '<section><h4>Flüge</h4><div class="flight">'+
+          '<div class="fl"><div class="h"><span>Business '+tag+'</span><span class="num">'+(src?"ab ":"ca. ")+fmt(b[0])+'</span></div><span>'+esc(b[2])+'</span>'+
+            (src?'<span class="src">Quelle: <a href="'+src.u+'" target="_blank" rel="noopener">'+esc(src.t)+'</a></span>':'')+'</div>'+
+          '<div class="fl"><div class="h"><span>Economy <span class="tag est">Richtwert</span></span><span class="num">'+eur.format(e[0])+'–'+fmt(e[1])+'</span></div><span>'+esc(d.ecoNote)+'</span></div>'+
+          '<div class="links"><a href="'+gf(d,"biz")+'" target="_blank" rel="noopener">Business live prüfen ↗</a><a href="'+gf(d,"eco")+'" target="_blank" rel="noopener">Economy live prüfen ↗</a></div>'+
+        '</div></section>'+
+        '<section><h4>Wetter im '+(m==="jan"?"Januar":"Februar")+'</h4><div class="wx">'+
+          '<div><b>'+w.t+'°</b><span>Luft</span></div><div><b>'+w.sea+'°</b><span>Wasser</span></div><div><b>'+w.sun+'</b><span>Std. Sonne</span></div><div><b>'+w.rain+'</b><span>Regentage</span></div>'+
+        '</div><p class="note">'+esc(d.wxNote)+'</p></section>'+
+        '<section><h4>Aktivitäten</h4><ul class="acts">'+d.acts.map(function(a){return "<li>"+esc(a)+"</li>";}).join("")+'</ul></section>'+
+        '<section><h4>Hotels · pro Nacht</h4><div class="hotels">'+d.hotels.map(function(h){
+          return '<div class="hotel"><span class="tier">'+h[0]+'</span><span>'+esc(h[1])+'</span><span class="n">ca. '+fmt(h[2])+'</span></div>';
+        }).join("")+'</div><p class="note">'+esc(d.hotNote)+'</p></section>'+
+        '<section><h4>Punkte im Detail</h4><div class="breakdown">'+bd+'</div></section>'+
+      '</div></details>';
+  }).join("");
+  document.getElementById("list").innerHTML=html;
+
+  document.querySelectorAll("[data-month]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.month===m));});
+  document.querySelectorAll("[data-sort]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.sort===state.sort));});
+}
+
+function renderSliders(){
+  document.getElementById("sliders").innerHTML='<div style="display:grid;gap:12px">'+CRIT.map(function(c){
+    return '<div class="w"><label for="w-'+c.k+'">'+c.label+'</label><output id="o-'+c.k+'">'+state.w[c.k]+'</output>'+
+      '<input type="range" id="w-'+c.k+'" data-w="'+c.k+'" min="0" max="50" step="5" value="'+state.w[c.k]+'"></div>';
+  }).join("")+'</div>';
+}
+
+// ---- Events ------------------------------------------------------------------
+document.addEventListener("click",function(ev){
+  var t=ev.target.closest("[data-month],[data-sort],[data-preset],#toggleW");
+  if(!t)return;
+  if(t.dataset.month){state.month=t.dataset.month;store.set("month",state.month);render();}
+  else if(t.dataset.sort){state.sort=t.dataset.sort;store.set("sort",state.sort);render();}
+  else if(t.dataset.preset){state.w=Object.assign({},PRESETS[t.dataset.preset]);store.set("w",state.w);renderSliders();render();}
+  else if(t.id==="toggleW"){var p=document.getElementById("weights");p.hidden=!p.hidden;t.setAttribute("aria-expanded",String(!p.hidden));}
+});
+document.addEventListener("input",function(ev){
+  var k=ev.target.dataset&&ev.target.dataset.w; if(!k)return;
+  state.w[k]=+ev.target.value; document.getElementById("o-"+k).textContent=ev.target.value;
+  store.set("w",state.w); render();
+});
+document.getElementById("list").addEventListener("toggle",function(ev){
+  var el=ev.target; if(el.dataset&&el.dataset.id){state.open[el.dataset.id]=el.open;}
+},true);
+
+renderSliders();
+render();
+})();
+</script>
+</body>
+</html>
