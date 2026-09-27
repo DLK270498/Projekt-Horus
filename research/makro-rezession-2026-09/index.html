@@ -1,0 +1,702 @@
+<title>Kommt die Rezession?</title>
+<meta name="description" content="Makro-Lagebild USA und Europa, Stand 27. September 2026: Rezessionswahrscheinlichkeit, Timing, Indikatoren, Szenarien und Frühwarn-Trigger.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#eef0ec;
+  --surface:#fcfcfb;
+  --surface-2:#f4f5f1;
+  --ink:#12171b;
+  --ink-2:#4a5157;
+  --muted:#7d8388;
+  --line:#dfe2dc;
+  --line-strong:#c3c7bf;
+  --accent:#0f5f73;
+  --accent-soft:#dcebee;
+  --accent-ink:#ffffff;
+  --series:#2a78d6;
+  --series-muted:#9ec5f4;
+  --good:#0ca30c; --good-ink:#006300; --good-bg:#e3f3e1;
+  --warn:#fab219; --warn-ink:#7a5200; --warn-bg:#fdf1d3;
+  --bad:#d03b3b;  --bad-ink:#a42727;  --bad-bg:#f8e1df;
+  --ord-1:#86b6ef; --ord-2:#3987e5; --ord-3:#1c5cab; --ord-4:#0d366b;
+  --ord-ink-1:#0b1f3a; --ord-ink-2:#ffffff; --ord-ink-3:#ffffff; --ord-ink-4:#ffffff;
+  --shadow:0 1px 2px rgba(18,23,27,.06),0 4px 16px rgba(18,23,27,.05);
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0f1214; --surface:#181c1f; --surface-2:#1f2427;
+    --ink:#f2f4f3; --ink-2:#bcc3c6; --muted:#8a9296;
+    --line:#2a3033; --line-strong:#3a4246;
+    --accent:#5fb3c7; --accent-soft:#16323a; --accent-ink:#0b1a1f;
+    --series:#3987e5; --series-muted:#2c4f7a;
+    --good-ink:#4fcf4f; --good-bg:#15301a;
+    --warn-ink:#f7c64f; --warn-bg:#352a0e;
+    --bad-ink:#f08585;  --bad-bg:#3a1818;
+    --ord-1:#184f95; --ord-2:#256abf; --ord-3:#3987e5; --ord-4:#86b6ef;
+    --ord-ink-1:#ffffff; --ord-ink-2:#ffffff; --ord-ink-3:#ffffff; --ord-ink-4:#0b1f3a;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0f1214; --surface:#181c1f; --surface-2:#1f2427;
+  --ink:#f2f4f3; --ink-2:#bcc3c6; --muted:#8a9296;
+  --line:#2a3033; --line-strong:#3a4246;
+  --accent:#5fb3c7; --accent-soft:#16323a; --accent-ink:#0b1a1f;
+  --series:#3987e5; --series-muted:#2c4f7a;
+  --good-ink:#4fcf4f; --good-bg:#15301a;
+  --warn-ink:#f7c64f; --warn-bg:#352a0e;
+  --bad-ink:#f08585;  --bad-bg:#3a1818;
+  --ord-1:#184f95; --ord-2:#256abf; --ord-3:#3987e5; --ord-4:#86b6ef;
+  --ord-ink-1:#ffffff; --ord-ink-2:#ffffff; --ord-ink-3:#ffffff; --ord-ink-4:#0b1f3a;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--f-body); font-size:15px; line-height:1.55;
+  padding-inline:16px; padding-block:0 48px;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px; margin-inline:auto; display:flex; flex-direction:column; gap:28px}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; letter-spacing:-.005em}
+h2{font-size:1.45rem; font-weight:700}
+h3{font-size:1.05rem; font-weight:600}
+p{margin:0}
+a{color:var(--accent); text-underline-offset:2px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+.eyebrow{font-family:var(--f-mono); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+
+/* Masthead */
+.mast{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; padding-top:20px; border-bottom:1px solid var(--line-strong); padding-bottom:10px}
+.mast .brand{font-family:var(--f-display); font-weight:700; font-size:1rem; letter-spacing:.02em}
+.mast .stamp{font-family:var(--f-mono); font-size:.75rem; color:var(--ink-2)}
+
+/* Section nav */
+.secnav{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--bg); margin-inline:-16px; padding:8px 16px; border-bottom:1px solid var(--line)}
+.secnav ul{list-style:none; margin:0; padding:0; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none}
+.secnav ul::-webkit-scrollbar{display:none}
+.secnav a{display:block; white-space:nowrap; text-decoration:none; color:var(--ink-2); font-size:.82rem; font-weight:500; padding:6px 11px; border-radius:999px; border:1px solid var(--line)}
+.secnav a:hover{border-color:var(--accent); color:var(--accent)}
+
+/* Answer */
+.answer{display:grid; gap:18px}
+.answer h1{font-size:clamp(2rem,7vw,3.4rem); font-weight:700; line-height:1.02}
+.verdict{font-family:var(--f-display); font-size:clamp(1.25rem,4.2vw,1.7rem); font-weight:600; line-height:1.2; max-width:34ch}
+.verdict em{font-style:normal; color:var(--accent)}
+.lede{color:var(--ink-2); max-width:65ch}
+.probgrid{display:grid; gap:12px; grid-template-columns:1fr}
+.probcard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:grid; gap:10px}
+.probcard header{display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+.probrow{display:grid; grid-template-columns:repeat(3,1fr); gap:8px}
+.prob{display:grid; gap:2px}
+.prob .v{font-family:var(--f-display); font-size:1.9rem; font-weight:700; line-height:1}
+.prob .k{font-size:.74rem; color:var(--muted); line-height:1.25}
+.prob.hl .v{color:var(--accent)}
+.meter{height:6px; background:var(--surface-2); border-radius:3px; overflow:hidden; border:1px solid var(--line)}
+.meter i{display:block; height:100%; background:var(--series); border-radius:0 3px 3px 0}
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px; display:grid; gap:12px; min-width:0}
+.panel .sub{color:var(--ink-2); font-size:.88rem}
+.chartbox{position:relative; width:100%; height:230px}
+.chartbox.tall{height:300px}
+.section{display:grid; gap:14px; scroll-margin-top:64px}
+.section > header{display:grid; gap:4px}
+.section > header p{color:var(--ink-2); max-width:65ch}
+.grid2{display:grid; gap:14px; grid-template-columns:1fr}
+
+/* KPI tiles */
+.kpis{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px; display:grid; gap:4px; align-content:start}
+.kpi .l{font-size:.75rem; color:var(--muted); line-height:1.25}
+.kpi .v{font-family:var(--f-display); font-weight:700; font-size:1.45rem; line-height:1.1}
+.kpi .d{font-size:.76rem; color:var(--ink-2); line-height:1.3}
+.kpi .d b{font-weight:600}
+.up-bad{color:var(--bad-ink)} .up-good{color:var(--good-ink)} .flat{color:var(--ink-2)}
+
+/* Pros / cons */
+.balance{display:grid; gap:14px; grid-template-columns:1fr}
+.balance ul{margin:0; padding-left:1.1em; display:grid; gap:8px}
+.balance li{color:var(--ink-2)}
+.balance li b{color:var(--ink); font-weight:600}
+.tag{display:inline-flex; align-items:center; gap:6px; font-size:.78rem; font-weight:600; padding:3px 9px; border-radius:999px; line-height:1.3; white-space:nowrap}
+.tag svg{width:12px; height:12px; flex:none}
+.s-good{background:var(--good-bg); color:var(--good-ink)}
+.s-warn{background:var(--warn-bg); color:var(--warn-ink)}
+.s-bad{background:var(--bad-bg); color:var(--bad-ink)}
+
+/* Filters */
+.filters{display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center}
+.seg{display:inline-flex; background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:3px; gap:2px; flex-wrap:wrap}
+.seg button{font:inherit; font-size:.8rem; font-weight:500; border:0; background:transparent; color:var(--ink-2); padding:5px 11px; border-radius:999px; cursor:pointer; min-height:32px}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:var(--shadow); font-weight:600}
+.tally{display:flex; gap:8px; flex-wrap:wrap}
+
+/* Scoreboard */
+.board{display:grid; gap:8px; grid-template-columns:1fr}
+.ind{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:grid; gap:6px; border-left:4px solid var(--line-strong)}
+.ind.good{border-left-color:var(--good)} .ind.warn{border-left-color:var(--warn)} .ind.bad{border-left-color:var(--bad)}
+.ind .top{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+.ind .name{font-weight:600; line-height:1.3}
+.ind .meta{font-family:var(--f-mono); font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted)}
+.ind .val{font-family:var(--f-display); font-size:1.2rem; font-weight:700; line-height:1.15}
+.ind .why{font-size:.85rem; color:var(--ink-2)}
+
+/* Scenarios */
+.stack{display:flex; width:100%; height:44px; border-radius:8px; overflow:hidden; gap:2px; background:var(--surface)}
+.stack div{display:flex; align-items:center; justify-content:center; font-weight:600; font-size:.85rem; min-width:0}
+.scen{display:grid; gap:10px; grid-template-columns:1fr}
+.scen article{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px; display:grid; gap:6px}
+.scen .hd{display:flex; align-items:center; gap:10px}
+.swatch{width:14px; height:14px; border-radius:3px; flex:none}
+.scen .p{margin-left:auto; font-family:var(--f-display); font-size:1.35rem; font-weight:700}
+.scen p{font-size:.88rem; color:var(--ink-2)}
+.scen .when{font-family:var(--f-mono); font-size:.74rem; color:var(--ink)}
+
+/* Table */
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:.86rem}
+th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:var(--f-mono); font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:500; background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+tr.now td{background:var(--accent-soft)}
+
+/* Triggers */
+.trig{display:grid; gap:8px; grid-template-columns:1fr}
+.trow{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px 14px; display:grid; gap:8px}
+.trow .top{display:flex; justify-content:space-between; gap:10px; align-items:baseline; flex-wrap:wrap}
+.trow .name{font-weight:600}
+.trow .nums{font-family:var(--f-mono); font-size:.78rem; color:var(--ink-2)}
+.track{position:relative; height:8px; border-radius:4px; background:var(--surface-2); border:1px solid var(--line)}
+.track i{position:absolute; left:0; top:0; bottom:0; border-radius:4px}
+.track::after{content:""; position:absolute; right:-1px; top:-4px; bottom:-4px; width:2px; background:var(--bad)}
+
+/* Method */
+.calc{display:grid; gap:6px; font-family:var(--f-mono); font-size:.84rem}
+.calc div{display:flex; justify-content:space-between; gap:12px; border-bottom:1px dashed var(--line); padding-bottom:6px}
+.calc div:last-child{border-bottom:0; font-weight:600; color:var(--accent)}
+
+/* Sources */
+.sources{columns:1; column-gap:28px; font-size:.84rem; padding-left:1.2em; margin:0}
+.sources li{break-inside:avoid; margin-bottom:6px; color:var(--ink-2)}
+footer.fine{font-size:.8rem; color:var(--muted); border-top:1px solid var(--line); padding-top:14px; display:grid; gap:6px}
+
+@media (min-width:640px){
+  .probgrid{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .board{grid-template-columns:1fr 1fr}
+  .scen{grid-template-columns:1fr 1fr}
+  .trig{grid-template-columns:1fr 1fr}
+  .balance{grid-template-columns:1fr 1fr}
+  .sources{columns:2}
+  .chartbox{height:260px}
+}
+@media (min-width:960px){
+  body{padding-inline:28px}
+  .secnav{margin-inline:-28px; padding-inline:28px}
+  .kpis{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .grid2{grid-template-columns:1fr 1fr}
+  .board{grid-template-columns:1fr 1fr 1fr}
+  .answer{grid-template-columns:1.1fr 1fr; align-items:start}
+  .answer .probgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .meter i,.track i{transition:width .6s ease}
+}
+</style>
+
+<div class="wrap">
+  <div class="mast">
+    <span class="brand">Makro-Lagebild · Rezessionsradar</span>
+    <span class="stamp">Datenstand 27.09.2026</span>
+  </div>
+
+  <nav class="secnav" aria-label="Abschnitte">
+    <ul>
+      <li><a href="#antwort">Antwort</a></li>
+      <li><a href="#kennzahlen">Kennzahlen</a></li>
+      <li><a href="#abwaegung">Abwägung</a></li>
+      <li><a href="#ampel">Ampel</a></li>
+      <li><a href="#modelle">Modelle</a></li>
+      <li><a href="#szenarien">Szenarien</a></li>
+      <li><a href="#geschichte">Geschichte</a></li>
+      <li><a href="#trigger">Frühwarnung</a></li>
+      <li><a href="#methodik">Methodik</a></li>
+      <li><a href="#quellen">Quellen</a></li>
+    </ul>
+  </nav>
+
+  <!-- ANTWORT -->
+  <section class="section answer" id="antwort">
+    <div style="display:grid;gap:14px">
+      <span class="eyebrow">Die Frage</span>
+      <h1>Kommt die Rezession?</h1>
+      <p class="verdict">Nicht 2026. Das Risiko konzentriert sich auf <em>Q2 bis Q4 2027</em>, und selbst dann ist eine Rezession nicht das Hauptszenario.</p>
+      <p class="lede">Die US-Wirtschaft läuft im Moment heiß (GDPNow Q3: 5,0 %, Arbeitslosigkeit 4,1 %). Europa erholt sich dank Fiskalimpuls. Gleichzeitig sind die Bremsen angezogen: Iran-Krieg und Ölpreis über 100 $, Fed und EZB erhöhen wieder, die 10-jährige US-Rendite liegt über 5 %. Solche Straffungen wirken mit 12 bis 18 Monaten Verzögerung. Deshalb steigt das Risiko erst im Lauf von 2027.</p>
+    </div>
+
+    <div style="display:grid;gap:12px">
+      <div class="probgrid">
+        <div class="probcard">
+          <header><h3>USA</h3><span class="eyebrow">Wahrscheinlichkeit</span></header>
+          <div class="probrow">
+            <div class="prob"><span class="v num">8 %</span><span class="k">6 Monate<br>bis Mär 27</span></div>
+            <div class="prob"><span class="v num">25 %</span><span class="k">12 Monate<br>bis Sep 27</span></div>
+            <div class="prob hl"><span class="v num">35 %</span><span class="k">bis Ende<br>2027</span></div>
+          </div>
+          <div class="meter" role="img" aria-label="35 Prozent bis Ende 2027"><i style="width:35%"></i></div>
+        </div>
+        <div class="probcard">
+          <header><h3>Deutschland / Eurozone</h3><span class="eyebrow">Wahrscheinlichkeit</span></header>
+          <div class="probrow">
+            <div class="prob"><span class="v num">8 %</span><span class="k">6 Monate<br>bis Mär 27</span></div>
+            <div class="prob"><span class="v num">20 %</span><span class="k">12 Monate<br>bis Sep 27</span></div>
+            <div class="prob hl"><span class="v num">30 %</span><span class="k">bis Ende<br>2027</span></div>
+          </div>
+          <div class="meter" role="img" aria-label="30 Prozent bis Ende 2027"><i style="width:30%"></i></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div>
+          <h3>Wann würde sie beginnen? (USA)</h3>
+          <p class="sub">Wahrscheinlichkeit, dass eine Rezession im jeweiligen Quartal beginnt. Summe bis Q4/27: 35 %. Mit 65 % bleibt es bis Ende 2027 ohne Rezession.</p>
+        </div>
+        <div class="chartbox"><canvas id="cTiming" aria-label="Balkendiagramm: Beginn einer US-Rezession nach Quartal" role="img"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KENNZAHLEN -->
+  <section class="section" id="kennzahlen">
+    <header>
+      <span class="eyebrow">Lage in Zahlen</span>
+      <h2>Kennzahlen</h2>
+      <p>Die wichtigsten Werte mit Veränderung zum Vorwert. Rot heißt: Die Bewegung erhöht das Rezessionsrisiko.</p>
+    </header>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <!-- ABWAEGUNG -->
+  <section class="section" id="abwaegung">
+    <header>
+      <span class="eyebrow">Die Abwägung</span>
+      <h2>Was trägt, was drückt</h2>
+      <p>Kurzfristig überwiegen die Stützen. Die Belastungen wirken langsamer, bauen sich aber auf.</p>
+    </header>
+    <div class="balance">
+      <div class="panel">
+        <h3><span class="tag s-good"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>Stützen</span></h3>
+        <ul>
+          <li><b>Arbeitsmarkt robust.</b> +162k Stellen im August, Erstanträge bei 197k. Die Sahm-Regel steht bei −0,07, weit weg von der Auslöseschwelle 0,5.</li>
+          <li><b>KI-Investitionsboom.</b> Rund 800 Mrd. $ Hyperscaler-Capex 2026. GDPNow sieht die privaten Investitionen in Q3 mit +18,7 % annualisiert.</li>
+          <li><b>Finanzierungsbedingungen locker.</b> Der High-Yield-Spread liegt bei 2,80 %, der S&P 500 nur 1,5 % unter dem Rekord.</li>
+          <li><b>Fiskalimpuls in Deutschland.</b> Das ifo-Geschäftsklima ist fünfmal in Folge gestiegen (89,9, höchster Stand seit über drei Jahren), der Composite-PMI steht bei 53,8.</li>
+          <li><b>Öl-Entlastung in Sicht.</b> Die EIA erwartet Brent 2027 im Schnitt bei 74 $, weil sich das Angebot aus dem Golf erholt.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3><span class="tag s-bad"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5L11 10.5H1z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 5v2.5" stroke="currentColor" stroke-width="1.6"/></svg>Belastungen</span></h3>
+        <ul>
+          <li><b>Energieschock.</b> Hormuz ist faktisch blockiert, Brent steht bei ~103 $. Die IEA spricht von der „größten Angebotsstörung“ der Ölmarkt-Geschichte.</li>
+          <li><b>Geldpolitik strafft in die Schwäche hinein.</b> Die Fed steht bei 3,75–4,00 %, der Markt preist ~4,8 % bis Sep 2027. Die EZB hat auf 2,50 % erhöht.</li>
+          <li><b>Langfristzinsen auf 19-Jahres-Hoch.</b> 10 Jahre: 5,17 %, 30 Jahre: 5,47 %. Hypothekenzinsen über 7 %, Hausverkäufe unter 4 Mio.</li>
+          <li><b>Haushalte unter Druck.</b> Das Michigan-Sentiment liegt bei 48,1, die Inflationserwartung auf 1 Jahr bei 4,6 %. Die Sparquote ist nur 3,0 %, der reale Konsum stagnierte im Juli.</li>
+          <li><b>Konzentrationsrisiko.</b> Das Wachstum hängt stark am KI-Capex. Wenn der abflacht, fällt ein Hauptmotor weg (OECD-Abwärtsrisiko).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- AMPEL -->
+  <section class="section" id="ampel">
+    <header>
+      <span class="eyebrow">Indikator-Scoreboard</span>
+      <h2>Ampel</h2>
+      <p>25 Indikatoren, jeweils mit Schwellenwert-Begründung. Vorlaufindikatoren sagen etwas über die nächsten 6 bis 18 Monate, Gleichlaufindikatoren über den Moment.</p>
+    </header>
+    <div class="filters">
+      <div class="seg" role="group" aria-label="Region">
+        <button type="button" id="fRegAll" data-reg="all" aria-pressed="true">Alle</button>
+        <button type="button" id="fRegUS" data-reg="US" aria-pressed="false">USA</button>
+        <button type="button" id="fRegEU" data-reg="EU" aria-pressed="false">Europa</button>
+        <button type="button" id="fRegGL" data-reg="GL" aria-pressed="false">Global</button>
+      </div>
+      <div class="seg" role="group" aria-label="Typ">
+        <button type="button" id="fTypAll" data-typ="all" aria-pressed="true">Alle Typen</button>
+        <button type="button" id="fTypV" data-typ="Vorlauf" aria-pressed="false">Vorlauf</button>
+        <button type="button" id="fTypG" data-typ="Gleichlauf" aria-pressed="false">Gleichlauf</button>
+        <button type="button" id="fTypP" data-typ="Politik & Schock" aria-pressed="false">Politik &amp; Schock</button>
+      </div>
+    </div>
+    <div class="tally" id="tally" aria-live="polite"></div>
+    <div class="board" id="board"></div>
+  </section>
+
+  <!-- MODELLE -->
+  <section class="section" id="modelle">
+    <header>
+      <span class="eyebrow">Wer sagt was</span>
+      <h2>Modelle und Prognosen</h2>
+      <p>US-Rezessionswahrscheinlichkeit, meist für die nächsten 12 Monate. Die Spanne ist groß. Modelle, die auf aktuellen Daten beruhen, sehen fast kein Risiko. Ökonomen-Umfragen preisen die verzögerte Straffungswirkung ein.</p>
+    </header>
+    <div class="grid2">
+      <div class="panel">
+        <h3>Rezessionswahrscheinlichkeit USA</h3>
+        <div class="chartbox tall"><canvas id="cModels" role="img" aria-label="Balkendiagramm Modellwahrscheinlichkeiten"></canvas></div>
+        <p class="small muted">Furno-Giannone und Chauvet-Piger: aktueller Monat. NY Fed: 12 Monate. Polymarket: bis Ende 2026. Goldman: Stand Juni. WSJ: Juli-Umfrage.</p>
+      </div>
+      <div class="panel">
+        <h3>US-Zinskurve heute</h3>
+        <p class="sub">Die 2-jährige Rendite liegt fast 1 Prozentpunkt über dem Leitzins. Der Markt erwartet also weitere Erhöhungen. Die Fed selbst signalisiert nur noch eine (Median Ende 2026 und 2027: 4,1 %).</p>
+        <div class="chartbox"><canvas id="cCurve" role="img" aria-label="Liniendiagramm US-Zinskurve"></canvas></div>
+      </div>
+      <div class="panel" style="grid-column:1/-1">
+        <h3>Brent-Ölpreis 2026</h3>
+        <p class="sub">Monatsmittel, gerundet, in $ je Barrel. Dazu die EIA-Prognose vom 9. September. Der Schock vom März/April hat die Wirtschaft verkraftet. Die zweite Welle seit Juli trifft auf eine straffere Geldpolitik.</p>
+        <div class="chartbox"><canvas id="cOil" role="img" aria-label="Liniendiagramm Brent-Ölpreis"></canvas></div>
+        <p class="small muted">Jan–Feb, Mär, Mai, Jun und Sep sind aus Tages- und Spannenangaben geschätzt. Apr (117 $), Jul (84 $) und Aug (91 $) stammen aus Statista bzw. der EIA.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SZENARIEN -->
+  <section class="section" id="szenarien">
+    <header>
+      <span class="eyebrow">Horizont bis Ende 2027 · USA</span>
+      <h2>Szenarien</h2>
+      <p>Vier Pfade, geordnet von günstig bis schwer. Die beiden Rezessionspfade zusammen ergeben die 35 % aus der Antwort.</p>
+    </header>
+    <div class="stack" id="stack" role="img" aria-label="Szenario-Verteilung: 35, 30, 25 und 10 Prozent"></div>
+    <div class="scen" id="scen"></div>
+  </section>
+
+  <!-- GESCHICHTE -->
+  <section class="section" id="geschichte">
+    <header>
+      <span class="eyebrow">Historische Analogien</span>
+      <h2>Ölschock plus Straffung: Was bisher passierte</h2>
+      <p>In den klassischen Fällen kam die Rezession binnen 0 bis 12 Monaten nach dem Schock. Jetzt sind 7 Monate vergangen, ohne Einbruch, ähnlich wie 2022. Das Risiko liegt diesmal eher in der zweiten Welle, der Zinswirkung.</p>
+    </header>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Episode</th><th>Schock</th><th>Geldpolitik</th><th>Rezession?</th><th>Abstand Schock → Rezession</th></tr></thead>
+        <tbody>
+          <tr><td><b>1973/74</b></td><td>Ölembargo Okt 1973, Ölpreis ×4</td><td>Fed strafft</td><td>Ja, ab Nov 1973</td><td class="num">~1 Monat</td></tr>
+          <tr><td><b>1979/80</b></td><td>Iranische Revolution, Öl ×2</td><td>Volcker-Schock ab Okt 1979</td><td>Ja, ab Jan 1980 (und 1981/82)</td><td class="num">~12 Monate</td></tr>
+          <tr><td><b>1990/91</b></td><td>Irak besetzt Kuwait (Aug 1990), Öl ×2</td><td>Fed hatte 1988/89 gestrafft</td><td>Ja, ab Jul 1990</td><td>lief bereits</td></tr>
+          <tr><td><b>2007/08</b></td><td>Öl bis 147 $ (Jul 2008)</td><td>Erhöhungen bis 2006</td><td>Ja, ab Dez 2007</td><td>Finanzkrise dominiert</td></tr>
+          <tr><td><b>2022/23</b></td><td>Ukraine-Krieg, Brent &gt;120 $</td><td>Fed +525 bp, EZB +450 bp</td><td>USA nein. DE: leichte Schrumpfung Winter 22/23</td><td>keine (USA)</td></tr>
+          <tr class="now"><td><b>2026/27</b></td><td>Iran-Krieg, Brent 72 → ~120 $, jetzt ~103 $</td><td>Fed und EZB erhöhen (Sep 2026)</td><td>Bisher nein</td><td>7 Monate nach Schock, offen</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TRIGGER -->
+  <section class="section" id="trigger">
+    <header>
+      <span class="eyebrow">Was die Einschätzung ändern würde</span>
+      <h2>Frühwarn-Trigger</h2>
+      <p>Wenn zwei oder mehr dieser Schwellen reißen, steigt die 12-Monats-Wahrscheinlichkeit auf über 50 %. Der Balken zeigt, wie weit der aktuelle Wert vom ruhigen Ausgangswert (links) zur Schwelle (rote Linie rechts) gewandert ist.</p>
+    </header>
+    <div class="trig" id="trig"></div>
+  </section>
+
+  <!-- METHODIK -->
+  <section class="section" id="methodik">
+    <header>
+      <span class="eyebrow">Herleitung</span>
+      <h2>Methodik</h2>
+      <p>Die Synthese ist bewusst einfach und nachvollziehbar. Ausgangspunkt ist der Median der sieben veröffentlichten Schätzungen. Darauf kommen begründete Auf- und Abschläge.</p>
+    </header>
+    <div class="grid2">
+      <div class="panel">
+        <h3>USA, 12 Monate</h3>
+        <div class="calc">
+          <div><span>Median der 7 Modelle/Umfragen</span><span class="num">14 %</span></div>
+          <div><span>+ Zinslag (Fed-Straffung, 10J &gt; 5 %)</span><span class="num">+6</span></div>
+          <div><span>+ Öl-/Hormuz-Risiko</span><span class="num">+5</span></div>
+          <div><span>+ Verbraucher, Wohnungsmarkt</span><span class="num">+3</span></div>
+          <div><span>− Arbeitsmarkt, GDPNow 5 %</span><span class="num">−3</span></div>
+          <div><span>= Synthese</span><span class="num">25 %</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Einordnung</h3>
+        <p class="sub">Die Synthese ist ein Urteil, kein ökonometrisches Modell. Datenbasierte Modelle (Furno-Giannone, Chauvet-Piger) erfassen den aktuellen Zustand gut, sehen Wendepunkte aber erst spät. Die Zinskurve hat nach Inversionen historisch oft erst bei der Wieder-Versteilung gewarnt, die gerade läuft. Allerdings treiben diesmal Inflations- und Laufzeitprämie die Versteilung, nicht Zinssenkungen.</p>
+        <p class="sub">Für Deutschland/Eurozone liegt die Wahrscheinlichkeit etwas niedriger, weil das Fiskalpaket und die EZB-Politik (2,50 %, etwa neutral) weniger restriktiv sind. Die Energieabhängigkeit ist aber höher (TTF +112 % zum Vorjahr).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUELLEN -->
+  <section class="section" id="quellen">
+    <header>
+      <span class="eyebrow">Belege</span>
+      <h2>Quellen</h2>
+    </header>
+    <ol class="sources">
+      <li><a href="https://www.federalreserve.gov/monetarypolicy/fomcprojtabl20260916.htm" target="_blank" rel="noopener">Fed: Summary of Economic Projections, 16.09.2026</a></li>
+      <li><a href="https://fredblog.stlouisfed.org/2026/09/fomc-summary-of-economic-projections-september-2026/" target="_blank" rel="noopener">FRED Blog: FOMC SEP September 2026</a></li>
+      <li><a href="https://www.schwab.com/learn/story/fomc-meeting" target="_blank" rel="noopener">Schwab: Fed hikes in 12-0 vote</a></li>
+      <li><a href="https://streetstats.finance/rates/fedfunds" target="_blank" rel="noopener">StreetStats: Fed-Funds-Markterwartung</a></li>
+      <li><a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank" rel="noopener">BLS: Employment Situation, August 2026</a></li>
+      <li><a href="https://fred.stlouisfed.org/series/SAHMREALTIME" target="_blank" rel="noopener">FRED: Real-time Sahm Rule</a></li>
+      <li><a href="https://www.cnbc.com/2026/09/11/cpi-inflation-report-august-2026.html" target="_blank" rel="noopener">CNBC: CPI August 2026</a></li>
+      <li><a href="https://www.atlantafed.org/cqer/research/gdpnow" target="_blank" rel="noopener">Atlanta Fed: GDPNow (25.09.2026)</a></li>
+      <li><a href="https://www.investing.com/analysis/the-gdpnow-final-estimate-for-2026-q2-gdp-is-15-200684761" target="_blank" rel="noopener">Investing.com: BIP Q2 2026 1,5 %</a></li>
+      <li><a href="https://www.prnewswire.com/news-releases/manufacturing-pmi-at-54-6-august-2026-ism-manufacturing-pmi-report-302865127.html" target="_blank" rel="noopener">ISM Manufacturing PMI, August 2026</a></li>
+      <li><a href="https://www.prnewswire.com/news-releases/services-pmi-at-55-4-august-2026-ism-services-pmi-report-302868046.html" target="_blank" rel="noopener">ISM Services PMI, August 2026</a></li>
+      <li><a href="https://verifiedinvesting.com/blogs/us-economic-metrics/jobless-claims-week-ending-september-19-2026" target="_blank" rel="noopener">Erstanträge, Woche bis 19.09.2026</a></li>
+      <li><a href="https://www.prnewswire.com/news-releases/the-conference-board-leading-economic-index-lei-for-the-us-edged-down-in-august-302883352.html" target="_blank" rel="noopener">Conference Board: LEI August 2026</a></li>
+      <li><a href="https://tradingeconomics.com/united-states/consumer-confidence/news/586955" target="_blank" rel="noopener">UMich Consumer Sentiment, September 2026</a></li>
+      <li><a href="https://govspending.org/series/BAMLH0A0HYM2/" target="_blank" rel="noopener">ICE BofA High-Yield OAS</a></li>
+      <li><a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">Freddie Mac: Hypothekenzinsen</a></li>
+      <li><a href="https://www.nar.realtor/research-and-statistics/housing-statistics/existing-home-sales" target="_blank" rel="noopener">NAR: Existing-Home Sales</a></li>
+      <li><a href="https://www.bea.gov/news/2026/personal-income-and-outlays-july-2026" target="_blank" rel="noopener">BEA: Personal Income and Outlays, Juli 2026</a></li>
+      <li><a href="https://www.advisorperspectives.com/dshort/updates/2026/09/25/treasury-yields-snapshot-september-25-2026" target="_blank" rel="noopener">Advisor Perspectives: Treasury Yields, 25.09.2026</a></li>
+      <li><a href="https://www.cnbc.com/2026/09/23/treasury-yields-oil-inflation-fed.html" target="_blank" rel="noopener">CNBC: 10-jährige Rendite auf 19-Jahres-Hoch</a></li>
+      <li><a href="https://247wallst.com/investing/2026/09/26/the-ai-boom-just-drove-sp-500-profits-51-higher-but-its-biggest-tailwind-is-fading/" target="_blank" rel="noopener">24/7 Wall St.: KI-Boom und S&amp;P-500-Gewinne</a></li>
+      <li><a href="https://www.gspublishing.com/content/research/en/reports/2026/06/12/50f004d3-b246-4366-9d7d-0bc7e845644b.html" target="_blank" rel="noopener">Goldman Sachs: AI capex und S&amp;P-500-ROE</a></li>
+      <li><a href="https://www.eia.gov/outlooks/steo/" target="_blank" rel="noopener">EIA: Short-Term Energy Outlook, 09.09.2026</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/2026%E2%80%932028_world_oil_market_chronology" target="_blank" rel="noopener">Wikipedia: Ölmarkt-Chronologie 2026–2028</a></li>
+      <li><a href="https://www.cnbc.com/2026/04/21/oil-price-iran-war-middle-east.html" target="_blank" rel="noopener">CNBC: Iran-Krieg und Ölpreis, Zeitleiste</a></li>
+      <li><a href="https://www.statista.com/statistics/262861/uk-brent-crude-oil-monthly-price-development/" target="_blank" rel="noopener">Statista: Brent-Monatspreise 2026</a></li>
+      <li><a href="https://www.economicgreenfield.com/2026/09/09/recession-probability-models-september-2026/" target="_blank" rel="noopener">EconomicGreenfield: Rezessionsmodelle, September 2026</a></li>
+      <li><a href="https://fredblog.stlouisfed.org/2026/09/estimating-the-risk-of-recession-in-the-us/" target="_blank" rel="noopener">FRED Blog: Furno-Giannone-Rezessionsrisiko</a></li>
+      <li><a href="https://rsmus.com/insights/economics/economic-outlook-for-2026.html" target="_blank" rel="noopener">RSM: Economic Outlook 2026</a></li>
+      <li><a href="https://polymarket.com/event/us-recession-by-end-of-2026" target="_blank" rel="noopener">Polymarket: US recession by end of 2026</a></li>
+      <li><a href="https://finance.yahoo.com/economy/articles/goldman-sachs-revamps-recession-odds-223300073.html" target="_blank" rel="noopener">Yahoo Finance: Goldman senkt Rezessionsrisiko auf 15 % (Juni)</a></li>
+      <li><a href="https://www.raisin.com/de-de/nachrichten/ezb-zinsprognose-10-september-2026/" target="_blank" rel="noopener">Raisin: EZB-Zinsentscheid 10.09.2026</a></li>
+      <li><a href="https://www.ifo.de/en/facts/2026-09-24/ifo-business-climate-rises-september-2026" target="_blank" rel="noopener">ifo: Geschäftsklima September 2026</a></li>
+      <li><a href="https://www.ifo.de/en/facts/2026-09-03/ifo-economic-forecast-autumn-2026-recovery-forces-gain-upper-hand" target="_blank" rel="noopener">ifo: Konjunkturprognose Herbst 2026</a></li>
+      <li><a href="https://www.finanznachrichten.de/nachrichten-2026-09/69582134-zew-konjunkturerwartungen-bleiben-stabil-003.htm" target="_blank" rel="noopener">ZEW-Konjunkturerwartungen, September 2026</a></li>
+      <li><a href="https://www.destatis.de/DE/Presse/Pressemitteilungen/2026/08/PD26_303_811.html" target="_blank" rel="noopener">Destatis: BIP Q2 2026</a></li>
+      <li><a href="https://www.bmas.de/DE/Service/Presse/Pressemitteilungen/2026/arbeitsmarktzahlen-august-2026.html" target="_blank" rel="noopener">BMAS: Arbeitsmarkt August 2026</a></li>
+      <li><a href="https://tradingeconomics.com/germany/composite-pmi" target="_blank" rel="noopener">S&amp;P Global: Germany Composite PMI (Flash Sep)</a></li>
+      <li><a href="https://ec.europa.eu/eurostat/web/products-euro-indicators/w/2-07092026-ap" target="_blank" rel="noopener">Eurostat: BIP Eurozone Q2 2026</a></li>
+      <li><a href="https://ec.europa.eu/eurostat/en/web/products-euro-indicators/w/3-01092026-bp" target="_blank" rel="noopener">Eurostat: Arbeitslosigkeit Juli 2026</a></li>
+      <li><a href="https://tradingeconomics.com/commodity/eu-natural-gas" target="_blank" rel="noopener">TradingEconomics: TTF-Gas</a></li>
+      <li><a href="https://tradingeconomics.com/germany/government-bond-yield" target="_blank" rel="noopener">TradingEconomics: Bund 10 Jahre</a></li>
+      <li><a href="https://www.oecd.org/en/about/news/press-releases/2026/09/global-growth-holds-up-despite-successive-shocks-but-risks-persist.html" target="_blank" rel="noopener">OECD Interim Economic Outlook, September 2026</a></li>
+      <li><a href="https://www.cnbc.com/2026/09/15/china-august-retail-sales-industrial-output-investment-exports-.html" target="_blank" rel="noopener">CNBC: China-Daten August 2026</a></li>
+    </ol>
+  </section>
+
+  <footer class="fine">
+    <p>Analyse auf Basis öffentlich verfügbarer Daten und Prognosen, Stand 27.09.2026. Keine Anlageberatung. Die größte Unsicherheit ist der Verlauf des Iran-Kriegs und damit der Ölpreis.</p>
+    <p>Rezession ist hier definiert als NBER-Rezession (USA) bzw. mindestens zwei Quartale mit schrumpfendem BIP (Deutschland/Eurozone).</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Data ---------- */
+  var KPIS = [
+    {l:"Fed-Leitzins", v:"3,75–4,00 %", d:"+25 bp am 16.09.", c:"up-bad"},
+    {l:"EZB-Einlagensatz", v:"2,50 %", d:"+25 bp am 10.09.", c:"up-bad"},
+    {l:"US-Inflation (CPI)", v:"3,4 %", d:"Aug · 0,4 % m/m", c:"up-bad"},
+    {l:"Eurozone-Inflation", v:"3,3 %", d:"Aug · Jul 2,9 %", c:"up-bad"},
+    {l:"US-Arbeitslosigkeit", v:"4,1 %", d:"Aug · unverändert", c:"flat"},
+    {l:"DE-Arbeitslosigkeit", v:"6,5 %", d:"Aug · +0,1 Pp.", c:"up-bad"},
+    {l:"US-BIP Q3 (GDPNow)", v:"5,0 %", d:"annualisiert · Q2 1,5 %", c:"up-good"},
+    {l:"Eurozone-BIP Q2", v:"+0,6 %", d:"q/q · DE +0,3 %", c:"up-good"},
+    {l:"Brent", v:"~103 $", d:"Hoch 2026 ~120 $", c:"up-bad"},
+    {l:"US 10 Jahre", v:"5,17 %", d:"19-Jahres-Hoch", c:"up-bad"},
+    {l:"Bund 10 Jahre", v:"3,61 %", d:"+0,38 Pp. in 1 Monat", c:"up-bad"},
+    {l:"S&P 500", v:"7.704", d:"−1,5 % zum Rekord", c:"flat"}
+  ];
+
+  // status: good | warn | bad
+  var IND = [
+    {r:"US",t:"Vorlauf",n:"Zinskurve 10J − 2J",v:"+36 bp",s:"warn",w:"Nach der Inversion wieder steil. Historisch kam die Rezession oft genau in dieser Phase, diesmal treiben aber Laufzeitprämie und Inflation."},
+    {r:"US",t:"Vorlauf",n:"Conference Board LEI",v:"−0,1 % (Aug)",s:"warn",w:"6-Monats-Rate −0,1 %. Weit weg vom Rezessionssignal (−4 %), aber erster Rückgang seit März."},
+    {r:"US",t:"Vorlauf",n:"ISM Industrie: Neuaufträge",v:"53,7",s:"good",w:"Über 50 heißt Expansion. Der Rückgang um 3 Punkte zeigt aber nachlassende Dynamik."},
+    {r:"US",t:"Vorlauf",n:"Erstanträge Arbeitslosenhilfe",v:"197k (4W: 202k)",s:"good",w:"Nahe Mehrjahrestief. Ein Warnsignal wäre ein Anstieg über 250k."},
+    {r:"US",t:"Vorlauf",n:"High-Yield-Spread",v:"2,80 %",s:"good",w:"Historisch eng. Der Kreditmarkt sieht keinen Stress, bietet aber wenig Puffer."},
+    {r:"US",t:"Vorlauf",n:"Verbraucherstimmung (UMich)",v:"48,1",s:"bad",w:"Vier-Monats-Tief, 15 % unter Januar. Preise, Benzin und Zölle belasten."},
+    {r:"US",t:"Vorlauf",n:"Wohnungsmarkt",v:"3,98 Mio. · 7,03 %",s:"bad",w:"Bestandsverkäufe erstmals seit Juni 2025 unter 4 Mio. Der 30-jährige Hypothekenzins ist vier Wochen in Folge gestiegen."},
+    {r:"US",t:"Vorlauf",n:"Inflationserwartung 1 Jahr",v:"4,6 %",s:"bad",w:"Von 4,0 % gestiegen. Das erhöht den Druck auf die Fed, weiter zu straffen."},
+    {r:"US",t:"Gleichlauf",n:"Beschäftigung (NFP)",v:"+162k (Aug)",s:"good",w:"Deutlich über Erwartung (53k), die Erwerbsbeteiligung ist gestiegen."},
+    {r:"US",t:"Gleichlauf",n:"Sahm-Regel (Echtzeit)",v:"−0,07",s:"good",w:"Löst bei 0,50 aus. Der Wert fällt seit April (0,13)."},
+    {r:"US",t:"Gleichlauf",n:"GDPNow Q3",v:"5,0 %",s:"good",w:"Getragen von Investitionen (+18,7 %) und Konsum (+4,2 %). Q2 lag bei nur 1,5 %."},
+    {r:"US",t:"Gleichlauf",n:"Realer Konsum, Sparquote",v:"±0 % · 3,0 %",s:"warn",w:"Realer Konsum im Juli flach, die Sparquote ist niedrig. Wenig Puffer für Haushalte."},
+    {r:"US",t:"Politik & Schock",n:"Fed-Pfad",v:"3,875 % → ~4,8 %",s:"bad",w:"Der Markt preist bis Sep 2027 weitere ~90 bp. Die Fed-Dots sehen nur 4,1 %."},
+    {r:"US",t:"Politik & Schock",n:"10-jährige Treasury",v:"5,17 %",s:"bad",w:"Höchster Stand seit 19 Jahren. Die 30-jährige steht bei 5,47 %. Das verteuert Immobilien- und Unternehmenskredite."},
+    {r:"GL",t:"Politik & Schock",n:"Brent-Ölpreis",v:"~103 $",s:"bad",w:"Hormuz faktisch blockiert, globale Lager seit Jahresbeginn −400 Mio. Barrel."},
+    {r:"EU",t:"Vorlauf",n:"ifo-Geschäftsklima",v:"89,9",s:"good",w:"Fünfter Anstieg in Folge, höchster Stand seit über drei Jahren. Die Erwartungen steigen."},
+    {r:"EU",t:"Vorlauf",n:"ZEW-Erwartungen DE",v:"34,7 (Lage −47,1)",s:"warn",w:"Positiv, aber unter Erwartung (40). Die Eurozone-Erwartungen sind auf 25,8 gefallen."},
+    {r:"EU",t:"Vorlauf",n:"PMI DE Composite (Flash)",v:"53,8",s:"good",w:"Kräftiger Sprung von 51,8. Die Industrieproduktion wächst so stark wie seit Jan 2022 nicht mehr."},
+    {r:"EU",t:"Gleichlauf",n:"BIP Eurozone Q2",v:"+0,6 % q/q",s:"good",w:"1,2 % zum Vorjahr. Deutschland +0,3 % q/q, getragen vom Export."},
+    {r:"EU",t:"Gleichlauf",n:"Arbeitsmarkt DE",v:"6,5 % · 3,06 Mio.",s:"warn",w:"Leicht steigend, Industrie und Bau bauen Stellen ab. Eurozone stabil bei 6,4 %."},
+    {r:"EU",t:"Politik & Schock",n:"EZB & HICP",v:"2,50 % · 3,3 %",s:"warn",w:"Erhöhung trotz schwachem Wachstum. Die EZB-Projektion für 2026: BIP 0,9 %, Inflation 3,0 %."},
+    {r:"EU",t:"Politik & Schock",n:"TTF-Erdgas",v:"~70 €/MWh",s:"bad",w:"+112 % zum Vorjahr. Die energieintensive Industrie in Deutschland ist besonders betroffen."},
+    {r:"EU",t:"Politik & Schock",n:"Bund 10 Jahre",v:"3,61 %",s:"warn",w:"+0,86 Pp. zum Vorjahr, bremst Bau und Investitionen."},
+    {r:"GL",t:"Gleichlauf",n:"China",v:"PMI 49,8 · Einzelhandel +0,4 %",s:"warn",w:"Export und Hightech stark, Binnenkonsum schwach, Anlageinvestitionen −7,2 % YTD."},
+    {r:"GL",t:"Vorlauf",n:"OECD-Weltwachstum",v:"2,9 % (2026)",s:"good",w:"Um 0,1 Pp. angehoben. Die Welt hat den Energieschock „besser als erwartet“ verkraftet."}
+  ];
+
+  var SCEN = [
+    {k:"A",n:"Soft Landing",p:35,when:"Keine Rezession",d:"Hormuz öffnet schrittweise, Brent fällt Richtung 75–80 $. Die Fed stoppt bei ~4,1 %, das Wachstum normalisiert sich auf ~2 %."},
+    {k:"B",n:"Stagflationäre Abkühlung",p:30,when:"Keine Rezession",d:"Öl bleibt um 90–100 $, die Inflation über 3 %. Das Wachstum sinkt auf 0,5–1,5 %, die Arbeitslosigkeit steigt leicht. Zäh, aber ohne Einbruch."},
+    {k:"C",n:"Milde Rezession",p:25,when:"Beginn Q2–Q4 2027",d:"Die Fed überstrafft (Markt: ~4,8 %). Wohnungsbau und Konsum knicken ein, der KI-Capex flacht ab. Kurz und flach, BIP −0,5 bis −1,5 %."},
+    {k:"D",n:"Harter Ölschock",p:10,when:"Beginn Q1–Q2 2027",d:"Eskalation, Brent dauerhaft über 130 $. Nachfrageeinbruch weltweit. Europa trifft es stärker als die USA."}
+  ];
+
+  // base = ruhiger Ausgangswert, now = aktuell, trig = Schwelle
+  var TRIG = [
+    {n:"Sahm-Regel",base:-0.3,now:-0.07,trig:0.5,fmt:function(x){return x.toFixed(2).replace(".",",");}},
+    {n:"Erstanträge, 4-Wochen-Schnitt",base:180,now:202.25,trig:260,fmt:function(x){return Math.round(x)+"k";}},
+    {n:"ISM-Neuaufträge (fallend)",base:60,now:53.7,trig:48,fmt:function(x){return x.toFixed(1).replace(".",",");}},
+    {n:"High-Yield-Spread",base:2.5,now:2.8,trig:4.5,fmt:function(x){return x.toFixed(2).replace(".",",")+" %";}},
+    {n:"Brent dauerhaft",base:70,now:103,trig:130,fmt:function(x){return Math.round(x)+" $";}},
+    {n:"US-Rendite 10 Jahre",base:4.0,now:5.17,trig:5.5,fmt:function(x){return x.toFixed(2).replace(".",",")+" %";}},
+    {n:"Fed-Leitzins (Mitte)",base:3.5,now:3.875,trig:4.5,fmt:function(x){return x.toFixed(2).replace(".",",")+" %";}},
+    {n:"LEI, 6-Monats-Rate (fallend)",base:1,now:-0.1,trig:-4,fmt:function(x){return x.toFixed(1).replace(".",",")+" %";}}
+  ];
+
+  var STATUS = {
+    good:{label:"Unauffällig",cls:"s-good",icon:'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>'},
+    warn:{label:"Beobachten",cls:"s-warn",icon:'<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 3.5v3" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="8.6" r=".9" fill="currentColor"/></svg>'},
+    bad:{label:"Warnsignal",cls:"s-bad",icon:'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5L11 10.5H1z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 5v2.5" stroke="currentColor" stroke-width="1.6"/></svg>'}
+  };
+  function tag(s){var o=STATUS[s];return '<span class="tag '+o.cls+'">'+o.icon+o.label+'</span>';}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+  /* ---------- KPIs ---------- */
+  document.getElementById("kpis").innerHTML = KPIS.map(function(k){
+    return '<div class="kpi"><span class="l">'+esc(k.l)+'</span><span class="v num">'+esc(k.v)+'</span><span class="d '+k.c+'">'+esc(k.d)+'</span></div>';
+  }).join("");
+
+  /* ---------- Scoreboard ---------- */
+  var REGNAME={US:"USA",EU:"Europa",GL:"Global"};
+  var state={reg:"all",typ:"all"};
+  try{var saved=JSON.parse(localStorage.getItem("rr-filter")||"null"); if(saved&&saved.reg&&saved.typ) state=saved;}catch(e){}
+  function renderBoard(){
+    var list=IND.filter(function(i){return (state.reg==="all"||i.r===state.reg)&&(state.typ==="all"||i.t===state.typ);});
+    var order={bad:0,warn:1,good:2};
+    list.sort(function(a,b){return order[a.s]-order[b.s];});
+    document.getElementById("board").innerHTML = list.map(function(i){
+      return '<article class="ind '+i.s+'"><div class="top"><div><div class="meta">'+REGNAME[i.r]+' · '+esc(i.t)+'</div><div class="name">'+esc(i.n)+'</div></div>'+tag(i.s)+'</div><div class="val num">'+esc(i.v)+'</div><p class="why">'+esc(i.w)+'</p></article>';
+    }).join("") || '<p class="muted">Keine Indikatoren für diese Auswahl.</p>';
+    var c={good:0,warn:0,bad:0}; list.forEach(function(i){c[i.s]++;});
+    document.getElementById("tally").innerHTML =
+      '<span class="tag s-bad">'+STATUS.bad.icon+c.bad+' Warnsignal</span>'+
+      '<span class="tag s-warn">'+STATUS.warn.icon+c.warn+' Beobachten</span>'+
+      '<span class="tag s-good">'+STATUS.good.icon+c.good+' Unauffällig</span>';
+    document.querySelectorAll("[data-reg]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.reg===state.reg));});
+    document.querySelectorAll("[data-typ]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.typ===state.typ));});
+    try{localStorage.setItem("rr-filter",JSON.stringify(state));}catch(e){}
+  }
+  document.querySelectorAll("[data-reg]").forEach(function(b){b.addEventListener("click",function(){state.reg=b.dataset.reg;renderBoard();});});
+  document.querySelectorAll("[data-typ]").forEach(function(b){b.addEventListener("click",function(){state.typ=b.dataset.typ;renderBoard();});});
+  renderBoard();
+
+  /* ---------- Scenarios ---------- */
+  document.getElementById("stack").innerHTML = SCEN.map(function(s,i){
+    return '<div title="'+esc(s.n)+': '+s.p+' %" style="flex:'+s.p+';background:var(--ord-'+(i+1)+');color:var(--ord-ink-'+(i+1)+')">'+s.k+' · '+s.p+' %</div>';
+  }).join("");
+  document.getElementById("scen").innerHTML = SCEN.map(function(s,i){
+    return '<article><div class="hd"><span class="swatch" style="background:var(--ord-'+(i+1)+')"></span><h3>'+s.k+' · '+esc(s.n)+'</h3><span class="p num">'+s.p+' %</span></div><span class="when">'+esc(s.when)+'</span><p>'+esc(s.d)+'</p></article>';
+  }).join("");
+
+  /* ---------- Triggers ---------- */
+  document.getElementById("trig").innerHTML = TRIG.map(function(t){
+    var f=(t.now-t.base)/(t.trig-t.base); f=Math.max(0.02,Math.min(1,f));
+    var s=f<0.4?"good":(f<0.7?"warn":"bad");
+    var col=s==="good"?"var(--good)":(s==="warn"?"var(--warn)":"var(--bad)");
+    return '<div class="trow"><div class="top"><span class="name">'+esc(t.n)+'</span>'+tag(s)+'</div>'+
+      '<div class="track" role="img" aria-label="'+Math.round(f*100)+' Prozent des Wegs zur Schwelle"><i style="width:'+(f*100).toFixed(0)+'%;background:'+col+'"></i></div>'+
+      '<div class="nums num">aktuell '+t.fmt(t.now)+' · Schwelle '+t.fmt(t.trig)+' · Ausgang '+t.fmt(t.base)+'</div></div>';
+  }).join("");
+
+  /* ---------- Charts ---------- */
+  if(!window.Chart) return;
+  var charts=[];
+  function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  function pct(v){return String(v).replace(".",",")+" %";}
+
+  function build(){
+    charts.forEach(function(c){c.destroy();}); charts=[];
+    var ink=tok("--ink"), ink2=tok("--ink-2"), muted=tok("--muted"), grid=tok("--line"), base=tok("--line-strong"),
+        series=tok("--series"), seriesMuted=tok("--series-muted"), accent=tok("--accent"), surface=tok("--surface");
+    Chart.defaults.font.family='"IBM Plex Sans",system-ui,sans-serif';
+    Chart.defaults.font.size=12;
+    Chart.defaults.color=muted;
+    var tip={backgroundColor:surface,titleColor:ink,bodyColor:ink2,borderColor:base,borderWidth:1,padding:10,displayColors:false,cornerRadius:6};
+    var axisX={grid:{display:false},border:{color:base},ticks:{color:muted}};
+    function axisY(extra){return Object.assign({grid:{color:grid},border:{display:false},ticks:{color:muted}},extra||{});}
+
+    // Timing
+    charts.push(new Chart(document.getElementById("cTiming"),{
+      type:"bar",
+      data:{labels:["Q4/26","Q1/27","Q2/27","Q3/27","Q4/27"],
+        datasets:[{data:[3,5,8,10,9],backgroundColor:[seriesMuted,seriesMuted,series,series,series],borderRadius:{topLeft:4,topRight:4},borderSkipped:"bottom",maxBarThickness:44}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:Object.assign({},tip,{callbacks:{label:function(c){return "Beginn in diesem Quartal: "+c.parsed.y+" %";}}})},
+        scales:{x:axisX,y:axisY({beginAtZero:true,max:12,ticks:{color:muted,stepSize:3,callback:function(v){return v+" %";}}})}}
+    }));
+
+    // Models
+    var M=[["Furno-Giannone (Fed)",0.08],["Chauvet-Piger",0.76],["NY-Fed-Zinskurve",13.9],["Polymarket",14],["Goldman Sachs",15],["WSJ-Umfrage",25],["RSM",30],["Synthese hier",25]];
+    charts.push(new Chart(document.getElementById("cModels"),{
+      type:"bar",
+      data:{labels:M.map(function(m){return m[0];}),
+        datasets:[{data:M.map(function(m){return m[1];}),backgroundColor:M.map(function(m,i){return i===M.length-1?accent:series;}),borderRadius:{topRight:4,bottomRight:4},borderSkipped:"left",barThickness:16}]},
+      options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:Object.assign({},tip,{callbacks:{label:function(c){return pct(c.parsed.x);}}})},
+        scales:{x:axisY({beginAtZero:true,max:35,ticks:{color:muted,stepSize:10,callback:function(v){return v+" %";}}}),
+                y:{grid:{display:false},border:{color:base},ticks:{color:ink2,font:{size:12}}}}},
+      plugins:[{id:"vals",afterDatasetsDraw:function(ch){var ctx=ch.ctx,meta=ch.getDatasetMeta(0);ctx.save();ctx.fillStyle=ink;ctx.font='600 11px "IBM Plex Mono",monospace';ctx.textBaseline="middle";
+        meta.data.forEach(function(b,i){ctx.fillText(pct(M[i][1]),b.x+6,b.y);});ctx.restore();}}]
+    }));
+
+    // Curve
+    charts.push(new Chart(document.getElementById("cCurve"),{
+      type:"line",
+      data:{labels:["Leitzins (eff.)","2 Jahre","10 Jahre","30 Jahre"],
+        datasets:[{data:[3.86,4.81,5.17,5.47],borderColor:series,backgroundColor:series,borderWidth:2,pointRadius:4,pointHoverRadius:6,pointBorderColor:surface,pointBorderWidth:2,tension:0,fill:false}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:Object.assign({},tip,{mode:"index",intersect:false,callbacks:{label:function(c){return pct(c.parsed.y.toFixed(2));}}})},
+        interaction:{mode:"index",intersect:false},
+        scales:{x:axisX,y:axisY({min:3.5,max:5.75,ticks:{color:muted,stepSize:0.5,callback:function(v){return pct(v.toFixed(1));}}})}},
+      plugins:[{id:"lbl",afterDatasetsDraw:function(ch){var ctx=ch.ctx,meta=ch.getDatasetMeta(0),d=ch.data.datasets[0].data;ctx.save();ctx.fillStyle=ink;ctx.font='600 11px "IBM Plex Mono",monospace';ctx.textAlign="center";
+        meta.data.forEach(function(p,i){ctx.fillText(pct(d[i].toFixed(2)),p.x,p.y-12);});ctx.restore();}}]
+    }));
+
+    // Oil
+    var labels=["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Q4/26","Ø 2027"];
+    var actual=[66,70,98,117,105,88,84,91,100,null,null];
+    var fc=[null,null,null,null,null,null,null,null,100,90,74];
+    charts.push(new Chart(document.getElementById("cOil"),{
+      type:"line",
+      data:{labels:labels,datasets:[
+        {label:"Brent, Monatsmittel",data:actual,borderColor:series,backgroundColor:series+"22",fill:"origin",borderWidth:2,pointRadius:function(c){return c.dataIndex===8?5:0;},pointHoverRadius:5,pointBackgroundColor:series,tension:0.25,spanGaps:false},
+        {label:"EIA-Prognose",data:fc,borderColor:muted,borderDash:[5,4],borderWidth:2,pointRadius:function(c){return c.dataIndex>8?4:0;},pointBackgroundColor:muted,fill:false,tension:0}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+        plugins:{legend:{display:true,position:"top",align:"start",labels:{color:ink2,boxWidth:14,boxHeight:2,usePointStyle:false}},
+          tooltip:Object.assign({},tip,{displayColors:true,callbacks:{label:function(c){return c.parsed.y==null?null:c.dataset.label+": "+c.parsed.y+" $";}}})},
+        scales:{x:axisX,y:axisY({min:50,max:130,ticks:{color:muted,stepSize:20,callback:function(v){return v+" $";}}})}}
+    }));
+  }
+  build();
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  if(mq.addEventListener) mq.addEventListener("change",build);
+  new MutationObserver(build).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+})();
+</script>
