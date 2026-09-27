@@ -64,8 +64,8 @@ button:focus-visible,summary:focus-visible,input:focus-visible,a:focus-visible{o
 /* list */
 .list{display:grid;gap:12px;margin-top:14px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-.card summary{list-style:none;cursor:pointer;padding:14px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:start}
-.card summary::-webkit-details-marker{display:none}
+.card>summary{list-style:none;cursor:pointer;padding:14px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:start}
+.card>summary::-webkit-details-marker{display:none}
 .rank{font:800 28px/1 var(--display);color:var(--ink-2);min-width:1.4em;font-variant-numeric:tabular-nums}
 .card[data-top="1"] .rank{color:var(--accent)}
 .name h3{font-size:19px;font-weight:700;line-height:1.2}
@@ -118,6 +118,23 @@ ul.acts{margin:0;padding-left:18px;display:grid;gap:4px;font-size:14px}
 .tag{font:600 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;border-radius:4px;vertical-align:middle}
 .tag.deal{background:var(--biz-soft);color:var(--biz)}
 .tag.est{background:var(--surface-2);color:var(--ink-2)}
+.plan{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.plan>summary{list-style:none;cursor:pointer;padding:12px;display:grid;gap:6px;background:var(--surface-2)}
+.plan>summary::-webkit-details-marker{display:none}
+.plan>summary b{font:700 16px/1.25 var(--display)}
+.plan>summary b::after{content:" ▾";color:var(--accent)}
+.plan[open]>summary b::after{content:" ▴"}
+.stops{font:500 12px/1.6 var(--mono);color:var(--ink-2)}
+.stops .n{color:var(--accent);font-weight:600}
+.plan>.hotels,.plan>.tips{margin:0 12px 12px}
+.days{list-style:none;margin:0;padding:4px 12px 8px;display:grid}
+.days li{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.days li:last-child{border-bottom:0}
+.dn{font:600 11px/1.6 var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.dt{font-weight:600;font-size:14.5px}
+.dm{font:500 11.5px/1.4 var(--mono);color:var(--ink-2);margin-top:1px}
+.days p{margin:4px 0 0;font-size:13.5px}
+.tips{font-size:13px;color:var(--ink-2)}
 footer{margin-top:28px;font-size:12.5px;color:var(--ink-2);display:grid;gap:8px}
 footer a{color:var(--accent)}
 @media (prefers-reduced-motion:no-preference){.sbar i,.bd .t i{transition:width .35s ease}}
@@ -191,7 +208,29 @@ var D = [
   wxScore:{jan:9.5,feb:9.5}, wxNote:"Hochsommer, trocken, oft windig (Cape Doctor). Atlantik kühl, False Bay wärmer.",
   act:10, acts:["Tafelberg & Lion's Head bei Sonnenaufgang","Kap der Guten Hoffnung & Pinguine am Boulders Beach","Weinland Stellenbosch & Franschhoek","Garden Route als Roadtrip","Walbeobachtung erst ab Juni – im Winter eher Haie in Gansbaai"],
   hot:9, hotels:[["Budget","Gästehaus in Gardens / Sea Point",55],["Mittel","Protea Fire & Ice, Gardens",120],["Top","Cape Grace, V&A Waterfront",450]],
-  hotNote:"Starker Euro-Kurs zum Rand: sehr viel Hotel fürs Geld."},
+  hotNote:"Starker Euro-Kurs zum Rand: sehr viel Hotel fürs Geld.",
+  plan:{
+   title:"14 Tage: Kapstadt, Weinland & Garden Route",
+   stops:[["Kapstadt",5],["Franschhoek",2],["Hermanus",1],["Swellendam",1],["Knysna",2],["Plettenberg Bay",1],["Kapstadt",1]],
+   days:[
+    [1,"Ankunft & Waterfront","Kapstadt","","Condor-Nachtflug landet morgens. Mietwagen am Flughafen, Check-in, V&A Waterfront. Sonnenuntergang auf dem Signal Hill."],
+    [2,"Tafelberg & Bo-Kaap","Kapstadt","","Früh auf den Tafelberg (Seilbahn online buchen, oder 2–3 h Aufstieg über Platteklip Gorge). Nachmittags Bo-Kaap und Company's Garden, abends Kloof Street."],
+    [3,"Kaphalbinsel","Kapstadt","ca. 3 h Fahrt (Rundtour)","Chapman's Peak Drive, Kap der Guten Hoffnung & Cape Point, Pinguine am Boulders Beach. Fisch essen in Kalk Bay."],
+    [4,"Robben Island & Kirstenbosch","Kapstadt","","Vormittags Robben Island (Wochen vorher buchen). Nachmittags Botanischer Garten Kirstenbosch, sonntags Summer Sunset Concert."],
+    [5,"Lion's Head & Strände","Kapstadt","","Lion's Head zum Sonnenaufgang (ca. 2 h). Danach Clifton & Camps Bay, abends Sea Point Promenade."],
+    [6,"Ins Weinland","Franschhoek","ca. 1 h","Mittags Franschhoek Wine Tram (Hop-on-Hop-off zwischen Weingütern). Abends Dinner im Ort."],
+    [7,"Stellenbosch","Franschhoek","2 × 30 min","Babylonstoren (Garten & Lunch), Delaire Graff, Altstadt Stellenbosch."],
+    [8,"Küstenstraße R44","Hermanus","ca. 1,5 h","Clarence Drive entlang der False Bay, Pinguinkolonie Stony Point in Betty's Bay. Cliff Path in Hermanus. Wale gibt es erst ab Juni."],
+    [9,"Kap Agulhas","Swellendam","ca. 3,5 h","Südlichster Punkt Afrikas, Treffpunkt von Atlantik und Indischem Ozean. Weiter nach Swellendam, eine der ältesten Städte des Landes."],
+    [10,"Garden Route","Knysna","ca. 3,5 h","Über Mossel Bay und den Map-of-Africa-Aussichtspunkt in Wilderness nach Knysna."],
+    [11,"Knysna","Knysna","","Bootstour durch die Lagune zu den Knysna Heads, Wanderung im Featherbed-Naturreservat, Austern an der Waterfront."],
+    [12,"Tsitsikamma & Robberg","Plettenberg Bay","ca. 1,5 h","Hängebrücke an der Storms River Mouth im Tsitsikamma-Nationalpark. Nachmittags Robberg-Halbinsel mit Robbenkolonie."],
+    [13,"Zurück nach Kapstadt","Kapstadt","1 h bis George + 1 h Flug","Mietwagen in George abgeben (Einweggebühr), Inlandsflug nach Kapstadt. Abschlussessen an der Waterfront."],
+    [14,"Heimflug","Nachtflug","","Letzte Einkäufe, Mittag in Muizenberg oder Kalk Bay. Abends Rückflug, Ankunft in Deutschland am Folgetag."]
+   ],
+   costs:[["Mietwagen 12 Tage inkl. Einweggebühr","ca. 550 €"],["Inlandsflug George–Kapstadt","ca. 80 €"],["Eintritte (Tafelberg, Robben Island, Cape Point, Boulders, Tsitsikamma)","ca. 110 €"],["Hotels, 13 Nächte (Mittelklasse, DZ)","ca. 1.500 €"]],
+   tips:["Linksverkehr. In Kapstadt nachts nicht zu Fuß durch leere Viertel, Auto nie mit sichtbaren Sachen parken.","Tafelberg-Seilbahn fährt bei starkem Wind nicht: Tag 2 und 5 bei Bedarf tauschen.","Option statt Tag 12–13: 2 Nächte Addo-Elefantenpark (malariafrei), Rückflug ab Gqeberha (PLZ)."]
+  }},
 
  {id:"mle", name:"Malediven", country:"Malediven", iata:"MLE", from:"MUC", hours:12.5, tz:4, stops:"1 Stopp AUH",
   biz:{jan:[1760,"mle","Etihad via Abu Dhabi, ab MUC (ab FRA 1.770 €)"],feb:[1760,"mle","Etihad via Abu Dhabi, ab MUC (ab FRA 1.770 €)"]},
@@ -343,6 +382,18 @@ function gf(d,cabin){
 function wxClass(v){return v>=8.5?"good":v>=7?"":v>=6?"warn":"bad";}
 function tz(n){return (n>0?"+":n<0?"−":"±")+String(Math.abs(n)).replace(".",",")+" h";}
 
+function planHtml(p){
+  return '<section><h4>Reiseroute · 14 Tage</h4><details class="plan"'+(state.open.plan?" open":"")+' data-plan="1">'+
+    '<summary><b>'+esc(p.title)+'</b><span class="stops">'+p.stops.map(function(s){return esc(s[0])+' <span class="n">'+s[1]+' N</span>';}).join(' → ')+'</span></summary>'+
+    '<ol class="days">'+p.days.map(function(x){
+      return '<li><span class="dn">Tag '+x[0]+'</span><div><div class="dt">'+esc(x[1])+'</div>'+
+        '<div class="dm">'+esc(x[2])+(x[3]?' · '+esc(x[3]):'')+'</div><p>'+esc(x[4])+'</p></div></li>';
+    }).join('')+'</ol>'+
+    '<div class="hotels">'+p.costs.map(function(c){return '<div class="hotel"><span class="tier">Kosten</span><span>'+esc(c[0])+'</span><span class="n">'+esc(c[1])+'</span></div>';}).join('')+'</div>'+
+    '<ul class="acts tips">'+p.tips.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul>'+
+  '</details></section>';
+}
+
 function render(){
   var m=state.month;
   var rows=D.map(function(d){var s=scores(d);return {d:d,s:s,t:total(s)};});
@@ -396,6 +447,7 @@ function render(){
         '<section><h4>Hotels · pro Nacht</h4><div class="hotels">'+d.hotels.map(function(h){
           return '<div class="hotel"><span class="tier">'+h[0]+'</span><span>'+esc(h[1])+'</span><span class="n">ca. '+fmt(h[2])+'</span></div>';
         }).join("")+'</div><p class="note">'+esc(d.hotNote)+'</p></section>'+
+        (d.plan?planHtml(d.plan):'')+
         '<section><h4>Punkte im Detail</h4><div class="breakdown">'+bd+'</div></section>'+
       '</div></details>';
   }).join("");
@@ -428,6 +480,7 @@ document.addEventListener("input",function(ev){
 });
 document.getElementById("list").addEventListener("toggle",function(ev){
   var el=ev.target; if(el.dataset&&el.dataset.id){state.open[el.dataset.id]=el.open;}
+  else if(el.dataset&&el.dataset.plan){state.open.plan=el.open;}
 },true);
 
 renderSliders();
