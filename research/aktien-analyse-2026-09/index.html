@@ -1,0 +1,612 @@
+<title>Aktienbuch Herbst 2026</title>
+<meta name="description" content="Investment-Memo im Stil eines Hedgefonds, Stand 27.09.2026: Strategie, Wachstums-Ranking und unterbewertete Aktien mit Begründung.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#f3f4f6;
+  --surface:#fdfdfd;
+  --surface-2:#eceef2;
+  --ink:#0e1a2b;
+  --ink-2:#465264;
+  --muted:#7a8494;
+  --line:#dcdfe5;
+  --line-strong:#bfc4cd;
+  --accent:#8c1d2c;
+  --accent-soft:#f5e3e5;
+  --series:#2a78d6;
+  --series-soft:#cde2fb;
+  --good:#0ca30c; --good-ink:#006300; --good-bg:#e2f2e0;
+  --warn:#fab219; --warn-ink:#7a5200; --warn-bg:#fcf0d2;
+  --bad:#d03b3b;  --bad-ink:#a42727;  --bad-bg:#f8e0de;
+  --info-ink:#1c5cab; --info-bg:#e1ecfa;
+  --al-1:#0d366b; --al-2:#1c5cab; --al-3:#3987e5; --al-4:#86b6ef; --al-5:#c9ccd3;
+  --al-ink-1:#fff; --al-ink-2:#fff; --al-ink-3:#fff; --al-ink-4:#0b1f3a; --al-ink-5:#0e1a2b;
+  --f-disp:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-ui:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0c1017; --surface:#141a23; --surface-2:#1b222d;
+    --ink:#eef1f5; --ink-2:#b5bdc9; --muted:#8690a0;
+    --line:#252d39; --line-strong:#37414f;
+    --accent:#e3808c; --accent-soft:#3a1d22;
+    --series:#3987e5; --series-soft:#1d3656;
+    --good-ink:#4fcf4f; --good-bg:#14301a;
+    --warn-ink:#f7c64f; --warn-bg:#35290d;
+    --bad-ink:#f08585;  --bad-bg:#3a1717;
+    --info-ink:#86b6ef; --info-bg:#172a45;
+    --al-1:#86b6ef; --al-2:#3987e5; --al-3:#256abf; --al-4:#184f95; --al-5:#3a4250;
+    --al-ink-1:#0b1f3a; --al-ink-2:#fff; --al-ink-3:#fff; --al-ink-4:#fff; --al-ink-5:#eef1f5;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0c1017; --surface:#141a23; --surface-2:#1b222d;
+  --ink:#eef1f5; --ink-2:#b5bdc9; --muted:#8690a0;
+  --line:#252d39; --line-strong:#37414f;
+  --accent:#e3808c; --accent-soft:#3a1d22;
+  --series:#3987e5; --series-soft:#1d3656;
+  --good-ink:#4fcf4f; --good-bg:#14301a;
+  --warn-ink:#f7c64f; --warn-bg:#35290d;
+  --bad-ink:#f08585;  --bad-bg:#3a1717;
+  --info-ink:#86b6ef; --info-bg:#172a45;
+  --al-1:#86b6ef; --al-2:#3987e5; --al-3:#256abf; --al-4:#184f95; --al-5:#3a4250;
+  --al-ink-1:#0b1f3a; --al-ink-2:#fff; --al-ink-3:#fff; --al-ink-4:#fff; --al-ink-5:#eef1f5;
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:var(--f-ui); font-size:15px; line-height:1.5; padding-inline:16px; padding-block:0 48px}
+.wrap{max-width:1080px; margin-inline:auto; display:flex; flex-direction:column; gap:32px}
+h1,h2,h3{font-family:var(--f-disp); margin:0; text-wrap:balance}
+h2{font-size:1.55rem; font-weight:750; font-stretch:88%; letter-spacing:-.01em}
+h3{font-size:1.02rem; font-weight:650}
+p{margin:0}
+a{color:var(--accent); text-underline-offset:2px}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+.eyebrow{font-family:var(--f-mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.serif{font-family:var(--f-serif)}
+.muted{color:var(--muted)}
+.small{font-size:.84rem}
+
+.mast{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:baseline; padding-top:20px; padding-bottom:10px; border-bottom:2px solid var(--ink)}
+.mast .brand{font-family:var(--f-disp); font-weight:800; font-stretch:75%; font-size:1.05rem; letter-spacing:.06em; text-transform:uppercase}
+.mast .stamp{font-family:var(--f-mono); font-size:.74rem; color:var(--ink-2)}
+
+.secnav{position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--bg); margin-inline:-16px; padding:8px 16px; border-bottom:1px solid var(--line)}
+.secnav ul{list-style:none; margin:0; padding:0; display:flex; gap:6px; overflow-x:auto; scrollbar-width:none}
+.secnav ul::-webkit-scrollbar{display:none}
+.secnav a{display:block; white-space:nowrap; text-decoration:none; color:var(--ink-2); font-size:.82rem; font-weight:550; padding:6px 11px; border-radius:999px; border:1px solid var(--line)}
+.secnav a:hover{border-color:var(--accent); color:var(--accent)}
+
+.section{display:grid; gap:14px; scroll-margin-top:64px}
+.section > header{display:grid; gap:4px}
+.section > header p{color:var(--ink-2); max-width:66ch}
+
+/* Hero */
+.hero{display:grid; gap:18px}
+.hero h1{font-size:clamp(2.1rem,8vw,4rem); font-weight:800; font-stretch:72%; line-height:.98; letter-spacing:-.01em; text-transform:uppercase}
+.thesis{font-family:var(--f-serif); font-size:clamp(1.12rem,3.6vw,1.4rem); line-height:1.4; max-width:44ch}
+.thesis b{color:var(--accent); font-weight:600}
+.memo{font-family:var(--f-serif); color:var(--ink-2); max-width:66ch; font-size:1rem}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px; display:grid; gap:12px; min-width:0}
+.panel .sub{color:var(--ink-2); font-size:.88rem}
+
+/* Allocation */
+.alloc{display:flex; height:40px; border-radius:8px; overflow:hidden; gap:2px; background:var(--surface)}
+.alloc div{display:flex; align-items:center; justify-content:center; font-weight:650; font-size:.78rem; min-width:0; white-space:nowrap; overflow:hidden}
+.alloc div.narrow span{display:none}
+@media (min-width:640px){.alloc div.narrow span{display:inline}}
+.alloc-legend{display:grid; gap:8px; grid-template-columns:1fr}
+.alloc-legend li{display:grid; grid-template-columns:14px 1fr auto; gap:10px; align-items:start; font-size:.88rem}
+.alloc-legend ul{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+.sw{width:14px; height:14px; border-radius:3px; margin-top:3px}
+.alloc-legend b{font-weight:650}
+.alloc-legend span.d{display:block; color:var(--ink-2); font-size:.82rem}
+.alloc-legend .p{font-family:var(--f-mono); font-weight:600}
+
+/* Principles */
+.princ{display:grid; gap:10px; grid-template-columns:1fr}
+.princ article{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:grid; gap:6px}
+.princ .k{font-family:var(--f-mono); font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent)}
+.princ p{font-family:var(--f-serif); color:var(--ink-2); font-size:.95rem}
+
+/* Calendar */
+.cal{list-style:none; margin:0; padding:0; display:grid; gap:0; border:1px solid var(--line); border-radius:10px; background:var(--surface); overflow:hidden}
+.cal li{display:grid; grid-template-columns:92px 1fr; gap:12px; padding:10px 14px; border-bottom:1px solid var(--line)}
+.cal li:last-child{border-bottom:0}
+.cal time{font-family:var(--f-mono); font-size:.8rem; font-weight:600}
+.cal span{color:var(--ink-2); font-size:.88rem}
+
+/* Filters */
+.seg{display:inline-flex; flex-wrap:wrap; background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:3px; gap:2px}
+.seg button{font:inherit; font-size:.8rem; font-weight:550; border:0; background:transparent; color:var(--ink-2); padding:5px 11px; border-radius:999px; cursor:pointer; min-height:32px}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); font-weight:650; box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+/* Ranking */
+.rank{list-style:none; margin:0; padding:0; display:grid; gap:8px}
+.rank > li{background:var(--surface); border:1px solid var(--line); border-radius:10px}
+.rank details > summary{list-style:none; cursor:pointer; padding:12px 14px; display:grid; gap:8px}
+.rank details > summary::-webkit-details-marker{display:none}
+.rank .row1{display:grid; grid-template-columns:28px 1fr auto; gap:10px; align-items:baseline}
+.rank .pos{font-family:var(--f-disp); font-weight:800; font-stretch:75%; font-size:1.3rem; color:var(--accent); line-height:1}
+.rank .nm{font-weight:650; line-height:1.25}
+.rank .tk{font-family:var(--f-mono); font-size:.72rem; color:var(--muted); margin-left:6px; font-weight:400}
+.rank .gv{font-family:var(--f-disp); font-weight:750; font-stretch:85%; font-size:1.2rem}
+.rank .row2{display:grid; grid-template-columns:28px 1fr; gap:10px; align-items:center}
+.bar{position:relative; height:10px; border-radius:0 4px 4px 0; background:var(--surface-2)}
+.bar i{position:absolute; left:0; top:0; bottom:0; border-radius:0 4px 4px 0; background:var(--series)}
+.bar i.cut{background:repeating-linear-gradient(90deg,var(--series) 0 calc(100% - 14px),transparent calc(100% - 14px) calc(100% - 11px),var(--series) calc(100% - 11px) calc(100% - 7px),transparent calc(100% - 7px) calc(100% - 4px),var(--series) calc(100% - 4px))}
+.rank .row3{display:flex; gap:8px; flex-wrap:wrap; align-items:center; padding-left:38px}
+.basis{font-size:.76rem; color:var(--muted)}
+.more{font-size:.78rem; color:var(--accent); font-weight:600; margin-left:auto}
+details[open] .more{display:none}
+.detail{padding:0 14px 14px 52px; display:grid; gap:10px}
+.detail ul{margin:0; padding-left:1.1em; display:grid; gap:4px; font-family:var(--f-serif); color:var(--ink-2); font-size:.95rem}
+.kv{display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:.86rem}
+.kv dt{color:var(--muted); font-family:var(--f-mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; padding-top:2px}
+.kv dd{margin:0; color:var(--ink)}
+
+.tag{display:inline-flex; align-items:center; gap:5px; font-size:.75rem; font-weight:650; padding:2px 9px; border-radius:999px; white-space:nowrap; line-height:1.4}
+.tag svg{width:11px; height:11px}
+.t-strong{background:var(--good-bg); color:var(--good-ink)}
+.t-buy{background:var(--info-bg); color:var(--info-ink)}
+.t-hold{background:var(--surface-2); color:var(--ink-2)}
+.t-watch{background:var(--warn-bg); color:var(--warn-ink)}
+.t-trade{background:var(--bad-bg); color:var(--bad-ink)}
+.theme{font-size:.72rem; color:var(--ink-2); border:1px solid var(--line); border-radius:999px; padding:1px 8px}
+
+/* Value cards */
+.vgrid{display:grid; gap:10px; grid-template-columns:1fr}
+.vcard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:grid; gap:8px; align-content:start}
+.vcard .top{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+.vcard .metric{font-family:var(--f-disp); font-weight:750; font-stretch:85%; font-size:1.3rem; line-height:1.1}
+.vcard .ml{font-size:.76rem; color:var(--muted)}
+.vcard p{font-family:var(--f-serif); color:var(--ink-2); font-size:.93rem}
+.vcard .cat b{font-family:var(--f-ui); font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:600; margin-right:4px}
+
+.chartbox{position:relative; width:100%; height:320px}
+.grid2{display:grid; gap:14px; grid-template-columns:1fr}
+.list{margin:0; padding-left:1.1em; display:grid; gap:8px; font-family:var(--f-serif); color:var(--ink-2)}
+.list b{font-family:var(--f-ui); color:var(--ink); font-weight:650}
+
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:600px; font-size:.86rem}
+th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:var(--f-mono); font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:400; background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+
+.sources{columns:1; column-gap:28px; font-size:.83rem; padding-left:1.2em; margin:0}
+.sources li{break-inside:avoid; margin-bottom:6px; color:var(--ink-2)}
+footer.fine{font-size:.8rem; color:var(--muted); border-top:1px solid var(--line); padding-top:14px; display:grid; gap:6px}
+
+@media (min-width:640px){
+  .princ{grid-template-columns:1fr 1fr}
+  .vgrid{grid-template-columns:1fr 1fr}
+  .sources{columns:2}
+  .alloc-legend ul{grid-template-columns:1fr 1fr}
+}
+@media (min-width:960px){
+  body{padding-inline:28px}
+  .secnav{margin-inline:-28px; padding-inline:28px}
+  .hero{grid-template-columns:1.15fr 1fr; align-items:start; column-gap:32px}
+  .princ{grid-template-columns:1fr 1fr 1fr}
+  .vgrid{grid-template-columns:1fr 1fr 1fr}
+  .grid2{grid-template-columns:1fr 1fr}
+  .alloc-legend ul{grid-template-columns:1fr}
+}
+</style>
+
+<div class="wrap">
+  <div class="mast">
+    <span class="brand">Investment Memo · Aktienbuch</span>
+    <span class="stamp">Stand 27.09.2026 · Horizont 12–18 Monate</span>
+  </div>
+
+  <nav class="secnav" aria-label="Abschnitte">
+    <ul>
+      <li><a href="#strategie">Strategie</a></li>
+      <li><a href="#prinzipien">Prinzipien</a></li>
+      <li><a href="#wachstum">Wachstum</a></li>
+      <li><a href="#karte">Wachstum vs. Preis</a></li>
+      <li><a href="#value">Unterbewertet</a></li>
+      <li><a href="#hedge">Absicherung</a></li>
+      <li><a href="#risiken">Exit-Trigger</a></li>
+      <li><a href="#quellen">Quellen</a></li>
+    </ul>
+  </nav>
+
+  <!-- STRATEGIE -->
+  <section class="section hero" id="strategie">
+    <div style="display:grid;gap:14px">
+      <span class="eyebrow">Strategie vorab</span>
+      <h1>Schaufeln kaufen, Preis prüfen, 2027 absichern</h1>
+      <p class="thesis">Der KI-Investitionszyklus ist das stärkste Gewinnwachstum seit Jahrzehnten. Wir besitzen die Firmen, bei denen dieses Geld als <b>Umsatz ankommt</b>, und zahlen dafür keine Fantasiepreise.</p>
+      <p class="memo">Die Hyperscaler investieren 2026 zusammen weit über 700 Mrd. $: Amazon ~220 Mrd., Microsoft ~175 Mrd., Meta 130–145 Mrd. Das ist Umsatz für Chips, Speicher, Rechenzentren und Strom. Nvidia wächst um 106 % und kostet trotzdem nur das 21-Fache des erwarteten Gewinns. Das ist Wachstum durch echte Gewinne, keine Multiple-Blase.</p>
+      <p class="memo">Gleichzeitig ist das Makro-Umfeld der Gegenwind: Ölpreis über 100 $, Fed und EZB erhöhen die Zinsen, die 10-jährige US-Rendite liegt bei 5,17 %. Unser Rezessionsradar sieht das Risikofenster in Q2 bis Q4 2027. Deshalb meiden wir teure Langfrist-Storys und halten eine Absicherung. Cash bringt über 4,5 %, Warten kostet also wenig.</p>
+    </div>
+    <div class="panel">
+      <div>
+        <h3>Modellbuch: Gewichtung</h3>
+        <p class="sub">So würden wir 100 % Kapital heute aufteilen.</p>
+      </div>
+      <div class="alloc" id="alloc" role="img" aria-label="Gewichtung: KI-Kern 40, Plattformen 20, Contrarian Value 15, Energie-Hedge 10, Cash 15 Prozent"></div>
+      <div class="alloc-legend"><ul id="allocLegend"></ul></div>
+    </div>
+  </section>
+
+  <!-- PRINZIPIEN -->
+  <section class="section" id="prinzipien">
+    <header>
+      <span class="eyebrow">Wie wir auswählen</span>
+      <h2>Sechs Regeln für dieses Buch</h2>
+    </header>
+    <div class="princ">
+      <article><span class="k">Folge dem Capex</span><h3>Wo landet das Geld?</h3><p>Wir kaufen dort, wo KI-Budgets zu Umsatz werden: Beschleuniger, Netzwerk-Chips, Speicher, Fertigung, Kühlung, Strom. Die Auftragsbücher sind gefüllt: Google Cloud 514 Mrd. $, Oracle 664 Mrd. $, GE Vernova 176 Mrd. $.</p></article>
+      <article><span class="k">Wachstum zum fairen Preis</span><h3>Wachstum ÷ KGV</h3><p>Bei 5 % Zins auf zehnjährige Anleihen ist jeder Gewinn in ferner Zukunft weniger wert. Wir bevorzugen Titel, deren Wachstum das Bewertungsniveau deutlich übertrifft (Broadcom, Nvidia, Alphabet), vor Titeln mit einem KGV über 100.</p></article>
+      <article><span class="k">Zyklik erkennen</span><h3>Niedriges KGV kann eine Falle sein</h3><p>Speicherchips verdienen gerade Rekordmargen: Micron 86 % Bruttomarge, SK Hynix 76 % operative Marge. Ein KGV von 5 bis 7 am Zyklushoch ist typisch, bevor die Preise drehen. Wir handeln das, statt es zu heiraten.</p></article>
+      <article><span class="k">Contrarian mit Katalysator</span><h3>Billig allein reicht nicht</h3><p>Der Markt hat Software als „KI-Verlierer“ abgestraft. Adobe, Salesforce und PayPal kosten ein KGV von 9 bis 15, verdienen aber weiter gut. Wir kaufen nur dort, wo ein Auslöser für eine Neubewertung sichtbar ist.</p></article>
+      <article><span class="k">Makro absichern</span><h3>Öl und Cash als Versicherung</h3><p>Energie-Konzerne verdienen am Iran-Schock (Exxon: über 17 Mrd. $ Free Cashflow in Q2). Sie gleichen aus, was der Ölpreis dem Rest des Buchs kostet. Kurzlaufende Staatsanleihen bringen fast 5 % ohne Kursrisiko.</p></article>
+      <article><span class="k">Positionsgröße vor Meinung</span><h3>Je unsicherer, desto kleiner</h3><p>Stark verschuldete oder extrem teure Wachstumswerte (CoreWeave, Palantir) bekommen höchstens 1 bis 2 % Gewicht. Hohe Überzeugung plus faire Bewertung bekommt bis zu 6 %. Bis Anfang 2027 senken wir das Marktrisiko schrittweise.</p></article>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <h3>Katalysator-Kalender</h3>
+        <ul class="cal">
+          <li><time>30.09.</time><span>Micron-Zahlen (Q4 FY26). Guidance 50 Mrd. $ Umsatz. Test für den Speicherzyklus.</span></li>
+          <li><time>Ende Okt</time><span>Q3-Zahlen von Microsoft, Alphabet, Meta, Amazon. Entscheidend sind die Capex-Pläne für 2027.</span></li>
+          <li><time>28.10.</time><span>Fed-Sitzung. Der Markt preist ~12 bp weitere Erhöhung ein.</span></li>
+          <li><time>Nov</time><span>Nvidia-Zahlen (Q3 FY27). Guidance 108 Mrd. $.</span></li>
+          <li><time>09.12.</time><span>Fed-Sitzung mit neuen Projektionen.</span></li>
+          <li><time>Q1 2027</time><span>Retatrutide-Zulassungsantrag von Lilly, erster Gigawatt von AMD für Anthropic.</span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Was wir meiden</h3>
+        <ul class="list">
+          <li><b>Zinssensible Zykliker.</b> Hausbauer und Immobilien bei Hypothekenzinsen über 7 % und Hausverkäufen unter 4 Mio.</li>
+          <li><b>Konsum-Discretionary.</b> Das schwächste Segment des Jahres. Sparquote 3 %, Verbraucherstimmung bei 48.</li>
+          <li><b>Unprofitables Wachstum mit Schulden.</b> Bei 5 % Zinsen ist die Refinanzierung teuer.</li>
+          <li><b>Rüstung zum Höchstpreis.</b> Die Story stimmt, aber Rheinmetall hat die Prognose gesenkt und der Cashflow ist schwach.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WACHSTUM -->
+  <section class="section" id="wachstum">
+    <header>
+      <span class="eyebrow">Ranking nach Umsatzwachstum</span>
+      <h2>Die stärksten Wachstumswerte</h2>
+      <p>Sortiert nach Umsatzwachstum zum Vorjahr, jeweils aus der jüngsten Guidance oder dem letzten Quartal (Basis steht beim Titel). Das Urteil daneben berücksichtigt auch den Preis. Tippen öffnet die Gründe.</p>
+    </header>
+    <div class="seg" role="group" aria-label="Thema filtern" id="themeFilter"></div>
+    <ol class="rank" id="rank"></ol>
+    <p class="small muted">Micron-Balken gekürzt, tatsächlicher Wert ≈ +340 %. Skala bis 160 %.</p>
+  </section>
+
+  <!-- KARTE -->
+  <section class="section" id="karte">
+    <header>
+      <span class="eyebrow">Wachstum zum fairen Preis</span>
+      <h2>Wachstum gegen Bewertung</h2>
+      <p>Rechts unten ist das beste Verhältnis: viel Wachstum, niedriges KGV. Speicherwerte liegen dort auch, aber wegen der Zyklik (siehe Regel 3). Die x-Achse ist logarithmisch, weil Micron sonst den Rest zusammendrückt.</p>
+    </header>
+    <div class="panel">
+      <div class="chartbox"><canvas id="cMap" role="img" aria-label="Streudiagramm: Umsatzwachstum gegen erwartetes KGV"></canvas></div>
+      <p class="small muted">Nur Titel mit belegtem Forward-KGV. Micron und Samsung: Mitte der Quellenspanne (5,8–7,5 bzw. 4,4–5,3). AMD: 32 laut GuruFocus, andere Quellen bis 57.</p>
+    </div>
+  </section>
+
+  <!-- VALUE -->
+  <section class="section" id="value">
+    <header>
+      <span class="eyebrow">Unterbewertet</span>
+      <h2>Günstige Aktien mit Substanz</h2>
+      <p>Sortiert nach unserer Überzeugung, nicht nach dem niedrigsten KGV. Für jeden Titel nennen wir, warum er billig ist, was die Neubewertung auslösen kann und woran die These scheitern würde.</p>
+    </header>
+    <div class="vgrid" id="vgrid"></div>
+  </section>
+
+  <!-- HEDGE -->
+  <section class="section" id="hedge">
+    <header>
+      <span class="eyebrow">Absicherung</span>
+      <h2>Energie als Gegengewicht</h2>
+      <p>Solange Hormuz blockiert ist, verdienen die Ölkonzerne außergewöhnlich. Im Buch gleichen sie aus, was der Ölpreis bei Konsum und Industrie kostet. Das Risiko: Ein Friedensabkommen lässt Brent Richtung 75 $ fallen, so die EIA-Prognose für 2027. Dann steigt aber der Rest des Buchs.</p>
+    </header>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Titel</th><th>Q2 2026</th><th>Aktionärsrendite</th><th>Urteil</th></tr></thead>
+        <tbody>
+          <tr><td><b>ExxonMobil</b> <span class="muted">XOM</span></td><td>Gewinn &gt;14,5 Mrd. $, Free Cashflow &gt;17 Mrd. $</td><td>Größter Dollar-Gewinn der Branche</td><td id="h1"></td></tr>
+          <tr><td><b>Shell</b> <span class="muted">SHEL</span></td><td>Bereinigter Gewinn 9,8 Mrd. $, operativer Cashflow 21,4 Mrd. $</td><td>3,0 Mrd. $ Rückkäufe + 2,2 Mrd. $ Dividende pro Quartal</td><td id="h2"></td></tr>
+          <tr><td><b>TotalEnergies</b> <span class="muted">TTE</span></td><td>Gewinn 5,4 Mrd. $, Cashflow-Prognose 2026 auf 34,5–35 Mrd. $ erhöht</td><td>1,5 Mrd. $ Rückkäufe pro Quartal</td><td id="h3"></td></tr>
+          <tr><td><b>US-T-Bills / 2-jährige</b></td><td>Rendite 2 Jahre: 4,81 %</td><td>Kein Kursrisiko bei Endfälligkeit</td><td id="h4"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RISIKEN -->
+  <section class="section" id="risiken">
+    <header>
+      <span class="eyebrow">Exit-Trigger</span>
+      <h2>Wann wir umbauen</h2>
+      <p>Jede These hat einen Punkt, an dem sie falsch ist. Diese Signale würden wir nicht aussitzen.</p>
+    </header>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Signal</th><th>Heute</th><th>Reaktion im Buch</th></tr></thead>
+        <tbody>
+          <tr><td><b>Hyperscaler kürzen die Capex-Pläne für 2027</b></td><td>Wurden 2026 mehrfach erhöht</td><td>KI-Kern halbieren. Die ganze Lieferkette hängt an diesen Budgets.</td></tr>
+          <tr><td><b>DRAM-Vertragspreise fallen</b></td><td>Steigen, Angebot knapp</td><td>Micron und Samsung komplett verkaufen. Zyklik schlägt schnell zu.</td></tr>
+          <tr><td><b>10-jährige US-Rendite über 5,5 %</b></td><td>5,17 %</td><td>Titel mit hohem KGV (AMD, Palantir, Lilly) reduzieren, Cash erhöhen.</td></tr>
+          <tr><td><b>Brent dauerhaft über 130 $</b></td><td>~103 $</td><td>Energie-Hedge auf 15 % aufstocken, Konsumtitel raus.</td></tr>
+          <tr><td><b>Sahm-Regel über 0,5 oder Erstanträge über 260k</b></td><td>−0,07 · 202k</td><td>Rezessions-Modus: Aktienquote auf ~50 %, Defensive (PepsiCo, UnitedHealth) übergewichten.</td></tr>
+          <tr><td><b>High-Yield-Spread über 4,5 %</b></td><td>2,80 %</td><td>CoreWeave und Oracle verkaufen. Kapitalintensive Modelle brauchen offene Kreditmärkte.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- QUELLEN -->
+  <section class="section" id="quellen">
+    <header><span class="eyebrow">Belege</span><h2>Quellen</h2></header>
+    <ol class="sources">
+      <li><a href="https://www.cnbc.com/2026/08/26/nvidia-nvda-earnings-report-q2-2027-live-updates.html" target="_blank" rel="noopener">CNBC: Nvidia Q2 FY27</a></li>
+      <li><a href="https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm" target="_blank" rel="noopener">Nvidia 8-K Q2 FY27</a></li>
+      <li><a href="https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial" target="_blank" rel="noopener">Broadcom Q3 FY26</a></li>
+      <li><a href="https://seekingalpha.com/news/4639799-broadcom-forecasts-58b-fiscal-2026-ai-revenue-and-outlines-115b-in-2027-230b-in-2028" target="_blank" rel="noopener">Seeking Alpha: Broadcom KI-Umsatzausblick</a></li>
+      <li><a href="https://www.tradingkey.com/analysis/stocks/us-stocks/262188101-mu-dram-hbm-skhynix-samsung-tradingkey" target="_blank" rel="noopener">TradingKey: Micron-Q4-Vorschau</a></li>
+      <li><a href="https://www.gurufocus.com/term/forward-pe-ratio/MU" target="_blank" rel="noopener">GuruFocus: Micron Forward-KGV</a></li>
+      <li><a href="https://www.investing.com/news/company-news/coreweave-q2-2026-slides-revenue-doubles-backlog-surges-246-93CH-4852949" target="_blank" rel="noopener">CoreWeave Q2 2026</a></li>
+      <li><a href="https://www.businesswire.com/news/home/20260802523449/en/" target="_blank" rel="noopener">Palantir Q2 2026</a></li>
+      <li><a href="https://macrotrends.net/stocks/charts/PLTR/palantir-technologies/pe-ratio" target="_blank" rel="noopener">MacroTrends: Palantir KGV</a></li>
+      <li><a href="https://newsroom.amd.com/news/amd-2q-2026-earnings/" target="_blank" rel="noopener">AMD Q2 2026</a></li>
+      <li><a href="https://www.gurufocus.com/term/forward-pe-ratio/AMD" target="_blank" rel="noopener">GuruFocus: AMD Forward-KGV</a></li>
+      <li><a href="https://investor.lilly.com/news-releases/news-release-details/lilly-reports-second-quarter-2026-financial-results-raises-full" target="_blank" rel="noopener">Eli Lilly Q2 2026</a></li>
+      <li><a href="https://finance.yahoo.com/markets/stocks/articles/applovin-corp-app-q2-2026-010639084.html" target="_blank" rel="noopener">AppLovin Q2 2026</a></li>
+      <li><a href="https://www.cnbc.com/2026/09/10/tsmc-august-revenue-chip-ai.html" target="_blank" rel="noopener">CNBC: TSMC August-Umsatz</a></li>
+      <li><a href="https://finance.yahoo.com/technology/articles/tsmc-lifts-2026-revenue-growth-135800593.html" target="_blank" rel="noopener">TSMC hebt Prognose 2026</a></li>
+      <li><a href="https://www.boerse-express.com/news/articles/rheinmetall-aktie-umsatzprognose-2026-auf-137142-milliarden-gesenkt-936736" target="_blank" rel="noopener">Rheinmetall: Prognose gesenkt</a></li>
+      <li><a href="https://investors.vertiv.com/news/news-details/2026/Vertiv-Reports-Strong-Second-Quarter-2026-with-Diluted-EPS-Growth-of-53-Adjusted-Diluted-EPS-Growth-of-60-Raises-Full-Year-2026-Guidance-Across-All-Key-Metrics/default.aspx" target="_blank" rel="noopener">Vertiv Q2 2026</a></li>
+      <li><a href="https://www.datacenterdynamics.com/en/news/oracle-has-455bn-in-remaining-performance-obligations-at-end-of-q1-2026/" target="_blank" rel="noopener">DCD: Oracle RPO</a></li>
+      <li><a href="https://www.sec.gov/Archives/edgar/data/0001341439/000119312526387905/orcl-ex99_1.htm" target="_blank" rel="noopener">Oracle 8-K Q1 FY27</a></li>
+      <li><a href="https://www.cnbc.com/2026/07/29/meta-q2-earnings-report-2026.html" target="_blank" rel="noopener">CNBC: Meta Q2 2026</a></li>
+      <li><a href="https://www.cnbc.com/2026/07/22/google-earnings-q2-goog-live-updates.html" target="_blank" rel="noopener">CNBC: Alphabet Q2 2026</a></li>
+      <li><a href="https://www.utilitydive.com/news/ge-vernova-gas-turbine-backlog-climbs-to-116-gw/826039/" target="_blank" rel="noopener">Utility Dive: GE Vernova</a></li>
+      <li><a href="https://www.cnbc.com/2026/07/30/amazon-amzn-q2-earnings-report-2026.html" target="_blank" rel="noopener">CNBC: Amazon Q2 2026</a></li>
+      <li><a href="https://www.cnbc.com/2026/07/29/microsoft-msft-q4-earnings-report-2026.html" target="_blank" rel="noopener">CNBC: Microsoft Q4 FY26</a></li>
+      <li><a href="https://247wallst.com/investing/2026/09/04/cramer-says-the-magnificent-seven-are-finally-cheap-and-most-investors-will-miss-it/" target="_blank" rel="noopener">24/7 Wall St.: Bewertungen Magnificent 7</a></li>
+      <li><a href="https://www.gurufocus.com/term/forward-pe-ratio/AVGO" target="_blank" rel="noopener">GuruFocus: Broadcom Forward-KGV</a></li>
+      <li><a href="https://news.skhynix.com/en/q2-2026-business-results/" target="_blank" rel="noopener">SK hynix Q2 2026</a></li>
+      <li><a href="https://finance.yahoo.com/technology/articles/samsung-q2-2026-earnings-record-115328985.html" target="_blank" rel="noopener">Samsung Q2 2026</a></li>
+      <li><a href="https://valueinvesting.io/005930.KS/metric/forward-pe" target="_blank" rel="noopener">Samsung Forward-KGV</a></li>
+      <li><a href="https://finance.yahoo.com/markets/stocks/articles/paypal-beat-q2-fy26-expectations-162700519.html" target="_blank" rel="noopener">PayPal: Bewertung und Q2</a></li>
+      <li><a href="https://www.fool.com/investing/2026/02/18/the-2026-software-stock-sell-off-ai-disruption-fea/" target="_blank" rel="noopener">Motley Fool: Software-Ausverkauf 2026</a></li>
+      <li><a href="https://finance.yahoo.com/markets/stocks/articles/software-stock-worst-performer-2026-174209348.html" target="_blank" rel="noopener">Yahoo: Adobe, Salesforce, ServiceNow</a></li>
+      <li><a href="https://www.tikr.com/blog/unitedhealth-stock-rallies-21-on-raised-2026-guidance-heres-what-changed" target="_blank" rel="noopener">TIKR: UnitedHealth-Guidance</a></li>
+      <li><a href="https://www.cnbc.com/2026/08/04/novo-nordisk-releases-earnings-and-guidance.html" target="_blank" rel="noopener">CNBC: Novo-Nordisk-Guidance</a></li>
+      <li><a href="https://www.macrotrends.net/stocks/charts/NVO/novo-nordisk/pe-ratio" target="_blank" rel="noopener">MacroTrends: Novo-KGV</a></li>
+      <li><a href="https://www.cnbc.com/2026/08/20/alibaba-cloud-revenue.html" target="_blank" rel="noopener">CNBC: Alibaba-Cloud</a></li>
+      <li><a href="https://www.morningstar.com/stocks/10-wide-moat-stocks-buy-that-look-cheap-today" target="_blank" rel="noopener">Morningstar: Wide-Moat-Aktien</a></li>
+      <li><a href="https://www.morningstar.com/stocks/10-best-companies-invest-now" target="_blank" rel="noopener">Morningstar: Best Companies</a></li>
+      <li><a href="https://www.indexbox.io/blog/big-oil-q2-2026-results-794b-profit-amid-iran-war-disruption/" target="_blank" rel="noopener">IndexBox: Big Oil Q2 2026</a></li>
+      <li><a href="https://boereport.com/2026/07/30/shell-plc-publishes-second-quarter-2026-press-release/" target="_blank" rel="noopener">Shell Q2 2026</a></li>
+      <li><a href="https://www.investing.com/news/transcripts/earnings-call-transcript-totalenergies-tops-revenue-in-q2-2026-shares-rise-93CH-4808986" target="_blank" rel="noopener">TotalEnergies Q2 2026</a></li>
+      <li><a href="https://www.spglobal.com/spdji/en/documents/performance-reports/dashboard-us-sector.pdf" target="_blank" rel="noopener">S&amp;P DJI: Sektor-Dashboard August 2026</a></li>
+      <li><a href="https://ir.crowdstrike.com/news-releases/news-release-details/crowdstrike-reports-second-quarter-fiscal-year-2027-financial" target="_blank" rel="noopener">CrowdStrike Q2 FY27</a></li>
+    </ol>
+  </section>
+
+  <footer class="fine">
+    <p>Das ist eine Analyse auf Basis öffentlicher Unternehmensberichte und Marktdaten, Stand 27.09.2026. Es ist keine Anlageberatung und keine Aufforderung zum Kauf oder Verkauf. Wachstumswerte beschreiben die jüngste Entwicklung und Guidance, nicht garantierte Zukunftsrenditen. KGV-Angaben unterscheiden sich je nach Quelle und Methode.</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+  var VERDICT={
+    strong:{l:"Übergewichten",c:"t-strong"},
+    buy:{l:"Kaufen",c:"t-buy"},
+    hold:{l:"Halten",c:"t-hold"},
+    watch:{l:"Beobachten",c:"t-watch"},
+    trade:{l:"Trade, Gewinne sichern",c:"t-trade"}
+  };
+  function vtag(v,extra){var o=VERDICT[v];return '<span class="tag '+o.c+'">'+o.l+(extra?' · '+esc(extra):'')+'</span>';}
+
+  /* Allocation */
+  var ALLOC=[
+    {n:"KI-Kern",p:40,d:"Nvidia, Broadcom, TSMC, AMD, Vertiv, GE Vernova, Micron (Trade)"},
+    {n:"Plattformen",p:20,d:"Alphabet, Microsoft, Amazon, Meta"},
+    {n:"Contrarian Value",p:15,d:"PayPal, UnitedHealth, Adobe, Samsung, PepsiCo, Alibaba"},
+    {n:"Energie-Hedge",p:10,d:"ExxonMobil, Shell, TotalEnergies"},
+    {n:"Cash / T-Bills",p:15,d:"~4,8 % Rendite, Munition für Rücksetzer 2027"}
+  ];
+  document.getElementById("alloc").innerHTML=ALLOC.map(function(a,i){
+    return '<div class="'+(a.p<12?'narrow':'')+'" style="flex:'+a.p+';background:var(--al-'+(i+1)+');color:var(--al-ink-'+(i+1)+')" title="'+esc(a.n)+' '+a.p+' %"><span>'+a.p+' %</span></div>';
+  }).join("");
+  document.getElementById("allocLegend").innerHTML=ALLOC.map(function(a,i){
+    return '<li><span class="sw" style="background:var(--al-'+(i+1)+')"></span><span><b>'+esc(a.n)+'</b><span class="d">'+esc(a.d)+'</span></span><span class="p num">'+a.p+' %</span></li>';
+  }).join("");
+
+  /* Growth ranking */
+  var G=[
+    {n:"Micron",t:"MU",th:"KI-Chips",g:340,b:"Guidance Q4 FY26: 50 Mrd. $ vs. 11,3 Mrd. $ Vorjahr",v:"trade",
+     r:["HBM- und Server-DRAM-Knappheit, Preise steigen weiter","Bruttomarge ~86 %, EPS-Guidance 31 $ pro Quartal","HBM4-Hochlauf, zusätzliche Kapazität ab H1 2027"],
+     val:"Forward-KGV ~6–7",risk:"Klassisches Zyklushoch. Neue Kapazität 2027 kann die Preise drehen."},
+    {n:"CoreWeave",t:"CRWV",th:"KI-Infrastruktur",g:158,b:"Guidance Q3 2026",v:"watch",
+     r:["Auftragsbestand 104 Mrd. $ (+246 %), plus 25 Mrd. $ Anfang Q3","Jahresumsatz 2026: 12,4–13,2 Mrd. $","EBITDA-Marge 59 %"],
+     val:"Hoher Capex (35–39 Mrd. $), stark fremdfinanziert",risk:"Kreditmärkte und Kundenkonzentration. Hängt an wenigen KI-Labs."},
+    {n:"Broadcom",t:"AVGO",th:"KI-Chips",g:93,b:"Guidance Q4 FY26: 34,8 Mrd. $",v:"strong",
+     r:["KI-Halbleiter-Umsatz Q4 +236 % auf 21,7 Mrd. $","Ausblick KI-Umsatz: 58 Mrd. $ (FY26), 115 Mrd. $ (FY27), 230 Mrd. $ (FY28)","Eigene Chips (ASICs) für Anthropic, OpenAI, Google"],
+     val:"Forward-KGV 18,9, unter dem Branchenmedian",risk:"Wenige Großkunden. Die Aktie hat trotz Rekordzahlen stagniert."},
+    {n:"Nvidia",t:"NVDA",th:"KI-Chips",g:89,b:"Guidance Q3 FY27: 108 Mrd. $",v:"strong",
+     r:["Q2 +106 %, Rechenzentrum +117 % auf 89 Mrd. $","CEO erwartet ~70 % Wachstum im FY28","AWS kauft 2 Mio. GPUs plus Vera-CPUs, China nicht in der Prognose"],
+     val:"Forward-KGV ~21 bei 75 % Bruttomarge",risk:"Capex-Kürzungen der Hyperscaler, eigene Chips der Kunden."},
+    {n:"Palantir",t:"PLTR",th:"Software",g:82,b:"Guidance Gesamtjahr 2026",v:"watch",
+     r:["Q2 +93 %, US-Kommerzgeschäft +149 %","Prognose zweimal erhöht auf 8,15 Mrd. $","CEO: Tempo hält „mindestens 18 Monate“"],
+     val:"KGV ~165 (trailing)",risk:"Bewertung lässt keinen Fehler zu. Bei 5 % Zinsen besonders anfällig."},
+    {n:"AMD",t:"AMD",th:"KI-Chips",g:50,b:"Q2 2026",v:"buy",
+     r:["Rechenzentrum mehr als verdoppelt (58 % vom Umsatz)","Server +80 % in H2 2026, +70 % in 2027","Anthropic setzt bis zu 2 GW MI450 ein, ab H1 2027"],
+     val:"Forward-KGV 32–57 je nach Quelle",risk:"Ausführung beim MI450-Hochlauf. Deutlich teurer als Nvidia."},
+    {n:"Eli Lilly",t:"LLY",th:"Gesundheit",g:48,b:"Q2 2026",v:"hold",
+     r:["Mounjaro/Zepbound: +60 % Volumen","Prognose 2026: 85–87 Mrd. $ Umsatz","Retatrutide-Daten komplett, Zulassungsantrag Q1 2027"],
+     val:"Premium-Bewertung, EPS-Ziel 35,50–36,50 $",risk:"Preise fallen (−13 %). Politischer Druck auf Medikamentenpreise."},
+    {n:"AppLovin",t:"APP",th:"Software",g:47,b:"Guidance Q3 2026",v:"buy",
+     r:["Q2 +53 %, EBITDA-Marge ~84 %","E-Commerce-Werbekunden auf Rekord","SEC-Untersuchung ohne Maßnahmen beendet"],
+     val:"Hochprofitabel, Bewertung nicht verifiziert",risk:"Abhängig von Werbebudgets im Abschwung."},
+    {n:"TSMC",t:"TSM",th:"KI-Chips",g:40,b:"Guidance Gesamtjahr 2026 (Aug: +53 %)",v:"strong",
+     r:["Prognose angehoben: gut 40 % Wachstum in USD","2-nm-Hochlauf, faktisches Monopol bei Spitzenchips","Jan–Aug +39 %, August Rekordmonat"],
+     val:"Moderat, fertigt für alle KI-Chip-Anbieter",risk:"Taiwan-Geopolitik, Zölle."},
+    {n:"Rheinmetall",t:"RHM",th:"Industrie & Energie",g:39,b:"Halbjahr 2026",v:"hold",
+     r:["Auftragsbestand 80,5 Mrd. € (+44 %)","Operative Marge 15 %, Gewinn +74 %","Fiskalpaket und NATO-Ziele"],
+     val:"Premium, Prognose auf 13,7–14,2 Mrd. € gesenkt",risk:"F126-Storno, schwacher Cashflow, Frieden als Kursrisiko."},
+    {n:"Vertiv",t:"VRT",th:"KI-Infrastruktur",g:31,b:"Organisch, Guidance 2026",v:"buy",
+     r:["Kühlung und Strom für KI-Rechenzentren","Bereinigtes EPS 2026: +60 %","Free Cashflow ~2,5 Mrd. $"],
+     val:"Wachstumsprämie, nicht verifiziert",risk:"Auslieferungs-Timing, Q2-Umsatz knapp verfehlt."},
+    {n:"Oracle",t:"ORCL",th:"Cloud & Plattformen",g:30,b:"Q1 FY27",v:"watch",
+     r:["Auftragsbestand (RPO) 664 Mrd. $, +209 Mrd.","Cloud-Infrastruktur +121 %","850 MW neue Kapazität geliefert"],
+     val:"Hoher Investitionsbedarf",risk:"Kapitalintensiv, abhängig von wenigen KI-Kunden."},
+    {n:"Meta",t:"META",th:"Cloud & Plattformen",g:28,b:"Q2 2026",v:"hold",
+     r:["Umsatz 60,8 Mrd. $, KI verbessert die Werbung","Große Nutzerbasis","Günstiger bewertet als vor einem Jahr"],
+     val:"Forward-KGV über ein Drittel gefallen",risk:"Free Cashflow auf 0,8 Mrd. $ eingebrochen, Capex bis 145 Mrd. $."},
+    {n:"Alphabet",t:"GOOGL",th:"Cloud & Plattformen",g:24,b:"Q2 2026",v:"strong",
+     r:["Google Cloud +82 %, Auftragsbestand 514 Mrd. $","Gemini-App 950 Mio. Nutzer","Operative Marge auf 34 % gestiegen"],
+     val:"KGV ~16,5, günstigste Magnificent-7-Aktie",risk:"Kartellverfahren, Suchmaschinen-Disruption durch KI."},
+    {n:"GE Vernova",t:"GEV",th:"Industrie & Energie",g:22,b:"Q2 2026 (Aufträge +88 %)",v:"buy",
+     r:["Auftragsbestand 176 Mrd. $, Ziel 200 Mrd. 2027","Gasturbinen: 116 GW, ausgebucht","Free Cashflow 2026: 11,5–12,5 Mrd. $"],
+     val:"Premium, Margen erst im Aufbau",risk:"EBITDA-Marge nur 11 %, Q2-Gewinn verfehlt."},
+    {n:"Amazon",t:"AMZN",th:"Cloud & Plattformen",g:20,b:"Q2 2026 (AWS +37 %)",v:"buy",
+     r:["AWS beschleunigt auf +37 %, schnellstes Wachstum seit 18 Quartalen","Operatives Ergebnis +43 %","AWS-Marge 39 %"],
+     val:"Forward-KGV über ein Drittel gefallen",risk:"Capex 220 Mrd. $, Konsum schwächelt."},
+    {n:"Microsoft",t:"MSFT",th:"Cloud & Plattformen",g:18,b:"Q4 FY26 (Azure +43 %)",v:"buy",
+     r:["Azure über 100 Mrd. $ Jahresumsatz","Guidance Azure +45 %","Beteiligung an Anthropic"],
+     val:"Premium, aber stabil",risk:"Capex 175 Mrd. $, Rendite auf KI-Investitionen muss kommen."}
+  ];
+  var THEMES=["Alle","KI-Chips","KI-Infrastruktur","Cloud & Plattformen","Software","Gesundheit","Industrie & Energie"];
+  var cur="Alle";
+  try{var s=localStorage.getItem("ab-theme"); if(s&&THEMES.indexOf(s)>-1) cur=s;}catch(e){}
+  var tf=document.getElementById("themeFilter");
+  tf.innerHTML=THEMES.map(function(t,i){return '<button type="button" id="th'+i+'" data-th="'+esc(t)+'" aria-pressed="false">'+esc(t)+'</button>';}).join("");
+  function renderRank(){
+    var list=G.map(function(x,i){x.rank=i+1;return x;}).filter(function(x){return cur==="Alle"||x.th===cur;});
+    var MAX=160;
+    document.getElementById("rank").innerHTML=list.map(function(x){
+      var w=Math.min(100,x.g/MAX*100), cut=x.g>MAX;
+      return '<li><details><summary>'+
+        '<div class="row1"><span class="pos num">'+x.rank+'</span><span class="nm">'+esc(x.n)+'<span class="tk">'+x.t+'</span></span><span class="gv num">'+(x.g>=300?'≈ +':'+')+x.g+' %</span></div>'+
+        '<div class="row2"><span></span><div class="bar" aria-hidden="true"><i class="'+(cut?'cut':'')+'" style="width:'+w.toFixed(1)+'%"></i></div></div>'+
+        '<div class="row3">'+vtag(x.v)+'<span class="theme">'+esc(x.th)+'</span><span class="basis">'+esc(x.b)+'</span><span class="more">Gründe ›</span></div>'+
+        '</summary><div class="detail"><ul>'+x.r.map(function(r){return '<li>'+esc(r)+'</li>';}).join("")+'</ul>'+
+        '<dl class="kv"><dt>Bewertung</dt><dd>'+esc(x.val)+'</dd><dt>Risiko</dt><dd>'+esc(x.risk)+'</dd></dl></div></details></li>';
+    }).join("");
+    tf.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.th===cur));});
+    try{localStorage.setItem("ab-theme",cur);}catch(e){}
+  }
+  tf.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;cur=b.dataset.th;renderRank();});
+  renderRank();
+
+  /* Value */
+  var V=[
+    {n:"Alphabet",t:"GOOGL",m:"KGV ~16,5",ml:"bei +24 % Umsatz",v:"strong",
+     why:"Der Markt fürchtet, dass KI-Chatbots das Suchgeschäft auffressen. Die Zahlen zeigen das Gegenteil: Cloud +82 %, Marge steigt.",
+     cat:"Cloud-Auftragsbestand von 514 Mrd. $ wird zu Umsatz, gut die Hälfte in 24 Monaten.",
+     risk:"Auflagen aus den Kartellverfahren."},
+    {n:"PayPal",t:"PYPL",m:"Forward-KGV ~9",ml:"Branche ~17",v:"buy",
+     why:"Seit Jahren als Verlierer gegen Apple Pay und Stripe abgestempelt. Das Q2-EPS von 1,38 $ lag über der Erwartung, die Prognose wurde angehoben.",
+     cat:"Checkout-Partnerschaft mit Meta (KI-Shopping), Aktienrückkäufe.",
+     risk:"Marktanteil beim Branded Checkout sinkt weiter."},
+    {n:"UnitedHealth",t:"UNH",m:"KGV 18,7 (2026e)",ml:"EPS-Ziel +13–16 % p. a.",v:"buy",
+     why:"Kostenexplosion 2025 und Untersuchungen haben die Aktie halbiert. Jetzt sinkt die Kostenquote von 89,4 % auf 86,7 %, die Prognose steigt.",
+     cat:"Margenerholung bei Optum und Medicare, operativer Cashflow ~24 Mrd. $.",
+     risk:"Regulierung und politische Eingriffe bei Medicare."},
+    {n:"Samsung Electronics",t:"005930",m:"Forward-KGV ~5",ml:"Umsatz Q2 +130 %",v:"buy",
+     why:"Operativer Gewinn in Q2 89,5 Bio. Won (+1.814 %). Der Markt glaubt nicht an die Dauer des Speicherbooms und bewertet entsprechend niedrig.",
+     cat:"HBM4-Aufträge bei Nvidia, Aktienrückkäufe.",
+     risk:"Das niedrige KGV ist Zyklusbewertung. Verkauf bei fallenden DRAM-Preisen."},
+    {n:"Adobe",t:"ADBE",m:"Forward-KGV ~10–17",ml:"5-Jahres-Tief",v:"buy",
+     why:"Der „SaaSpocalypse“-Ausverkauf: KI-Bildgeneratoren sollen Creative Cloud ersetzen. Die Aktie hat ~50 % unter dem Niveau von Anfang 2025 verloren, verdient aber weiter hohe Margen.",
+     cat:"Nachweis, dass KI-Funktionen (Firefly) Umsatz bringen; Übernahmen in der Branche.",
+     risk:"Die Disruption ist real und schneller als gedacht."},
+    {n:"PepsiCo",t:"PEP",m:"23 % unter Fair Value",ml:"Morningstar, geringe Unsicherheit",v:"buy",
+     why:"Abnehmspritzen und schwacher Konsum drücken die Snack-Volumen. Breiter Burggraben, verlässliche Dividende.",
+     cat:"Defensiver Anker, falls 2027 die Rezession kommt.",
+     risk:"GLP-1-Effekt auf Snackkonsum größer als erwartet."},
+    {n:"Alibaba",t:"BABA",m:"KGV 18,7",ml:"Analystenziele +47 %",v:"buy",
+     why:"Der Gewinn fiel um 75 %, weil KI massiv Capex frisst. Dabei wächst die Cloud um 45 %, KI-Produkte seit 12 Quartalen dreistellig.",
+     cat:"Cloud-Margen, Stimulus für den chinesischen Konsum.",
+     risk:"China-Konjunktur (Einzelhandel +0,4 %), US-Sanktionen. Positionsgröße klein halten."},
+    {n:"Salesforce",t:"CRM",m:"Forward-KGV <15",ml:"−25 bis −30 % seit Jahresbeginn",v:"watch",
+     why:"Agenten-KI soll die Zahl der Nutzerlizenzen senken, das gefährdet das Preismodell. Die Bewertung preist bereits Schrumpfung ein.",
+     cat:"Agentforce-Umsatz, Übernahme durch Private Equity denkbar.",
+     risk:"Nutzerbasiertes Preismodell bricht wirklich ein."},
+    {n:"Novo Nordisk",t:"NVO",m:"KGV ~9,6",ml:"Lilly: über 50",v:"watch",
+     why:"Die Umsatzprognose 2026 liegt bei −6 % bis 0 %, Lilly gewinnt Marktanteile. Das KGV liegt bei einem Bruchteil von Lilly.",
+     cat:"Stabilisierung der US-Verschreibungen, neue Präparate.",
+     risk:"Klassische Value-Falle: fallende Umsätze, sinkende Preise."},
+    {n:"Comcast",t:"CMCSA",m:"37 % unter Fair Value",ml:"Morningstar, Fair Value 36 $",v:"watch",
+     why:"Kabelkunden wandern ab, der Breitband-Wettbewerb ist hart. Viel Cashflow, niedrige Erwartungen.",
+     cat:"Abspaltungen, Rückkäufe.",
+     risk:"Strukturelles Schrumpfen ohne Wende."},
+    {n:"Zimmer Biomet",t:"ZBH",m:"27 % unter Fair Value",ml:"Morningstar Wide Moat",v:"watch",
+     why:"Enttäuschendes Wachstum bei Knie- und Hüftimplantaten. Breiter Burggraben, alternde Bevölkerung.",
+     cat:"Kostenprogramm, neue Produkte.",
+     risk:"Wachstum bleibt unter dem Markt."}
+  ];
+  document.getElementById("vgrid").innerHTML=V.map(function(x,i){
+    return '<article class="vcard"><div class="top"><div><span class="eyebrow">#'+(i+1)+' · '+x.t+'</span><h3>'+esc(x.n)+'</h3></div>'+vtag(x.v)+'</div>'+
+      '<div><div class="metric num">'+esc(x.m)+'</div><div class="ml">'+esc(x.ml)+'</div></div>'+
+      '<p>'+esc(x.why)+'</p><p class="cat"><b>Auslöser</b>'+esc(x.cat)+'</p><p class="cat"><b>Risiko</b>'+esc(x.risk)+'</p></article>';
+  }).join("");
+
+  document.getElementById("h1").innerHTML=vtag("buy");
+  document.getElementById("h2").innerHTML=vtag("buy");
+  document.getElementById("h3").innerHTML=vtag("hold");
+  document.getElementById("h4").innerHTML=vtag("strong");
+
+  /* Scatter */
+  if(!window.Chart) return;
+  var chart;
+  function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  var P=[
+    {n:"Micron",x:340,y:6.6},{n:"Samsung",x:130,y:4.9},{n:"Broadcom",x:93,y:18.9},
+    {n:"Nvidia",x:89,y:21},{n:"AMD",x:50,y:32},{n:"Alphabet",x:24,y:16.5}
+  ];
+  function build(){
+    if(chart) chart.destroy();
+    var ink=tok("--ink"), muted=tok("--muted"), grid=tok("--line"), base=tok("--line-strong"), series=tok("--series"), surface=tok("--surface"), ink2=tok("--ink-2");
+    Chart.defaults.font.family='"Archivo",system-ui,sans-serif';
+    chart=new Chart(document.getElementById("cMap"),{
+      type:"scatter",
+      data:{datasets:[{data:P,backgroundColor:series,borderColor:surface,borderWidth:2,pointRadius:7,pointHoverRadius:9}]},
+      options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:14,right:24}},
+        plugins:{legend:{display:false},
+          tooltip:{backgroundColor:surface,titleColor:ink,bodyColor:ink2,borderColor:base,borderWidth:1,padding:10,displayColors:false,
+            callbacks:{label:function(c){var d=c.raw;return d.n+": +"+d.x+" % Wachstum, KGV "+String(d.y).replace(".",",");}}}},
+        scales:{
+          x:{type:"logarithmic",min:15,max:500,grid:{color:grid},border:{color:base},
+             ticks:{color:muted,callback:function(v){return [20,50,100,200,400].indexOf(v)>-1?"+"+v+" %":"";}},
+             title:{display:true,text:"Umsatzwachstum (log)",color:muted}},
+          y:{min:0,max:36,grid:{color:grid},border:{display:false},ticks:{color:muted,stepSize:10},
+             title:{display:true,text:"Forward-KGV",color:muted}}}},
+      plugins:[{id:"lbl",afterDatasetsDraw:function(ch){var ctx=ch.ctx,m=ch.getDatasetMeta(0);ctx.save();ctx.fillStyle=ink;ctx.font='600 12px "Archivo",system-ui,sans-serif';
+        m.data.forEach(function(pt,i){var d=P[i];var right=d.n==="Micron";ctx.textAlign=right?"right":"left";ctx.fillText(d.n,pt.x+(right?-11:11),pt.y+(d.n==="Nvidia"?-6:d.n==="Broadcom"?12:4));});ctx.restore();}}]
+    });
+  }
+  build();
+  var mq=window.matchMedia("(prefers-color-scheme: dark)");
+  if(mq.addEventListener) mq.addEventListener("change",build);
+  new MutationObserver(build).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+})();
+</script>
