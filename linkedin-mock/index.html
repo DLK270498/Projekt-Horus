@@ -982,7 +982,7 @@ document.addEventListener('click', e => {
     case 'expand': expanded.has(list) ? expanded.delete(list) : expanded.add(list); render(); scrollTo(0, y); break;
     case 'more': a.previousElementSibling.classList.add('open'); a.remove(); break;
     case 'contact': document.getElementById('modal').classList.add('on'); break;
-    case 'close-modal': if (e.target === a) document.getElementById('modal').classList.remove('on'); break;
+    case 'close-modal': if (a.id !== 'modal' || e.target === a) document.getElementById('modal').classList.remove('on'); break;
     case 'img-remove': setP(a.dataset.path, ''); save(true); render(); scrollTo(0, y); break;
     case 'menu': document.getElementById('dock').classList.toggle('open'); break;
     case 'export': {
