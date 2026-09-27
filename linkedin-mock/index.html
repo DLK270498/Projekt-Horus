@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Profil-Mock</title>
+<style>
+:root{
+  --bg:#f4f2ee; --card:#fff; --nav:#fff; --text:rgba(0,0,0,.9); --muted:rgba(0,0,0,.6); --faint:rgba(0,0,0,.45);
+  --line:rgba(140,140,140,.2); --shadow:0 0 0 1px rgba(140,140,140,.2); --hover:rgba(0,0,0,.08);
+  --blue:#0a66c2; --blue-h:#004182; --on-blue:#fff; --green:#01754f; --otw:#e6f4ea; --otw-ring:#57a55a;
+  --gold:#915907; --badge:#cb112d; --input:#edf3f8; --chip:#e8e8e8; --edit:#fff8d6; --edit-line:#e7b416;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000; --card:#1b1f23; --nav:#1d2226; --text:rgba(255,255,255,.9); --muted:rgba(255,255,255,.6); --faint:rgba(255,255,255,.45);
+    --line:rgba(255,255,255,.15); --shadow:0 0 0 1px rgba(255,255,255,.12); --hover:rgba(255,255,255,.08);
+    --blue:#71b7fb; --blue-h:#a8d4ff; --on-blue:#000; --green:#5fc198; --otw:#1f3a2b; --otw-ring:#57a55a;
+    --gold:#e7a33e; --input:#38434f; --chip:#38434f; --edit:#3a3317; --edit-line:#e7b416;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000; --card:#1b1f23; --nav:#1d2226; --text:rgba(255,255,255,.9); --muted:rgba(255,255,255,.6); --faint:rgba(255,255,255,.45);
+  --line:rgba(255,255,255,.15); --shadow:0 0 0 1px rgba(255,255,255,.12); --hover:rgba(255,255,255,.08);
+  --blue:#71b7fb; --blue-h:#a8d4ff; --on-blue:#000; --green:#5fc198; --otw:#1f3a2b; --otw-ring:#57a55a;
+  --gold:#e7a33e; --input:#38434f; --chip:#38434f; --edit:#3a3317; --edit-line:#e7b416;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.42857 -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","Fira Sans",Ubuntu,Oxygen,"Oxygen Sans",Cantarell,"Droid Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Lucida Grande",Helvetica,Arial,sans-serif;}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+svg{display:block;flex:none}
+ul{list-style:none;margin:0;padding:0}
+h1,h2,h3,p{margin:0}
+
+/* ---------- Global nav ---------- */
+.nav{position:sticky;top:0;z-index:50;background:var(--nav);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1128px;margin:0 auto;height:52px;display:flex;align-items:center;padding:0 16px;gap:8px}
+.logo{width:34px;height:34px;border-radius:4px;background:var(--blue);color:var(--on-blue);display:grid;place-items:center;font:700 22px/1 Arial,sans-serif;letter-spacing:-1px;flex:none}
+.search{display:flex;align-items:center;gap:8px;background:var(--input);border-radius:4px;height:34px;padding:0 10px;width:280px;color:var(--muted);margin-right:auto}
+.search input{border:0;background:none;outline:0;font:inherit;color:var(--text);width:100%}
+.navlist{display:flex;align-items:stretch;height:52px}
+.navitem{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:80px;color:var(--muted);font-size:12px;position:relative;cursor:pointer}
+.navitem:hover{color:var(--text)}
+.navitem.active{color:var(--text)}
+.navitem.active::after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--text)}
+.navitem .ic{position:relative}
+.navbadge{position:absolute;top:-4px;right:-8px;background:var(--badge);color:#fff;font-size:11px;font-weight:600;border-radius:9px;min-width:16px;height:16px;padding:0 4px;display:grid;place-items:center;border:2px solid var(--nav)}
+.navsep{width:1px;background:var(--line);margin:0 8px}
+.nav-me .mini{width:24px;height:24px;border-radius:50%}
+.premium{color:var(--gold);text-decoration:underline;font-size:12px;text-align:center;line-height:1.2;max-width:84px}
+
+/* ---------- Layout ---------- */
+.wrap{max-width:1128px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px}
+main{display:flex;flex-direction:column;gap:8px;min-width:0}
+aside{display:flex;flex-direction:column;gap:8px;min-width:0}
+.card{background:var(--card);border-radius:8px;box-shadow:var(--shadow);overflow:hidden}
+.pad{padding:24px 24px 12px}
+.sec-h{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px}
+.sec-h h2{font-size:20px;font-weight:600;line-height:1.4}
+.sec-sub{color:var(--muted);font-size:14px;display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted);flex:none}
+.icon-btn:hover{background:var(--hover);color:var(--text)}
+.sec-foot{display:flex;align-items:center;justify-content:center;gap:6px;border-top:1px solid var(--line);padding:12px;color:var(--muted);font-weight:600;font-size:16px;width:100%}
+.sec-foot:hover{background:var(--hover);color:var(--text)}
+
+/* ---------- Top card ---------- */
+.banner{height:0;padding-bottom:25%;background:linear-gradient(135deg,#a0b4b7 0%,#c8d6d9 55%,#dfe8ea 100%) center/cover no-repeat;position:relative}
+.top-body{padding:0 24px 24px;position:relative}
+.avatar-wrap{width:160px;height:160px;border-radius:50%;border:4px solid var(--card);margin-top:-112px;position:relative;background:var(--card);overflow:hidden}
+.avatar-wrap img,.avatar-wrap .ghost{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.ghost{background:#9db3c8;display:grid!important;place-items:end center;overflow:hidden}
+.otw .otw-ring{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:conic-gradient(from 150deg,var(--otw-ring) 0 120deg,transparent 120deg);-webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%)}
+.otw-label{position:absolute;bottom:14px;left:50%;transform:translateX(-50%) rotate(0);font-size:11px;font-weight:700;color:#fff;letter-spacing:.3px;text-shadow:0 0 2px rgba(0,0,0,.4);pointer-events:none;white-space:nowrap}
+.top-pencil{position:absolute;right:16px;top:12px}
+.top-cam{position:absolute;right:16px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--card);color:var(--blue);display:grid;place-items:center;z-index:2}
+.top-grid{display:grid;grid-template-columns:minmax(0,1fr) 232px;gap:24px;margin-top:8px}
+.name-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.name-row h1{font-size:24px;font-weight:600;line-height:1.25}
+.verified{color:var(--muted)}
+.pronouns{color:var(--muted);font-size:14px}
+.headline{font-size:16px;line-height:1.5;margin-top:2px}
+.loc{color:var(--muted);margin-top:8px}
+.link{color:var(--blue);font-weight:600;cursor:pointer}
+.link:hover{text-decoration:underline}
+.web{margin-top:4px;display:flex;align-items:center;gap:4px}
+.conn{margin-top:8px;color:var(--muted)}
+.conn b{color:var(--blue);font-weight:600}
+.orgs li{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;margin-bottom:8px;line-height:1.3}
+.orgs li:hover{color:var(--blue);text-decoration:underline;cursor:pointer}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pill{height:32px;padding:0 16px;border-radius:16px;font-weight:600;font-size:16px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pill.primary{background:var(--blue);color:var(--on-blue)}
+.pill.primary:hover{background:var(--blue-h)}
+.pill.secondary{box-shadow:inset 0 0 0 1px var(--blue);color:var(--blue)}
+.pill.secondary:hover{box-shadow:inset 0 0 0 2px var(--blue);background:rgba(10,102,194,.06)}
+.pill.tertiary{box-shadow:inset 0 0 0 1px var(--muted);color:var(--muted)}
+.pill.tertiary:hover{box-shadow:inset 0 0 0 2px var(--text);color:var(--text);background:var(--hover)}
+.pill.sm{height:32px;font-size:14px;padding:0 14px}
+.otw-box{margin-top:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.otw-card{border-radius:8px;padding:12px 16px;position:relative;font-size:14px}
+.otw-card.a{background:var(--otw)}
+.otw-card.b{box-shadow:inset 0 0 0 1px var(--line)}
+.otw-card b{display:block;font-weight:600}
+.otw-card .link{display:inline-block;margin-top:2px}
+
+/* ---------- Generic items ---------- */
+.muted{color:var(--muted)}
+.lock{display:inline-flex;align-items:center;gap:4px;color:var(--muted)}
+.analytics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:4px 0 12px}
+.ana{display:flex;gap:8px;padding:4px 0}
+.ana b{display:block;font-weight:600}
+.ana span{color:var(--muted);font-size:14px}
+.ml{white-space:pre-wrap;word-wrap:break-word}
+.clamp{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.clamp.open{display:block;-webkit-line-clamp:unset}
+.more{color:var(--muted);font-weight:600;display:block;margin-left:auto;margin-top:2px}
+.more:hover{color:var(--blue);text-decoration:underline}
+.about-text{font-size:14px;margin-bottom:12px}
+.top-skills{box-shadow:inset 0 0 0 1px var(--line);border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.top-skills b{font-weight:600;display:block}
+
+.list > li{display:flex;gap:8px;padding:12px 0;position:relative}
+.list > li + li{border-top:1px solid var(--line)}
+.logo-sq{border-radius:4px;display:grid;place-items:center;color:#fff;font-weight:700;flex:none;overflow:hidden}
+.item-body{flex:1;min-width:0}
+.t1{font-weight:600;font-size:14px}
+.t2{font-size:14px}
+.t3{color:var(--muted);font-size:14px}
+.desc{margin-top:8px;font-size:14px}
+.skillline{margin-top:8px;display:flex;gap:6px;align-items:flex-start;font-size:14px}
+.skillline b{font-weight:600}
+.media{margin-top:8px;display:flex;gap:8px;align-items:center;font-size:14px}
+.media-thumb{width:112px;height:64px;border-radius:4px;background:var(--chip);flex:none;overflow:hidden}
+.media-thumb img{width:100%;height:100%;object-fit:cover}
+
+.featured{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);gap:8px;overflow-x:auto;padding-bottom:16px;scrollbar-width:thin}
+.feat{box-shadow:inset 0 0 0 1px var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;position:relative;min-width:0}
+.feat-img{height:130px;background-color:var(--chip);background-position:center;background-size:cover;display:grid;place-items:center;color:var(--muted);font-size:12px;position:relative}
+.feat-b{padding:12px}
+.feat-kind{color:var(--muted);font-size:12px}
+.feat-t{font-weight:600;margin-top:2px}
+.feat-x{color:var(--muted);font-size:12px;margin-top:4px}
+
+.posts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-bottom:12px}
+.post{box-shadow:inset 0 0 0 1px var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;position:relative;min-width:0}
+.post-h{display:flex;gap:8px;align-items:center}
+.post-h .mini{width:32px;height:32px;border-radius:50%;flex:none;overflow:hidden}
+.post-n{font-weight:600;font-size:12px;line-height:1.3}
+.post-t{color:var(--muted);font-size:12px;display:flex;align-items:center;gap:3px}
+.post-f{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:8px;margin-top:auto}
+.reacts{display:flex;align-items:center;gap:4px}
+.reacts i{width:16px;height:16px;border-radius:50%;display:inline-grid;place-items:center;font-style:normal;font-size:9px;margin-right:-6px;border:1px solid var(--card)}
+.reacts i:last-of-type{margin-right:2px}
+.tabs{display:flex;gap:8px;margin:4px 0 12px;flex-wrap:wrap}
+.tab{height:32px;padding:0 12px;border-radius:16px;box-shadow:inset 0 0 0 1px var(--muted);color:var(--muted);font-weight:600;display:inline-flex;align-items:center}
+.tab.on{background:var(--green);color:#fff;box-shadow:none}
+.follow{margin-top:-2px;margin-bottom:8px}
+
+.skills > li{display:block}
+.skill-n{font-weight:600}
+.endorse{display:flex;gap:6px;align-items:center;color:var(--muted);margin-top:6px}
+
+.reco > li{align-items:flex-start}
+.avatar-s{display:block;align-self:flex-start;width:56px;height:56px;border-radius:50%;flex:none;overflow:hidden}
+
+.people > li{border-top:0!important;padding:8px 0}
+.people .avatar-s{width:48px;height:48px;border-radius:50%;flex:none;overflow:hidden}
+.people .pill{margin-top:8px}
+.editing .people > li.has-ctrls{flex-wrap:wrap;padding-right:0}
+.people .ctrls{position:static;margin-left:56px;box-shadow:none}
+
+.side-card{padding:16px}
+.side-row{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.side-row + .side-row{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+.side-row b{font-weight:600;font-size:16px;display:block}
+.side-card h3{font-size:16px;font-weight:600}
+.foot{color:var(--muted);font-size:12px;text-align:center;padding:16px 8px;line-height:1.9}
+.foot span{margin:0 6px;white-space:nowrap;display:inline-block}
+.foot .logo-t{font-weight:700;color:var(--blue)}
+.ad{padding:12px 16px;text-align:center;font-size:12px;color:var(--muted)}
+.ad-in{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0}
+
+/* ---------- Edit mode ---------- */
+.editing [data-path]{outline:1px dashed var(--edit-line);outline-offset:1px;border-radius:2px;background:var(--edit);min-width:24px;display:inline-block;cursor:text}
+.editing div[data-path],.editing p[data-path]{display:block}
+.editing [data-path]:focus{outline:2px solid var(--edit-line)}
+.editing [data-path]:empty::before{content:attr(data-ph);color:var(--faint)}
+.editing .clamp{display:block;-webkit-line-clamp:unset}
+.editing .more{display:none}
+.editing [data-img]{cursor:pointer}
+.img-hint{position:absolute;inset:auto 8px 8px auto;background:rgba(0,0,0,.65);color:#fff;font-size:12px;padding:4px 8px;border-radius:4px;pointer-events:none;z-index:3}
+.avatar-wrap .img-hint{inset:auto 50% 40% auto;transform:translateX(50%);white-space:nowrap}
+.ctrls{display:none;gap:2px;position:absolute;top:8px;right:0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:2px;z-index:4}
+.editing .ctrls{display:flex}
+.ctrls button{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
+.ctrls button:hover{background:var(--hover);color:var(--text)}
+.ctrls button.del:hover{color:#cb112d}
+.editing .has-ctrls{padding-right:100px}
+.add-btn{display:none}
+.editing .add-btn{display:grid}
+body:not(.editing) .edit-only{display:none!important}
+.edit-opts{display:none;flex-wrap:wrap;gap:16px;margin-top:12px;padding:10px 12px;border-radius:8px;background:var(--edit);box-shadow:inset 0 0 0 1px var(--edit-line);font-size:13px}
+.editing .edit-opts{display:flex}
+.edit-opts label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+.dates{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:2px 0;font-size:13px}
+.dates input[type=month]{font:inherit;color:var(--text);background:var(--edit);border:1px dashed var(--edit-line);border-radius:4px;padding:2px 4px;color-scheme:light dark}
+.hidden-sec{opacity:.45}
+.sec-toggle{font-size:12px;display:inline-flex;gap:4px;align-items:center;color:var(--muted);margin-right:4px;white-space:nowrap}
+
+/* ---------- Toolbar & modal ---------- */
+.dock{position:fixed;right:16px;bottom:16px;z-index:80;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.dock-menu{display:none;background:var(--card);box-shadow:0 4px 24px rgba(0,0,0,.2),var(--shadow);border-radius:8px;padding:6px;min-width:220px}
+.dock.open .dock-menu{display:block}
+.dock-menu button,.dock-menu label{display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border-radius:6px;text-align:left;cursor:pointer}
+.dock-menu button:hover,.dock-menu label:hover{background:var(--hover)}
+.dock-menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+.dock-main{display:flex;gap:8px}
+.fab{height:44px;padding:0 18px;border-radius:22px;background:var(--blue);color:var(--on-blue);font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.fab.alt{background:var(--card);color:var(--text);padding:0;width:44px;justify-content:center}
+.editing-flag .fab.main{background:#e7b416;color:#000}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d2226;color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:90;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:70;display:none;align-items:flex-start;justify-content:center;padding:48px 16px;overflow:auto}
+.modal-bg.on{display:flex}
+.modal{background:var(--card);border-radius:8px;width:100%;max-width:552px;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.modal-h{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 12px 24px;border-bottom:1px solid var(--line)}
+.modal-h h2{font-size:20px;font-weight:400}
+.modal-b{padding:16px 24px 24px}
+.ci{display:flex;gap:16px;padding:10px 0}
+.ci b{display:block;font-weight:600;font-size:16px}
+.ci .v{color:var(--blue)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1000px){ .navitem .lbl{display:none} .navitem{min-width:56px} .premium{display:none} }
+@media (max-width:860px){
+  .wrap{grid-template-columns:minmax(0,1fr);margin-top:0;padding:0}
+  .card{border-radius:0}
+  .top-grid{grid-template-columns:minmax(0,1fr)}
+  .orgs{display:none}
+  .search{width:auto;flex:1}
+  .navitem.hide-sm,.navsep,.biz{display:none}
+}
+@media (max-width:560px){
+  .pad{padding:16px 16px 8px}
+  .top-body{padding:0 16px 16px}
+  .avatar-wrap{width:104px;height:104px;margin-top:-64px}
+  .otw-label{font-size:8px;bottom:8px}
+  .posts{grid-template-columns:minmax(0,1fr)}
+  .otw-box{grid-template-columns:minmax(0,1fr)}
+  .analytics{grid-template-columns:minmax(0,1fr)}
+  .navlist .navitem:not(.keep){display:none}
+  .fab .lbl{display:none}
+  .fab.main{width:44px;padding:0;justify-content:center}
+}
+@media print{
+  .nav,.dock,.ctrls,.edit-opts,.add-btn,aside{display:none!important}
+  .wrap{grid-template-columns:1fr;margin:0}
+  body{background:#fff}
+  .clamp{display:block;-webkit-line-clamp:unset}.more{display:none}
+}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Hauptnavigation">
+  <div class="nav-in" id="nav"></div>
+</nav>
+<div class="wrap" id="app">
+  <main id="main"></main>
+  <aside id="side"></aside>
+</div>
+
+<div class="modal-bg" id="modal" data-act="close-modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal-inner"></div>
+</div>
+
+<div class="dock" id="dock">
+  <div class="dock-menu" id="dock-menu">
+    <button data-act="export"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg>Als JSON exportieren</button>
+    <label><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3m0 0L8 7m4-4 4 4M4 17v3h16v-3"/></svg>JSON importieren<input type="file" accept="application/json,.json" id="import-file" hidden></label>
+    <button data-act="print"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 9V3h10v6M7 18H4v-8h16v8h-3M7 14h10v7H7z"/></svg>Drucken / als PDF</button>
+    <button data-act="theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>Hell / Dunkel wechseln</button>
+    <hr>
+    <button data-act="reset" style="color:#cb112d"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5"/></svg>Auf Beispieldaten zurücksetzen</button>
+  </div>
+  <div class="dock-main">
+    <button class="fab alt" data-act="menu" aria-label="Menü"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+    <button class="fab main" data-act="toggle-edit" id="edit-btn"></button>
+  </div>
+</div>
+<input type="file" accept="image/*" id="img-file" hidden>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+const KEY = 'profile-mock-v1';
+const THEME_KEY = 'profile-mock-theme';
+
+/* ------------------------------------------------------------------ */
+/* Beispieldaten – alles hier ist frei erfunden und wird überschrieben */
+/* ------------------------------------------------------------------ */
+const DEFAULT = {
+  name: 'Max Mustermann',
+  pronouns: 'Er/Ihm',
+  verified: true,
+  headline: 'Senior Product Manager | B2B SaaS & Plattformen | Ich verbinde Nutzerbedürfnisse, Daten und Technologie zu Produkten, die wachsen',
+  location: 'Berlin, Deutschland',
+  website: 'maxmustermann.de',
+  followers: '1.284',
+  connections: '500+',
+  topCompany: 'Nordlicht Digital GmbH',
+  topSchool: 'Technische Universität München',
+  avatar: '',
+  banner: '',
+  openToWork: true,
+  openToWorkRoles: 'Head of Product, Director Product Management und Group Product Manager',
+  openToWorkPlaces: 'Berlin · Hamburg · Remote',
+  providing: 'Produktstrategie, Product Discovery und Workshop-Moderation',
+  contact: {
+    url: 'linkedin.com/in/max-mustermann',
+    email: 'max@maxmustermann.de',
+    phone: '+49 170 1234567 (Mobil)',
+    website: 'maxmustermann.de (Persönlich)',
+    birthday: '12. März'
+  },
+  analytics: { views: '247', impressions: '3.912', searches: '58' },
+  sections: {},
+  about: 'Ich baue seit über 9 Jahren digitale Produkte – vom ersten Prototyp bis zur Plattform mit sechsstelliger Nutzerzahl.\n\nAktuell verantworte ich bei Nordlicht Digital die Produktstrategie für unsere B2B-Plattform. Mein Fokus: klare Produktvisionen, datengetriebene Entscheidungen und crossfunktionale Teams, die gerne zusammenarbeiten.\n\nWas mich antreibt:\n• Probleme wirklich verstehen, bevor wir Lösungen bauen\n• Teams befähigen statt Tickets verteilen\n• Messbare Ergebnisse statt Output\n\nOffen für Austausch zu Product Discovery, OKRs und Plattformstrategien – schreib mir gerne!',
+  topSkills: 'Produktstrategie • Product Discovery • OKR • Stakeholder-Management • SaaS',
+  featured: [
+    { kind: 'Beitrag', title: '5 Lektionen aus 3 Jahren Plattform-Produktmanagement', text: 'Was ich gerne vorher gewusst hätte – und was ich heute anders machen würde.', img: '' },
+    { kind: 'Link', title: 'Vortrag: Discovery im Enterprise-Umfeld', text: 'ProductCamp Berlin 2025 · Folien & Aufzeichnung', img: '' },
+    { kind: 'Artikel', title: 'OKRs, die wirklich funktionieren', text: 'Ein praktischer Leitfaden für Produktteams', img: '' }
+  ],
+  activity: [
+    { text: 'Riesige Freude: Unser neues Self-Service-Onboarding ist live! 🚀\n\nIn nur 10 Wochen haben wir die Time-to-Value für neue Kunden von 14 auf 3 Tage reduziert. Danke an das gesamte Team – ihr seid großartig.', time: '1 Woche', reactions: '184', comments: '23' },
+    { text: 'Gestern auf dem ProductCamp Berlin über Discovery im Enterprise-Umfeld gesprochen. Die spannendste Frage aus dem Publikum: „Wie viel Discovery ist genug?“ Meine Antwort: So viel, bis ihr euch traut, etwas wegzulassen.', time: '3 Wochen', reactions: '96', comments: '11' }
+  ],
+  experience: [
+    { title: 'Senior Product Manager', company: 'Nordlicht Digital GmbH', type: 'Vollzeit', start: '2022-04', end: '', location: 'Berlin, Deutschland', workplace: 'Hybrid', description: 'Verantwortlich für die B2B-Plattform (Self-Service, Billing, Integrationen) mit 3 crossfunktionalen Teams.\n• ARR-Wachstum von 38 % durch neues Self-Service-Onboarding\n• Einführung von Continuous Discovery und OKRs im gesamten Produktbereich\n• Aufbau einer Integrations-Plattform mit 40+ Partnern', skills: 'Produktstrategie, OKR und +4 Kenntnisse' },
+    { title: 'Product Manager', company: 'Wellenwerk Software AG', type: 'Vollzeit', start: '2019-01', end: '2022-03', location: 'Hamburg, Deutschland', workplace: 'Vor Ort', description: 'Produktverantwortung für die Mobile App (iOS/Android) mit über 250.000 aktiven Nutzer:innen.\n• App-Store-Rating von 3,4 auf 4,6 verbessert\n• Retention nach 30 Tagen um 22 % gesteigert', skills: 'Mobile, A/B-Testing und +2 Kenntnisse' },
+    { title: 'Associate Product Manager', company: 'Wellenwerk Software AG', type: 'Vollzeit', start: '2017-08', end: '2018-12', location: 'Hamburg, Deutschland', workplace: 'Vor Ort', description: 'Einstieg ins Produktmanagement im Payments-Team.', skills: '' },
+    { title: 'Werkstudent Business Development', company: 'Alpenblick Ventures', type: 'Werkstudent', start: '2015-10', end: '2017-06', location: 'München, Deutschland', workplace: '', description: '', skills: '' }
+  ],
+  education: [
+    { school: 'Technische Universität München', degree: 'Master of Science – MS, Wirtschaftsinformatik', period: '2015 – 2017', grade: 'Note: 1,3', description: 'Schwerpunkt: Digitale Plattformen und Innovationsmanagement.' },
+    { school: 'Universität Mannheim', degree: 'Bachelor of Science – BS, Betriebswirtschaftslehre', period: '2011 – 2015', grade: '', description: 'Auslandssemester an der Copenhagen Business School.' }
+  ],
+  certifications: [
+    { name: 'Professional Scrum Product Owner I (PSPO I)', issuer: 'Scrum.org', date: 'Ausgestellt: Mai 2021', cred: '' },
+    { name: 'Product Analytics Certification', issuer: 'Beispiel-Akademie', date: 'Ausgestellt: Sept. 2023', cred: 'Nachweis-ID 8F2K-19QX' },
+    { name: 'Design Thinking Practitioner', issuer: 'Beispiel-Institut', date: 'Ausgestellt: Feb. 2020', cred: '' }
+  ],
+  projects: [
+    { name: 'Open-Source-Toolkit für Discovery-Interviews', date: 'Jan. 2024 – Heute', description: 'Sammlung von Vorlagen und Leitfäden für Nutzerinterviews, genutzt von 30+ Produktteams.' }
+  ],
+  volunteering: [
+    { role: 'Mentor', org: 'Produktmentoring e. V.', period: 'Jan. 2021 – Heute', cause: 'Bildung', description: 'Mentoring für Berufseinsteiger:innen im Produktmanagement.' }
+  ],
+  skills: [
+    { name: 'Produktstrategie', endorsements: '42', context: 'Senior Product Manager bei Nordlicht Digital GmbH' },
+    { name: 'Product Discovery', endorsements: '35', context: '2 Berufserfahrungen bei Nordlicht Digital GmbH und Wellenwerk Software AG' },
+    { name: 'OKR', endorsements: '28', context: '' },
+    { name: 'Stakeholder-Management', endorsements: '24', context: '' },
+    { name: 'Agile Methoden', endorsements: '21', context: '' },
+    { name: 'SQL', endorsements: '9', context: '' }
+  ],
+  recommendations: [
+    { name: 'Laura Beispiel', headline: 'VP Engineering bei Nordlicht Digital GmbH', relation: '14. Juni 2024 · Laura hat mit Max im selben Team gearbeitet', text: 'Max ist einer der strukturiertesten Produktmenschen, mit denen ich je gearbeitet habe. Er schafft es, komplexe Anforderungen in klare Prioritäten zu übersetzen und das Team dabei mitzunehmen. Jede Engineering-Organisation kann sich glücklich schätzen, ihn an Bord zu haben.' },
+    { name: 'Jonas Muster', headline: 'Head of Design bei Wellenwerk Software AG', relation: '2. März 2022 · Jonas hat mit Max zusammengearbeitet, war aber in einem anderen Team', text: 'Die Zusammenarbeit mit Max war immer auf Augenhöhe. Er hat Design von Anfang an in die Discovery eingebunden.' }
+  ],
+  languages: [
+    { name: 'Deutsch', level: 'Muttersprache oder zweisprachig' },
+    { name: 'Englisch', level: 'Verhandlungssicher' },
+    { name: 'Spanisch', level: 'Grundkenntnisse' }
+  ],
+  interests: [
+    { name: 'Nordlicht Digital GmbH', followers: '12.408 Follower:innen' },
+    { name: 'Produktmentoring e. V.', followers: '3.221 Follower:innen' }
+  ],
+  people: [
+    { name: 'Sophie Beispiel', headline: 'Product Designerin | UX Research', img: '' },
+    { name: 'Tim Muster', headline: 'Engineering Manager bei Wellenwerk Software AG', img: '' },
+    { name: 'Aylin Exempel', headline: 'Head of Growth | B2B SaaS', img: '' }
+  ]
+};
+
+/* Bearbeitbare Listen: Titel + Vorlage für neue Einträge */
+const LISTS = {
+  featured: { title: 'Im Fokus', tpl: () => ({ kind: 'Beitrag', title: 'Titel', text: '', img: '' }) },
+  activity: { title: 'Aktivitäten', tpl: () => ({ text: 'Neuer Beitrag …', time: 'Gerade eben', reactions: '0', comments: '0' }) },
+  experience: { title: 'Berufserfahrung', tpl: () => ({ title: 'Position', company: 'Unternehmen', type: 'Vollzeit', start: new Date().toISOString().slice(0, 7), end: '', location: '', workplace: '', description: '', skills: '' }) },
+  education: { title: 'Ausbildung', tpl: () => ({ school: 'Hochschule', degree: 'Abschluss, Fachrichtung', period: '', grade: '', description: '' }) },
+  certifications: { title: 'Bescheinigungen und Zertifikate', limit: 3, tpl: () => ({ name: 'Zertifikat', issuer: 'Aussteller', date: 'Ausgestellt: ', cred: '' }) },
+  projects: { title: 'Projekte', tpl: () => ({ name: 'Projektname', date: '', description: '' }) },
+  volunteering: { title: 'Ehrenamt', tpl: () => ({ role: 'Rolle', org: 'Organisation', period: '', cause: '', description: '' }) },
+  skills: { title: 'Kenntnisse', limit: 3, tpl: () => ({ name: 'Kenntnis', endorsements: '0', context: '' }) },
+  recommendations: { title: 'Empfehlungen', limit: 2, tpl: () => ({ name: 'Name', headline: 'Position', relation: '', text: 'Empfehlungstext …' }) },
+  languages: { title: 'Sprachkenntnisse', tpl: () => ({ name: 'Sprache', level: 'Niveau' }) },
+  interests: { title: 'Interessen', tpl: () => ({ name: 'Unternehmen', followers: '' }) },
+  people: { title: 'Personen, die Sie kennen könnten', tpl: () => ({ name: 'Name', headline: 'Position', img: '' }) }
+};
+
+/* ------------------------------ State ------------------------------ */
+const clone = o => JSON.parse(JSON.stringify(o));
+function merge(base, over) {
+  if (Array.isArray(base)) return Array.isArray(over) ? over : base;
+  if (base && typeof base === 'object') {
+    const out = { ...base };
+    if (over && typeof over === 'object') for (const k of Object.keys(over)) out[k] = k in base ? merge(base[k], over[k]) : over[k];
+    return out;
+  }
+  return over === undefined ? base : over;
+}
+function load() {
+  try { const raw = localStorage.getItem(KEY); if (raw) return merge(clone(DEFAULT), JSON.parse(raw)); } catch (e) {}
+  return clone(DEFAULT);
+}
+let S = load();
+let editing = false;
+const expanded = new Set();
+let saveTimer;
+function save(now) {
+  clearTimeout(saveTimer);
+  const run = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { toast('Speichern fehlgeschlagen – evtl. sind die Bilder zu groß.'); } };
+  now ? run() : (saveTimer = setTimeout(run, 250));
+}
+const getP = p => p.split('.').reduce((o, k) => (o == null ? o : o[k]), S);
+function setP(p, v) { const ks = p.split('.'); let o = S; for (let i = 0; i < ks.length - 1; i++) o = o[ks[i]]; o[ks[ks.length - 1]] = v; }
+
+/* ----------------------------- Helpers ----------------------------- */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const CE = (() => { const d = document.createElement('div'); d.contentEditable = 'plaintext-only'; return d.contentEditable === 'plaintext-only' ? 'plaintext-only' : 'true'; })();
+/* Editierbares Feld; im Ansichtsmodus verschwinden leere Felder */
+function E(path, ph = '', tag = 'span', cls = '') {
+  const v = getP(path) ?? '';
+  if (!editing && v === '') return '';
+  return `<${tag} class="${cls}" data-path="${path}" data-ph="${esc(ph)}"${editing ? ` contenteditable="${CE}" spellcheck="true"` : ''}>${esc(v)}</${tag}>`;
+}
+/* Verbindet Teile mit " · " und lässt leere weg */
+const J = (...parts) => parts.filter(Boolean).join(' · ');
+const has = p => editing || (getP(p) ?? '') !== '';
+
+const MONTHS = ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni', 'Juli', 'Aug.', 'Sept.', 'Okt.', 'Nov.', 'Dez.'];
+const fmtMonth = d => { if (!d) return 'Heute'; const [y, m] = d.split('-'); return m ? `${MONTHS[+m - 1]} ${y}` : y; };
+function duration(s, e) {
+  if (!s) return '';
+  const [sy, sm] = s.split('-').map(Number);
+  let ey, em;
+  if (e) [ey, em] = e.split('-').map(Number); else { const n = new Date(); ey = n.getFullYear(); em = n.getMonth() + 1; }
+  const t = Math.max(1, (ey - sy) * 12 + (em - (sm || 1)) + 1);
+  const y = Math.floor(t / 12), m = t % 12;
+  return [y ? `${y} J.` : '', m ? `${m} Mon.` : ''].filter(Boolean).join(' ');
+}
+function hue(str) { let h = 0; for (const c of String(str)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; }
+function initials(n) { return String(n || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase(); }
+function logo(name, size = 48) {
+  const h = hue(name);
+  return `<span class="logo-sq" style="width:${size}px;height:${size}px;background:hsl(${h} 45% 38%);font-size:${Math.round(size * .36)}px">${esc(initials(name))}</span>`;
+}
+const GHOST = `<svg viewBox="0 0 128 128" width="100%" height="100%"><rect width="128" height="128" fill="#9db3c8"/><circle cx="64" cy="50" r="24" fill="#e9eff4"/><path d="M20 128c4-28 22-42 44-42s40 14 44 42z" fill="#e9eff4"/></svg>`;
+function personPic(name, img, size) {
+  if (img) return `<img src="${esc(img)}" alt="" style="width:100%;height:100%;object-fit:cover">`;
+  const h = hue(name);
+  return `<span style="width:100%;height:100%;display:grid;place-items:center;background:hsl(${h} 30% 55%);color:#fff;font-weight:600;font-size:${Math.round(size * .38)}px">${esc(initials(name))}</span>`;
+}
+const myPic = () => S.avatar ? `<img src="${esc(S.avatar)}" alt="">` : GHOST;
+
+/* ------------------------------ Icons ------------------------------ */
+const I = {
+  pencil: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M21.13 2.86a3 3 0 0 0-4.17 0l-13 13L2 22l6.19-2L21.13 7a3 3 0 0 0 0-4.16zM6.77 18.57l-1.35-1.34L16.64 6 18 7.35z"/></svg>',
+  plus: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M21 13h-8v8h-2v-8H3v-2h8V3h2v8h8z"/></svg>',
+  arrow: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.45 3 15 8l-3.55 5H9l2.84-4H2V7h9.84L9 3z"/></svg>',
+  eye: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3C4.5 3 1.6 5.1.3 8c1.3 2.9 4.2 5 7.7 5s6.4-2.1 7.7-5C14.4 5.1 11.5 3 8 3zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>',
+  people: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 16v6H3v-6a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3zm5.5-3A3.5 3.5 0 1 0 14 9.5a3.5 3.5 0 0 0 3.5 3.5zm1 2h-2a2.5 2.5 0 0 0-2.5 2.5V22h7v-4.5a2.5 2.5 0 0 0-2.5-2.5zM7.5 2A4.5 4.5 0 1 0 12 6.5 4.49 4.49 0 0 0 7.5 2z"/></svg>',
+  chart: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23 20v1H1v-1zM8 9H2v10h6zm7-6H9v16h6zm7 11h-6v5h6z"/></svg>',
+  search: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M14.56 12.44 11.3 9.18a5.51 5.51 0 1 0-2.12 2.12l3.26 3.26a1.5 1.5 0 1 0 2.12-2.12zM3 6.5A3.5 3.5 0 1 1 6.5 10 3.5 3.5 0 0 1 3 6.5z"/></svg>',
+  shield: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5zm-1.2 15.4-4-4 1.4-1.4 2.6 2.6 5.4-5.4 1.4 1.4z"/></svg>',
+  link: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M14 3v7h-2V6.4L6.7 11.7 5.3 10.3 10.6 5H7V3zm-3 9v1H3V5h1V3H1v12h12v-3z"/></svg>',
+  globe: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 7 7 7 7 0 0 0-7-7zm4.6 4H10.9a11 11 0 0 0-.9-2.8A5.5 5.5 0 0 1 12.6 5zM8 2.6A8.7 8.7 0 0 1 9.3 5H6.7A8.7 8.7 0 0 1 8 2.6zM2.6 9a5.3 5.3 0 0 1 0-2h2a14.4 14.4 0 0 0 0 2zm.8 2h1.7a11 11 0 0 0 .9 2.8A5.5 5.5 0 0 1 3.4 11zm1.7-6H3.4A5.5 5.5 0 0 1 6 2.2 11 11 0 0 0 5.1 5zM8 13.4A8.7 8.7 0 0 1 6.7 11h2.6A8.7 8.7 0 0 1 8 13.4zM9.6 9H6.4a12 12 0 0 1 0-2h3.2a12 12 0 0 1 0 2zm.4 4.8a11 11 0 0 0 .9-2.8h1.7a5.5 5.5 0 0 1-2.6 2.8zM11.4 9a14.4 14.4 0 0 0 0-2h2a5.3 5.3 0 0 1 0 2z"/></svg>',
+  lock: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M12 7V5a4 4 0 0 0-8 0v2H3v8h10V7zM6 5a2 2 0 0 1 4 0v2H6z"/></svg>',
+  diamond: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1 2 8l6 7 6-7zm0 11.2L4.6 8 8 3.8 11.4 8z"/></svg>',
+  up: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3 2 9l1.4 1.4L8 5.8l4.6 4.6L14 9z"/></svg>',
+  down: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 13 2 7l1.4-1.4L8 10.2l4.6-4.6L14 7z"/></svg>',
+  trash: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5 2V1h6v1h4v2H1V2zm-2 3h10l-1 10H4z"/></svg>',
+  close: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13.42 12 20 18.58 18.58 20 12 13.42 5.42 20 4 18.58 10.58 12 4 5.42 5.42 4 12 10.58 18.58 4 20 5.42z"/></svg>',
+  cam: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10 9a2 2 0 1 1-2-2 2 2 0 0 1 2 2zm5-4v9H1V5h3l1.5-2h5L12 5zm-4 4a3 3 0 1 0-3 3 3 3 0 0 0 3-3z"/></svg>',
+  thumb: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M12.9 7H10l.6-3.1A1.6 1.6 0 0 0 9 2H8L5 7v7h6.4a2 2 0 0 0 1.9-1.4l1.2-3.6A1.5 1.5 0 0 0 12.9 7zM1 7h3v7H1z"/></svg>',
+  person: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M9 14v1H1v-1a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3zM5 10a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm8-5V3h-1v2h-2v1h2v2h1V6h2V5z"/></svg>',
+  mail: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M2 4v16h20V4zm2 2h16v.4l-8 5-8-5zm0 12V8.8l8 5 8-5V18z"/></svg>',
+  phone: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16.5v3.8a1.7 1.7 0 0 1-1.9 1.7A18.5 18.5 0 0 1 2 4.9 1.7 1.7 0 0 1 3.7 3h3.8l1.8 4.6-2.4 1.6a12 12 0 0 0 7.9 7.9l1.6-2.4z"/></svg>',
+  cake: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 1.3 1.5 2.3 1.5 3a1.5 1.5 0 0 1-3 0c0-.7.5-1.7 1.5-3zm-1 6h2v3h6a2 2 0 0 1 2 2v2.2c-1 .8-2 .8-3 0-1.2-1-2.8-1-4 0-1.2 1-2.8 1-4 0-1.2-1-2.8-1-4 0-1 .8-2 .8-3 0V13a2 2 0 0 1 2-2h6zM3 17.5c1.6.8 3.3.6 4.5-.4.7-.6 1.3-.6 2 0 1.5 1.3 3.5 1.3 5 0 .7-.6 1.3-.6 2 0 1.2 1 2.9 1.2 4.5.4V22H3z"/></svg>'
+};
+const NAV_IC = {
+  home: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M23 9v2h-2v7a3 3 0 0 1-3 3h-4v-6h-4v6H6a3 3 0 0 1-3-3v-7H1V9l11-7 5 3.18V2h3v5.09z"/></svg>',
+  net: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 16v6H3v-6a3 3 0 0 1 3-3h3a3 3 0 0 1 3 3zm5.5-3A3.5 3.5 0 1 0 14 9.5a3.5 3.5 0 0 0 3.5 3.5zm1 2h-2a2.5 2.5 0 0 0-2.5 2.5V22h7v-4.5a2.5 2.5 0 0 0-2.5-2.5zM7.5 2A4.5 4.5 0 1 0 12 6.5 4.49 4.49 0 0 0 7.5 2z"/></svg>',
+  jobs: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17 6V5a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3v1H2v4a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V6zM9 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1H9zm10 9a4 4 0 0 0 3-1.38V17a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-4.38A4 4 0 0 0 5 14z"/></svg>',
+  msg: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M16 4H8a7 7 0 0 0 0 14h4v4l8.16-5.39A6.78 6.78 0 0 0 23 11a7 7 0 0 0-7-7zm-8 8.25A1.25 1.25 0 1 1 9.25 11 1.25 1.25 0 0 1 8 12.25zm4 0A1.25 1.25 0 1 1 13.25 11 1.25 1.25 0 0 1 12 12.25zm4 0A1.25 1.25 0 1 1 17.25 11 1.25 1.25 0 0 1 16 12.25z"/></svg>',
+  bell: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M22 19h-8.28a2 2 0 1 1-3.44 0H2v-1a4.52 4.52 0 0 1 1.17-2.83l1-1.17h15.7l1 1.17A4.42 4.42 0 0 1 22 18zM18.21 7.44A6.27 6.27 0 0 0 12 2a6.27 6.27 0 0 0-6.21 5.44L5 13h14z"/></svg>',
+  grid: '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h4v4H3zm7 4h4V3h-4zm7-4v4h4V3zM3 14h4v-4H3zm7 0h4v-4h-4zm7 0h4v-4h-4zM3 21h4v-4H3zm7 0h4v-4h-4zm7 0h4v-4h-4z"/></svg>'
+};
+
+/* ----------------------------- Render ------------------------------ */
+function ctrls(list, i) {
+  return `<div class="ctrls">
+    <button data-act="up" data-list="${list}" data-i="${i}" title="Nach oben" aria-label="Nach oben">${I.up}</button>
+    <button data-act="down" data-list="${list}" data-i="${i}" title="Nach unten" aria-label="Nach unten">${I.down}</button>
+    <button class="del" data-act="del" data-list="${list}" data-i="${i}" title="Löschen" aria-label="Löschen">${I.trash}</button>
+  </div>`;
+}
+const addBtn = list => `<button class="icon-btn add-btn" data-act="add" data-list="${list}" title="Eintrag hinzufügen" aria-label="Eintrag hinzufügen">${I.plus}</button>`;
+const penBtn = `<button class="icon-btn" data-act="toggle-edit" aria-label="Bearbeiten">${I.pencil}</button>`;
+function clampBlock(path, cls = '') {
+  if (!has(path)) return '';
+  return `<div class="clamp-wrap">${E(path, 'Beschreibung', 'div', `ml clamp ${cls}`)}</div>`;
+}
+function visible(key) { return S.sections[key] !== false; }
+function secToggle(key) {
+  return `<label class="sec-toggle edit-only"><input type="checkbox" data-sec="${key}" ${visible(key) ? 'checked' : ''}> anzeigen</label>`;
+}
+/* Rahmen einer Listen-Sektion */
+function listSection(key, itemFn, opts = {}) {
+  const list = S[key] || [];
+  if (!editing && (!visible(key) || !list.length)) return '';
+  const lim = LISTS[key].limit;
+  const showAll = editing || !lim || expanded.has(key);
+  const items = showAll ? list : list.slice(0, lim);
+  const body = opts.wrap ? opts.wrap(items.map((it, i) => itemFn(it, i)).join('')) : `<ul class="list ${opts.cls || ''}">${items.map((it, i) => itemFn(it, i)).join('')}</ul>`;
+  const foot = (!editing && lim && list.length > lim)
+    ? `<button class="sec-foot" data-act="expand" data-list="${key}">${expanded.has(key) ? 'Weniger anzeigen' : `${opts.allLabel ? opts.allLabel(list.length) : `Alle ${list.length} anzeigen`}`} ${I.arrow}</button>` : (opts.foot || '');
+  return `<section class="card ${!visible(key) ? 'hidden-sec' : ''}" aria-label="${esc(LISTS[key].title)}">
+    <div class="pad">
+      <div class="sec-h"><h2>${esc(LISTS[key].title)}</h2><div style="display:flex;align-items:center">${secToggle(key)}${addBtn(key)}${opts.headExtra || (editing ? '' : penBtn)}</div></div>
+      ${opts.sub || ''}
+      ${body}
+    </div>${foot}
+  </section>`;
+}
+
+function renderNav() {
+  const it = (ic, lbl, extra = '', cls = '') => `<div class="navitem ${cls}"><span class="ic">${ic}${extra}</span><span class="lbl">${lbl}</span></div>`;
+  document.getElementById('nav').innerHTML = `
+    <div class="logo" aria-hidden="true">in</div>
+    <label class="search">${I.search}<input placeholder="Suche" aria-label="Suche"></label>
+    <div class="navlist">
+      ${it(NAV_IC.home, 'Startseite', '', 'keep')}
+      ${it(NAV_IC.net, 'Mein Netzwerk', '', 'hide-sm')}
+      ${it(NAV_IC.jobs, 'Jobs', '', 'hide-sm')}
+      ${it(NAV_IC.msg, 'Nachrichten', '<span class="navbadge">2</span>')}
+      ${it(NAV_IC.bell, 'Mitteilungen', '<span class="navbadge">5</span>')}
+      <div class="navitem nav-me active keep"><span class="ic"><span class="mini" style="display:block;overflow:hidden">${myPic()}</span></span><span class="lbl">Sie ▾</span></div>
+      <div class="navsep"></div>
+      <div class="navitem biz">${NAV_IC.grid}<span class="lbl">Für Unternehmen ▾</span></div>
+      <a class="navitem premium">Premium 1 Monat für 0 € testen</a>
+    </div>`;
+}
+
+function renderTop() {
+  const banner = S.banner ? `background-image:url('${S.banner.replace(/'/g, '%27')}')` : '';
+  return `<section class="card" aria-label="Profil">
+    <div class="banner" data-img="banner" style="${banner}">
+      ${editing ? `<span class="img-hint">Hintergrundbild ändern</span>` : `<span class="top-cam">${I.cam}</span>`}
+    </div>
+    <div class="top-body">
+      <div class="avatar-wrap ${S.openToWork ? 'otw' : ''}" data-img="avatar">
+        ${S.avatar ? `<img src="${esc(S.avatar)}" alt="Profilbild">` : `<span class="ghost">${GHOST}</span>`}
+        ${S.openToWork ? '<span class="otw-ring"></span><span class="otw-label">#OPENTOWORK</span>' : ''}
+        ${editing ? '<span class="img-hint">Foto ändern</span>' : ''}
+      </div>
+      <div class="top-pencil">${editing ? '' : penBtn}</div>
+      <div class="top-grid">
+        <div>
+          <div class="name-row">
+            <h1>${E('name', 'Name')}</h1>
+            ${S.verified ? `<span class="verified" title="Verifiziert">${I.shield}</span>` : ''}
+            ${has('pronouns') ? `<span class="pronouns">${E('pronouns', 'Pronomen')}</span>` : ''}
+          </div>
+          <div class="headline">${E('headline', 'Überschrift')}</div>
+          <div class="loc">${J(E('location', 'Ort'), '<a class="link" data-act="contact">Kontaktinformationen</a>')}</div>
+          ${has('website') ? `<div class="web"><a class="link">${E('website', 'Website')}</a><span style="color:var(--blue)">${I.link}</span></div>` : ''}
+          <div class="conn"><b>${E('followers', '0')} Follower:innen</b> · <b>${E('connections', '0')} Kontakte</b></div>
+        </div>
+        <ul class="orgs">
+          ${has('topCompany') ? `<li>${logo(S.topCompany, 32)}${E('topCompany', 'Aktuelles Unternehmen')}</li>` : ''}
+          ${has('topSchool') ? `<li>${logo(S.topSchool, 32)}${E('topSchool', 'Hochschule')}</li>` : ''}
+        </ul>
+      </div>
+      <div class="btns">
+        <button class="pill primary">Offen für</button>
+        <button class="pill secondary">Profilbereich hinzufügen</button>
+        <button class="pill secondary">Profil optimieren</button>
+        <button class="pill tertiary">Mehr</button>
+      </div>
+      <div class="edit-opts">
+        <label><input type="checkbox" data-bool="openToWork" ${S.openToWork ? 'checked' : ''}> #OpenToWork-Rahmen &amp; Box</label>
+        <label><input type="checkbox" data-bool="verified" ${S.verified ? 'checked' : ''}> Verifiziert-Symbol</label>
+        ${S.avatar ? '<button class="link" data-act="img-remove" data-path="avatar">Foto entfernen</button>' : ''}
+        ${S.banner ? '<button class="link" data-act="img-remove" data-path="banner">Hintergrund entfernen</button>' : ''}
+      </div>
+      ${S.openToWork ? `<div class="otw-box">
+        <div class="otw-card a"><b>Offen für neue Jobs</b><div>${E('openToWorkRoles', 'Positionen')}</div><div class="muted">${E('openToWorkPlaces', 'Orte')}</div><a class="link">Details anzeigen</a></div>
+        ${has('providing') ? `<div class="otw-card b"><b>Dienstleistungen anbieten</b><div>${E('providing', 'Dienstleistungen')}</div><a class="link">Details anzeigen</a></div>` : ''}
+      </div>` : ''}
+    </div>
+  </section>`;
+}
+
+function renderAnalytics() {
+  return `<section class="card" aria-label="Analysen"><div class="pad">
+    <div class="sec-h"><h2>Analysen</h2></div>
+    <div class="sec-sub">${I.eye}<span>Nur für Sie sichtbar</span></div>
+    <div class="analytics">
+      <div class="ana">${I.people}<div><b>${E('analytics.views', '0')} Profilbesuche</b><span>Finden Sie heraus, wer Ihr Profil besucht hat.</span></div></div>
+      <div class="ana">${I.chart}<div><b>${E('analytics.impressions', '0')} Beitragsimpressionen</b><span>Sehen Sie sich an, wer mit Ihren Beiträgen interagiert.</span></div></div>
+      <div class="ana">${I.search.replace(/16/g, '24')}<div><b>${E('analytics.searches', '0')} Suchanfragen</b><span>Sehen Sie, wie oft Sie in Suchergebnissen erscheinen.</span></div></div>
+    </div></div>
+    <button class="sec-foot">Alle Analysen anzeigen ${I.arrow}</button>
+  </section>`;
+}
+
+function renderAbout() {
+  if (!editing && (!visible('about') || !S.about)) return '';
+  return `<section class="card ${!visible('about') ? 'hidden-sec' : ''}" aria-label="Info"><div class="pad">
+    <div class="sec-h"><h2>Info</h2><div style="display:flex;align-items:center">${secToggle('about')}${editing ? '' : penBtn}</div></div>
+    <div class="about-text clamp-wrap">${E('about', 'Erzählen Sie etwas über sich …', 'div', 'ml clamp')}</div>
+    ${has('topSkills') ? `<div class="top-skills">${I.diamond}<div><b>Top-Kenntnisse</b>${E('topSkills', 'Kenntnis • Kenntnis • …')}</div></div>` : ''}
+  </div></section>`;
+}
+
+function renderFeatured() {
+  return listSection('featured', (f, i) => `
+    <div class="feat">
+      ${ctrls('featured', i)}
+      <div class="feat-img" data-img="featured.${i}.img" style="${f.img ? `background-image:url('${f.img.replace(/'/g, '%27')}')` : `background-image:linear-gradient(135deg,hsl(${hue(f.title)} 40% 78%),hsl(${(hue(f.title) + 40) % 360} 45% 62%))`}">
+        ${f.img ? '' : `<span>${editing ? 'Bild hinzufügen' : ''}</span>`}
+        ${editing && f.img ? `<span class="img-hint">Bild ändern</span>` : ''}
+      </div>
+      <div class="feat-b">
+        <div class="feat-kind">${E(`featured.${i}.kind`, 'Typ')}</div>
+        <div class="feat-t">${E(`featured.${i}.title`, 'Titel')}</div>
+        <div class="feat-x">${E(`featured.${i}.text`, 'Beschreibung')}</div>
+      </div>
+    </div>`, { wrap: inner => `<div class="featured">${inner}</div>` });
+}
+
+function renderActivity() {
+  const name = esc(S.name);
+  return listSection('activity', (p, i) => `
+    <article class="post">
+      ${ctrls('activity', i)}
+      <div class="post-h"><span class="mini">${myPic()}</span><div><div class="post-n">${name} <span class="muted" style="font-weight:400">• Sie</span></div><div class="post-t">${E(`activity.${i}.time`, 'Zeit')} • ${I.globe}</div></div></div>
+      ${clampBlock(`activity.${i}.text`)}
+      <div class="post-f"><span class="reacts"><i style="background:#378fe9">👍</i><i style="background:#df704d">❤</i><i style="background:#6dae4f">👏</i>${E(`activity.${i}.reactions`, '0')}</span><span>${E(`activity.${i}.comments`, '0')} Kommentare</span></div>
+    </article>`, {
+    sub: `<div class="follow"><a class="link" style="font-weight:600">${esc(S.followers)} Follower:innen</a></div>
+      <div class="tabs"><span class="tab on">Beiträge</span><span class="tab">Kommentare</span><span class="tab">Bilder</span></div>`,
+    headExtra: `<button class="pill secondary sm" style="margin-right:4px">Beitrag erstellen</button>${editing ? '' : penBtn}`,
+    wrap: inner => `<div class="posts">${inner}</div>`,
+    foot: `<button class="sec-foot">Alle Beiträge anzeigen ${I.arrow}</button>`
+  });
+}
+
+function renderExperience() {
+  return listSection('experience', (x, i) => {
+    const p = `experience.${i}`;
+    const dates = editing
+      ? `<div class="dates"><input type="month" data-date="${p}.start" value="${esc(x.start)}" aria-label="Beginn"> – <input type="month" data-date="${p}.end" value="${esc(x.end)}" ${x.end ? '' : 'disabled'} aria-label="Ende"><label><input type="checkbox" data-current="${p}.end" ${x.end ? '' : 'checked'}> Aktuell</label></div>`
+      : `<div class="t3">${J(x.start ? `${fmtMonth(x.start)} – ${fmtMonth(x.end)}` : '', duration(x.start, x.end))}</div>`;
+    return `<li class="has-ctrls">
+      ${logo(x.company)}
+      <div class="item-body">
+        <div class="t1">${E(`${p}.title`, 'Position')}</div>
+        <div class="t2">${J(E(`${p}.company`, 'Unternehmen'), E(`${p}.type`, 'Beschäftigungsart'))}</div>
+        ${dates}
+        ${has(`${p}.location`) || has(`${p}.workplace`) ? `<div class="t3">${J(E(`${p}.location`, 'Ort'), E(`${p}.workplace`, 'Vor Ort / Hybrid / Remote'))}</div>` : ''}
+        ${clampBlock(`${p}.description`, 'desc')}
+        ${has(`${p}.skills`) ? `<div class="skillline">${I.diamond}<span><b>Kenntnisse:</b> ${E(`${p}.skills`, 'Kenntnisse')}</span></div>` : ''}
+      </div>
+      ${ctrls('experience', i)}
+    </li>`;
+  });
+}
+
+function renderEducation() {
+  return listSection('education', (x, i) => {
+    const p = `education.${i}`;
+    return `<li class="has-ctrls">
+      ${logo(x.school)}
+      <div class="item-body">
+        <div class="t1">${E(`${p}.school`, 'Hochschule')}</div>
+        <div class="t2">${E(`${p}.degree`, 'Abschluss, Fachrichtung')}</div>
+        ${has(`${p}.period`) ? `<div class="t3">${E(`${p}.period`, 'z. B. 2015 – 2017')}</div>` : ''}
+        ${has(`${p}.grade`) ? `<div class="t2" style="margin-top:4px">${E(`${p}.grade`, 'Note')}</div>` : ''}
+        ${clampBlock(`${p}.description`, 'desc')}
+      </div>
+      ${ctrls('education', i)}
+    </li>`;
+  });
+}
+
+function renderCerts() {
+  return listSection('certifications', (x, i) => {
+    const p = `certifications.${i}`;
+    return `<li class="has-ctrls">
+      ${logo(x.issuer)}
+      <div class="item-body">
+        <div class="t1">${E(`${p}.name`, 'Name')}</div>
+        <div class="t2">${E(`${p}.issuer`, 'Aussteller')}</div>
+        ${has(`${p}.date`) ? `<div class="t3">${E(`${p}.date`, 'Ausgestellt: …')}</div>` : ''}
+        ${has(`${p}.cred`) ? `<div class="t3">${E(`${p}.cred`, 'Nachweis-ID')}</div>` : ''}
+        <button class="pill tertiary sm" style="margin-top:8px">Nachweis anzeigen ${I.link}</button>
+      </div>
+      ${ctrls('certifications', i)}
+    </li>`;
+  }, { allLabel: n => `Alle ${n} Bescheinigungen und Zertifikate anzeigen` });
+}
+
+function renderProjects() {
+  return listSection('projects', (x, i) => {
+    const p = `projects.${i}`;
+    return `<li class="has-ctrls" style="display:block">
+      <div class="t1">${E(`${p}.name`, 'Projektname')}</div>
+      ${has(`${p}.date`) ? `<div class="t3">${E(`${p}.date`, 'Zeitraum')}</div>` : ''}
+      ${clampBlock(`${p}.description`, 'desc')}
+      ${ctrls('projects', i)}
+    </li>`;
+  });
+}
+
+function renderVolunteering() {
+  return listSection('volunteering', (x, i) => {
+    const p = `volunteering.${i}`;
+    return `<li class="has-ctrls">
+      ${logo(x.org)}
+      <div class="item-body">
+        <div class="t1">${E(`${p}.role`, 'Rolle')}</div>
+        <div class="t2">${E(`${p}.org`, 'Organisation')}</div>
+        ${has(`${p}.period`) ? `<div class="t3">${E(`${p}.period`, 'Zeitraum')}</div>` : ''}
+        ${has(`${p}.cause`) ? `<div class="t3">${E(`${p}.cause`, 'Bereich')}</div>` : ''}
+        ${clampBlock(`${p}.description`, 'desc')}
+      </div>
+      ${ctrls('volunteering', i)}
+    </li>`;
+  });
+}
+
+function renderSkills() {
+  return listSection('skills', (x, i) => {
+    const p = `skills.${i}`;
+    return `<li class="has-ctrls">
+      <div class="item-body">
+        <div class="skill-n">${E(`${p}.name`, 'Kenntnis')}</div>
+        ${has(`${p}.context`) ? `<div class="skillline">${logo(x.context, 24)}<span>${E(`${p}.context`, 'Kontext, z. B. Position bei Unternehmen')}</span></div>` : ''}
+        <div class="endorse">${I.person}<span>${E(`${p}.endorsements`, '0')} Bestätigungen</span></div>
+      </div>
+      ${ctrls('skills', i)}
+    </li>`;
+  }, { cls: 'skills', allLabel: n => `Alle ${n} Kenntnisse anzeigen` });
+}
+
+function renderRecos() {
+  return listSection('recommendations', (x, i) => {
+    const p = `recommendations.${i}`;
+    return `<li class="has-ctrls">
+      <span class="avatar-s">${personPic(x.name, '', 56)}</span>
+      <div class="item-body">
+        <div class="t1">${E(`${p}.name`, 'Name')}</div>
+        <div class="t3" style="color:var(--text)">${E(`${p}.headline`, 'Position')}</div>
+        ${has(`${p}.relation`) ? `<div class="t3" style="font-size:12px">${E(`${p}.relation`, 'Datum · Beziehung')}</div>` : ''}
+        ${clampBlock(`${p}.text`, 'desc')}
+      </div>
+      ${ctrls('recommendations', i)}
+    </li>`;
+  }, {
+    sub: '<div class="tabs"><span class="tab on">Erhalten</span><span class="tab">Abgegeben</span></div>',
+    allLabel: n => `Alle ${n} Empfehlungen anzeigen`
+  });
+}
+
+function renderLanguages() {
+  return listSection('languages', (x, i) => {
+    const p = `languages.${i}`;
+    return `<li class="has-ctrls" style="display:block">
+      <div class="t1">${E(`${p}.name`, 'Sprache')}</div>
+      <div class="t3">${E(`${p}.level`, 'Niveau')}</div>
+      ${ctrls('languages', i)}
+    </li>`;
+  });
+}
+
+function renderInterests() {
+  return listSection('interests', (x, i) => {
+    const p = `interests.${i}`;
+    return `<li class="has-ctrls">
+      ${logo(x.name, 56)}
+      <div class="item-body">
+        <div class="t1">${E(`${p}.name`, 'Name')}</div>
+        <div class="t3">${E(`${p}.followers`, 'Follower:innen')}</div>
+        <button class="pill tertiary sm" style="margin-top:8px">✓ Folge ich</button>
+      </div>
+      ${ctrls('interests', i)}
+    </li>`;
+  }, { sub: '<div class="tabs"><span class="tab">Top Voices</span><span class="tab on">Unternehmen</span><span class="tab">Gruppen</span><span class="tab">Newsletter</span><span class="tab">Schulen</span></div>' });
+}
+
+function renderSide() {
+  const people = (S.people || []).map((x, i) => {
+    const p = `people.${i}`;
+    return `<li class="has-ctrls" style="position:relative">
+      <span class="avatar-s">${personPic(x.name, x.img, 48)}</span>
+      <div class="item-body">
+        <div class="t1">${E(`${p}.name`, 'Name')}</div>
+        <div class="t3" style="font-size:12px">${E(`${p}.headline`, 'Position')}</div>
+        <button class="pill tertiary sm">${I.person} Vernetzen</button>
+      </div>
+      ${ctrls('people', i)}
+    </li>`;
+  }).join('');
+  document.getElementById('side').innerHTML = `
+    <section class="card side-card">
+      <div class="side-row"><div><b>Profilsprache</b><span class="muted">Deutsch</span></div>${I.pencil}</div>
+      <div class="side-row"><div style="min-width:0"><b>Öffentliches Profil &amp; URL</b><span class="muted" style="word-break:break-all">${E('contact.url', 'linkedin.com/in/…')}</span></div>${I.pencil}</div>
+    </section>
+    <section class="card side-card">
+      <div class="ad-in">
+        <span class="muted" style="font-size:12px;align-self:flex-end">Anzeige ···</span>
+        <span class="muted" style="font-size:12px">${esc(S.name.split(' ')[0] || '')}, entdecken Sie Jobs, die zu Ihnen passen</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="mini" style="width:64px;height:64px;border-radius:50%;overflow:hidden;display:block">${myPic()}</span>${logo('Jobs', 64)}</div>
+        <span style="text-align:center">Sehen Sie, wer nach Profilen wie Ihrem sucht</span>
+        <button class="pill secondary sm">Folgen</button>
+      </div>
+    </section>
+    <section class="card side-card">
+      <div class="sec-h"><h3>${esc(LISTS.people.title)}</h3>${addBtn('people')}</div>
+      <div class="muted" style="font-size:12px;margin-bottom:4px">Aus Ihrer Branche</div>
+      <ul class="list people">${people}</ul>
+    </section>
+    <div class="foot">
+      <span>Info</span><span>Barrierefreiheit</span><span>Talent Solutions</span><span>Community-Richtlinien</span><span>Karriere</span><span>Marketing-Lösungen</span><span>Datenschutz &amp; Bedingungen ▾</span><span>Werbung</span><span>Hilfe</span><br>
+      <span>Privates Profil-Mock · nur lokal gespeichert</span>
+    </div>`;
+}
+
+function renderModal() {
+  const row = (ic, label, path, isLink) => has(path) ? `<div class="ci">${ic}<div><b>${label}</b><span class="${isLink ? 'v' : ''}">${E(path, label)}</span></div></div>` : '';
+  document.getElementById('modal-inner').innerHTML = `
+    <div class="modal-h"><h2 id="modal-title">${esc(S.name)}</h2><button class="icon-btn" data-act="close-modal" aria-label="Schließen">${I.close}</button></div>
+    <div class="modal-b">
+      <h3 style="font-size:20px;font-weight:600;margin-bottom:8px">Kontaktinformationen</h3>
+      ${row(I.link.replace(/16/g, '24'), 'Ihr Profil', 'contact.url', true)}
+      ${row(I.globe.replace(/16/g, '24'), 'Website', 'contact.website', true)}
+      ${row(I.phone, 'Telefon', 'contact.phone')}
+      ${row(I.mail, 'E-Mail', 'contact.email', true)}
+      ${row(I.cake, 'Geburtstag', 'contact.birthday')}
+    </div>`;
+}
+
+function render() {
+  document.body.classList.toggle('editing', editing);
+  document.getElementById('dock').classList.toggle('editing-flag', editing);
+  document.getElementById('edit-btn').innerHTML = editing
+    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg><span class="lbl">Fertig</span>`
+    : `${I.pencil.replace(/24/g, '18')}<span class="lbl">Bearbeiten</span>`;
+  renderNav();
+  document.getElementById('main').innerHTML = [
+    renderTop(), renderAnalytics(), renderAbout(), renderFeatured(), renderActivity(),
+    renderExperience(), renderEducation(), renderCerts(), renderProjects(), renderVolunteering(),
+    renderSkills(), renderRecos(), renderLanguages(), renderInterests()
+  ].join('');
+  renderSide();
+  renderModal();
+  document.title = S.name ? `${S.name} | Profil` : 'Profil-Mock';
+  requestAnimationFrame(addMoreButtons);
+}
+function addMoreButtons() {
+  if (editing) return;
+  document.querySelectorAll('.clamp').forEach(el => {
+    if (el.scrollHeight > el.clientHeight + 2 && !el.nextElementSibling?.classList.contains('more')) {
+      el.insertAdjacentHTML('afterend', '<button class="more" data-act="more">…mehr anzeigen</button>');
+    }
+  });
+}
+
+/* ----------------------------- Events ------------------------------ */
+document.addEventListener('input', e => {
+  const el = e.target.closest('[data-path][contenteditable]');
+  if (!el) return;
+  setP(el.dataset.path, el.innerText.replace(/\n$/, ''));
+  save();
+  if (el.dataset.path === 'name') { renderNav(); }
+});
+document.addEventListener('paste', e => {
+  const el = e.target.closest?.('[data-path][contenteditable]');
+  if (!el || CE === 'plaintext-only') return;
+  e.preventDefault();
+  document.execCommand('insertText', false, e.clipboardData.getData('text/plain'));
+});
+document.addEventListener('keydown', e => {
+  const el = e.target.closest?.('[data-path][contenteditable]');
+  if (el && e.key === 'Enter' && !el.classList.contains('ml')) { e.preventDefault(); el.blur(); }
+  if (e.key === 'Escape') document.getElementById('modal').classList.remove('on');
+});
+/* Nach dem Bearbeiten neu zeichnen (Logos, Initialen usw.) */
+document.addEventListener('focusout', e => {
+  if (e.target.closest?.('[data-path][contenteditable]')) setTimeout(() => {
+    if (!document.activeElement?.closest?.('[data-path][contenteditable]')) { const y = scrollY; render(); scrollTo(0, y); }
+  }, 0);
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.bool) { S[t.dataset.bool] = t.checked; }
+  else if (t.dataset.sec) { S.sections[t.dataset.sec] = t.checked; }
+  else if (t.dataset.date) { setP(t.dataset.date, t.value); }
+  else if (t.dataset.current) { setP(t.dataset.current, t.checked ? '' : new Date().toISOString().slice(0, 7)); }
+  else return;
+  save(true); const y = scrollY; render(); scrollTo(0, y);
+});
+
+let imgTarget = null;
+const imgFile = document.getElementById('img-file');
+const IMG_MAX = { avatar: [400, 400], banner: [1584, 396] };
+imgFile.addEventListener('change', async () => {
+  const f = imgFile.files[0]; imgFile.value = '';
+  if (!f || !imgTarget) return;
+  try {
+    const [w, h] = IMG_MAX[imgTarget] || [800, 450];
+    setP(imgTarget, await shrink(f, w, h));
+    save(true); render();
+  } catch (err) { toast('Bild konnte nicht geladen werden.'); }
+});
+function shrink(file, maxW, maxH) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onerror = rej;
+    r.onload = () => {
+      const im = new Image();
+      im.onerror = rej;
+      im.onload = () => {
+        // Bild wird später per object-fit/cover beschnitten – daher auf die kürzere Zielseite skalieren
+        const scale = Math.min(1, Math.max(maxW / im.width, maxH / im.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(im.width * scale); c.height = Math.round(im.height * scale);
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        res(c.toDataURL('image/jpeg', 0.86));
+      };
+      im.src = r.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+
+document.getElementById('import-file').addEventListener('change', e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try { S = merge(clone(DEFAULT), JSON.parse(r.result)); save(true); render(); toast('Profil importiert.'); }
+    catch (err) { toast('Die Datei ist kein gültiges Profil-JSON.'); }
+  };
+  r.readAsText(f);
+});
+
+document.addEventListener('click', e => {
+  const imgEl = editing && e.target.closest('[data-img]');
+  if (imgEl && !e.target.closest('[data-act],[data-path]')) { imgTarget = imgEl.dataset.img; imgFile.click(); return; }
+  const a = e.target.closest('[data-act]');
+  if (!a) { if (!e.target.closest('#dock')) document.getElementById('dock').classList.remove('open'); return; }
+  const act = a.dataset.act, list = a.dataset.list, i = +a.dataset.i;
+  const y = scrollY;
+  switch (act) {
+    case 'toggle-edit': editing = !editing; render(); scrollTo(0, y); toast(editing ? 'Bearbeitungsmodus: Klicken Sie auf beliebige Texte oder Bilder.' : 'Gespeichert.'); break;
+    case 'add': S[list].push(LISTS[list].tpl()); save(true); render(); scrollTo(0, y); break;
+    case 'del': if (confirm('Diesen Eintrag löschen?')) { S[list].splice(i, 1); save(true); render(); scrollTo(0, y); } break;
+    case 'up': case 'down': {
+      const j = act === 'up' ? i - 1 : i + 1;
+      if (j < 0 || j >= S[list].length) break;
+      [S[list][i], S[list][j]] = [S[list][j], S[list][i]]; save(true); render(); scrollTo(0, y); break;
+    }
+    case 'expand': expanded.has(list) ? expanded.delete(list) : expanded.add(list); render(); scrollTo(0, y); break;
+    case 'more': a.previousElementSibling.classList.add('open'); a.remove(); break;
+    case 'contact': document.getElementById('modal').classList.add('on'); break;
+    case 'close-modal': if (e.target === a) document.getElementById('modal').classList.remove('on'); break;
+    case 'img-remove': setP(a.dataset.path, ''); save(true); render(); scrollTo(0, y); break;
+    case 'menu': document.getElementById('dock').classList.toggle('open'); break;
+    case 'export': {
+      const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+      const link = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'profil.json' });
+      document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      break;
+    }
+    case 'print': document.getElementById('dock').classList.remove('open'); setTimeout(() => print(), 50); break;
+    case 'theme': {
+      const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem(THEME_KEY, next); } catch (err) {}
+      break;
+    }
+    case 'reset':
+      if (confirm('Alle Änderungen verwerfen und Beispieldaten laden? Exportieren Sie Ihr Profil vorher, wenn Sie es behalten möchten.')) {
+        S = clone(DEFAULT); save(true); render(); document.getElementById('dock').classList.remove('open');
+      }
+      break;
+  }
+});
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
+}
+
+try { const th = localStorage.getItem(THEME_KEY); if (th) document.documentElement.dataset.theme = th; } catch (e) {}
+render();
+})();
+</script>
+</body>
+</html>
